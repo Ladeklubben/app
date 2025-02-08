@@ -14,7 +14,6 @@ Very easy to get working, without having to fiddle with Android Studio dependenc
 ### Manual Setup
 1. Follow the Tauri [guide](https://tauri.app/start/prerequisites/)
 1. Install Android Studio and get it set up so you can see your device when plugged in to your computer (Device Manager)
-1. Go to 
 
 ## Step 2 - Starting Tauri
 1. Navigate into the repository
