@@ -47,6 +47,12 @@ rbenv global 3.4.1
 1. Install cocoapods with `sudo gem install cocoapods`. This is why we need to upgrade Ruby
 1. Run `npm run tauri ios init` again, it should not fail.
 
+# Adding Icons
+- Find and click on an icon you like [here](https://icones.js.org/collection/mdi)
+- The website says "How to use the icon?" and it looks like this `category:icon-name`. Fx `mdi:account-box-outline`
+- Import the icon as follows: `import IconName from '~icons/category/icon-name'`. Fx `import IconAccountBoxOutline from '~icons/mdi/account-box-outline'`
+- We have mainly been using the category `mdi`. If you want to use a different category the plugin will automatically download the icon package, so you just need to import it as usual.
+
 # Troubleshooting
 - If your device doesn't come up when you run `adb devices`, try to restart the adb server with `adb kill-server && adb devices`
 - If you get the error `xcode-select: error: tool 'xcodebuild' requires Xcode, but active developer directory '/Library/Developer/CommandLineTools' is a command line tools instance` when you try to run `npm run tauri ios dev` then you need to run `sudo xcode-select -s /Applications/Xcode.app/Contents/Developer` to use the full Xcode.app.
