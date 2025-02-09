@@ -48,6 +48,7 @@ rbenv global 3.4.1
 1. Run `npm run tauri ios init` again, it should not fail.
 
 # Adding Icons
+- We are using [unplugin-icons](https://github.com/unplugin/unplugin-icons) to manage icons.
 - Find and click on an icon you like [here](https://icones.js.org/collection/mdi)
 - The website says "How to use the icon?" and it looks like this `category:icon-name`. Fx `mdi:account-box-outline`
 - Import the icon as follows: `import IconName from '~icons/category/icon-name'`. Fx `import IconAccountBoxOutline from '~icons/mdi/account-box-outline'`
