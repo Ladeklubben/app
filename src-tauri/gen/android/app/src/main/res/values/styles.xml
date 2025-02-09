@@ -2,5 +2,7 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:statusBarColor">@color/ladeklubben_dark_blue</item>
         <item name="android:navigationBarColor">@color/ladeklubben_dark_blue</item>
+        <item name="android:windowBackground">@color/ladeklubben_dark_blue</item>
+        <item name="android:windowSplashScreenBackground">@color/ladeklubben_dark_blue</item>
     </style>
 </resources>
