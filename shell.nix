@@ -12,7 +12,7 @@ pkgs.mkShell {
     gobject-introspection
     rustup
     cargo-tauri
-    nodejs
+    nodejs_20
   ];
 
   buildInputs = with pkgs;[
