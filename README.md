@@ -1,6 +1,7 @@
 # Ladeklubben App
 Free and open-source app to control your EV charger
 
+# Quickstart Guide
 ## Step 1 - Prerequisites
 
 ### Nix Setup
@@ -27,3 +28,6 @@ It is very important you have run Step 2 first, or else Tauri returns an error. 
 1. Run `npm run tauri android dev`
 
 Hot Module Reloading does not seem to work on the USB android device, so for developing it is best to use the desktop application from Step 2, and then once in a while check how it looks on Android.
+
+# Troubleshooting
+- If your device doesn't come up when you run `adb devices`, try to restart the adb server with `adb kill-server && adb devices`
