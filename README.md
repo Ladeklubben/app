@@ -1,4 +1,4 @@
-# Ladeklubben App
+# Ladeklubben Meter App
 Free and open-source app to control your EV charger
 
 # Quickstart Guide
