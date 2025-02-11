@@ -1,36 +1,42 @@
 <script>
-    let activeTab = 'Home';
+	import HomeVariant from '~icons/mdi/home-variant';
+	import Menu from '~icons/mdi/menu';
 
-    function setActiveTab(tab) {
-        activeTab = tab;
-    }
 </script>
 
 <div class="navbar">
-    <a href="#" class:active={activeTab === 'Home'} on:click={() => setActiveTab('Home')}>Home</a>
-    <a href="#" class:active={activeTab === 'About'} on:click={() => setActiveTab('About')}>About</a>
-    <a href="#" class:active={activeTab === 'Contact'} on:click={() => setActiveTab('Contact')}>Contact</a>
+	<div class="nav-element">
+		<HomeVariant style="font-size: 25px;"/>
+		Home
+	</div>
+	
+	<div class="nav-element">
+		<Menu style="font-size: 25px;"/>
+		Menu
+	</div>
 </div>
 
 <style>
     .navbar {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        background-color: #f0f0f0;
-        display: flex;
-        justify-content: space-around;
-        padding: 10px;
-    }
+		display: flex;
+		justify-content: space-around;
+		align-items: center;
+		padding: 0 20px;
+		background-color: #333;
+		color: white;
+		min-height: 80px;
+		position: fixed;
+		bottom: 0;
+		width: 100%;
+		z-index: 1000;
 
-    .navbar a {
-        text-decoration: none;
-        color: #333;
-        font-weight: bold;
-    }
+	}
 
-    .navbar a.active {
-        color: #007bff;
-    }
+	.nav-element {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 5px;
+	}
+
 </style>
