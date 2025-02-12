@@ -1,0 +1,14 @@
+:root {
+    /* Ladeklubben Blue */
+    --lk-blue-50: #f1f9fa;
+    --lk-blue-100: #dceef1;
+    --lk-blue-200: #bddee4;
+    --lk-blue-300: #8fc7d1;
+    --lk-blue-400: #59a6b7;
+    --lk-blue-500: #3e8a9c;
+    --lk-blue-600: #367284;
+    --lk-blue-700: #315e6d;
+    --lk-blue-800: #2e4d59;
+    --lk-blue-900: #2b444e;
+    --lk-blue-950: #182b34;
+  }

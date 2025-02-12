@@ -4,6 +4,5 @@
 	
 </script>
 
-<h1>Ladeklubben</h1>
-<IconAccountBox />
+<h1>Ladeklubbens</h1>
 <NavBar />
