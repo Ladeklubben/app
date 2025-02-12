@@ -1,17 +1,18 @@
 <script>
 	import HomeVariant from "~icons/mdi/home-variant";
 	import Menu from "~icons/mdi/menu";
+	import { goto } from "$app/navigation";
 </script>
 
 <div class="navbar">
-	<div class="nav-element">
+	<div class="nav-element" on:click={() => goto("/")}>
 		<HomeVariant style="font-size: 25px;" />
 		Home
 	</div>
 
-	<div class="nav-element">
+	<div class="nav-element" on:click={() => goto("/settings")}>
 		<Menu style="font-size: 25px;" />
-		Menu
+		Settings
 	</div>
 </div>
 

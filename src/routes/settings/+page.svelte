@@ -1,7 +1,7 @@
 <script lang="ts">
 </script>
 
-<h1>Home</h1>
+<h1>Settings</h1>
 
 <style>
     h1 {
