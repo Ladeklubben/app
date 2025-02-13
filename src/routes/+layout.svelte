@@ -1,6 +1,6 @@
 <!-- +layout.svelte -->
 <script>
-    import NavBar from '$lib/NavBar.svelte';
+    import TabBar from '$lib/TabBar.svelte';
 </script>
 
 
@@ -8,7 +8,7 @@
     <main>
         <slot />
     </main>
-    <NavBar />
+    <TabBar />
 </div>
 
 <style>
@@ -20,7 +20,7 @@
 
     main {
         flex: 1;
-        /* Add padding-bottom to prevent content from being hidden behind navbar */
-        padding-bottom: 60px; /* Adjust based on your navbar height */
+        /* Add padding-bottom to prevent content from being hidden behind tabbar */
+        padding-bottom: 60px; /* Adjust based on your tabbar height */
     }
 </style>

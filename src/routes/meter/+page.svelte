@@ -1,4 +1,7 @@
-<h1>Home</h1>
+<script lang="ts">
+</script>
+
+<h1>Meter</h1>
 
 <style>
     h1 {
