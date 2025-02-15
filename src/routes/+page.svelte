@@ -1,7 +1,17 @@
-<h1>Home</h1>
+<script>
+    import PhaseOverview from "$lib/PhaseOverview.svelte";
+</script>
+
+<div class="container">
+    <PhaseOverview />
+</div>
+
 
 <style>
-    h1 {
-        color: var(--lk-blue-100);
+    .container {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        padding: 20px;
     }
 </style>
