@@ -1,6 +1,7 @@
 <!-- +layout.svelte -->
 <script>
     import TabBar from '$lib/TabBar.svelte';
+    import { page } from '$app/stores';
 </script>
 
 
@@ -8,7 +9,9 @@
     <main>
         <slot />
     </main>
-    <TabBar />
+    {#if $page.url.pathname !== '/login'}
+        <TabBar />
+    {/if}
 </div>
 
 <style>

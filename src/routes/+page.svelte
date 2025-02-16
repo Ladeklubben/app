@@ -2,6 +2,11 @@
     import PhaseOverview from "$lib/PhaseOverview.svelte";
     import { onMount } from "svelte";
     import { login } from "$lib/stores/auth";
+    import { goto } from "$app/navigation";
+
+    onMount(() => {
+        goto("/login");
+    });
 </script>
 
 <div class="container">

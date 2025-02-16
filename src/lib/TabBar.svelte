@@ -1,6 +1,5 @@
 <script>
 	import HomeVariant from "~icons/mdi/home-variant";
-	import HomeVariantOutlined from "~icons/mdi/home-variant-outline";
 	import Menu from "~icons/mdi/menu";
 	import { page } from "$app/stores";
 	import { goto } from "$app/navigation";
