@@ -13,13 +13,8 @@
 		on:click={() => goto("/")}
 		style="opacity: {$page.url.pathname === '/' ? '100%' : '60%'};"
 	>
-		{#if $page.url.pathname === "/"}
-			<HomeVariant style="font-size: 25px;" />
-			Home
-		{:else}
-			<HomeVariantOutlined style="font-size: 25px;" />
-			Home
-		{/if}
+		<HomeVariant style="font-size: 25px;" />
+		Home
 	</button>
 
 	<button
@@ -69,5 +64,6 @@
 		border: none;
 		color: inherit;
 		cursor: pointer;
+		-webkit-tap-highlight-color: transparent;
 	}
 </style>

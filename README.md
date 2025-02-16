@@ -23,7 +23,7 @@ Very easy to get working, without having to fiddle with Android Studio dependenc
 1. Start desktop version of application: `npm run tauri dev`
 
 ## Step 3 - Start Tauri on Android Device
-It is very important you have run Step 2 first, or else Tauri returns an error. If this happens to you, clean the project using `rm -rf src-tauri/gen/ src-tauri/target/ node_modules`. Then complete Step 2 and return here once done.
+It is very important you have run Step 2 first, or else Tauri returns an error. If this happens to you, clean the project using `rm -rf src-tauri/gen/ src-tauri/target/ node_modules`. Then run `direnv reload` (if using Nix and direnv) and then complete Step 2 and return here once done.
 1. Run `adb devices`, and make sure your Android device is visible
 1. Run `npm run tauri android init` and make sure no errors are shown
 1. Run `npm run tauri android dev`
