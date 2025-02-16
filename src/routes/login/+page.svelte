@@ -1,12 +1,61 @@
+<script lang="ts">
+    import { login } from "$lib/stores/auth";
+    import { error } from "@sveltejs/kit";
+
+    let fields = { email: "", password: "" };
+    let errors = { email: "", password: "" };
+    let valid = false;
+
+    const submitHandler = () => {
+        valid = true;
+
+        // Validate email
+        if (!fields.email) {
+            errors.email = "Email is required";
+            valid = false;
+        } else {
+            errors.email = "";
+        }
+
+        // Validate password
+        if (!fields.password) {
+            errors.password = "Password is required";
+            fields.password = "";
+            valid = false;
+        } else {
+            errors.password = "";
+        }
+    };
+</script>
+
 <div class="container">
     <div class="login">
-        <img src="/logo_white_trans.png" alt="Ladeklubben Logo">
-        <form>
+        <img src="/logo_white_trans.png" alt="Ladeklubben Logo" />
+        <form on:submit|preventDefault={submitHandler} novalidate>
             <label for="email">Email</label>
-            <input type="email" id="email" name="email" required>
+            <input
+                type="email"
+                id="email"
+                name="email"
+                bind:value={fields.email}
+                class:error-border={errors.email}
+            />
+            {#if errors.email}
+                <span class="error-text">{errors.email}</span>
+            {/if}
             <label for="password">Password</label>
-            <input type="password" id="password" name="password" required>
+            <input
+                type="password"
+                id="password"
+                name="password"
+                bind:value={fields.password}
+                class:error-border={errors.password}
+            />
+            {#if errors.password}
+                <span class="error-text">{errors.password}</span>
+            {/if}
             <button type="submit">Login</button>
+            
         </form>
     </div>
 </div>
@@ -28,7 +77,6 @@
 
     img {
         width: 100px;
-
     }
 
     form {
@@ -36,7 +84,6 @@
         flex-direction: column;
         gap: 1rem;
         width: 100%;
-
     }
 
     label {
@@ -67,5 +114,15 @@
         color: white;
         margin-top: 1rem;
         cursor: pointer;
+    }
+
+    .error-border {
+        border-color: var(--lk-red-700);
+    }
+
+    .error-text {
+        color: var(--lk-red-700);
+        text-align: center;
+        margin: -10px 0px;
     }
 </style>
