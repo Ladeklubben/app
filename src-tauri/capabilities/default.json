@@ -10,7 +10,10 @@
     "opener:default",
     {
       "identifier": "http:default",
-      "allow": [{ "url": "https://*.tauri.app" }],
+      "allow": [
+        { "url": "https://*.tauri.app" },
+        { "url": "https://restapi.ladeklubben.dk" }
+      ],
       "deny": [{ "url": "https://private.tauri.app" }]
     }
   ]
