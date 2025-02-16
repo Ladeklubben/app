@@ -1,12 +1,12 @@
 <script lang="ts">
+    import { goto } from "$app/navigation";
     import { login } from "$lib/stores/auth";
-    import { error } from "@sveltejs/kit";
 
     let fields = { email: "", password: "" };
     let errors = { email: "", password: "" };
     let valid = false;
 
-    const submitHandler = () => {
+    const submitHandler = async () => {
         valid = true;
 
         // Validate email
@@ -24,6 +24,18 @@
             valid = false;
         } else {
             errors.password = "";
+        }
+        
+        // Login 
+        // #TODO handle network errors
+        if (valid) {
+            if (await login(fields.email, fields.password)) {
+                goto("/"); // Redirect to home page
+            }
+            else {
+                errors.email = "Invalid email or password";
+                errors.password = "Invalid email or password";
+            }
         }
     };
 </script>
@@ -55,24 +67,17 @@
                 <span class="error-text">{errors.password}</span>
             {/if}
             <button type="submit">Login</button>
-            
         </form>
     </div>
 </div>
 
 <style>
-    .container {
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-        padding: 20px;
-    }
-
     .login {
         display: flex;
         flex-direction: column;
         gap: 10px;
         align-items: center;
+        padding: 20px;
     }
 
     img {

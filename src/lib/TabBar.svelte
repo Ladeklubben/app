@@ -19,7 +19,7 @@
 	<button
 		type="button"
 		class="tab-element"
-		on:click={() => goto("/meter")}
+		on:click={() => goto("/login")}
 		style="opacity: {$page.url.pathname === '/meter' ? '100%' : '60%'};"
 	>
 		<Menu style="font-size: 25px;" />
