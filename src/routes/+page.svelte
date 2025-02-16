@@ -1,8 +1,8 @@
 <script>
     import PhaseOverview from "$lib/PhaseOverview.svelte";
-    import { onMount } from "svelte";
-    import { login } from "$lib/stores/auth";
-    import { goto } from "$app/navigation";
+    import { invoke } from '@tauri-apps/api/core';
+
+    
 
 </script>
 

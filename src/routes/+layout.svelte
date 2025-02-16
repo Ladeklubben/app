@@ -1,16 +1,29 @@
 <!-- +layout.svelte -->
 <script>
-    import TabBar from '$lib/TabBar.svelte';
-    import { page } from '$app/stores';
+    import TabBar from "$lib/TabBar.svelte";
+    import { page } from "$app/stores";
+    import { goto } from "$app/navigation";
+    import { checkLoginStatus } from "$lib/stores/auth";
+    import { onMount } from "svelte";
+
+    let loginCheckDone = false;
+    onMount(async () => {
+        const isLoggedIn = await checkLoginStatus();
+        if (!isLoggedIn) {
+            goto("/login");
+        }
+        loginCheckDone = true;
+    });
 </script>
 
-
 <div class="layout-container">
-    <main>
-        <slot />
-    </main>
-    {#if $page.url.pathname !== '/login'}
-        <TabBar />
+    {#if loginCheckDone}
+        <main>
+            <slot />
+        </main>
+        {#if $page.url.pathname !== "/login"}
+            <TabBar />
+        {/if}
     {/if}
 </div>
 

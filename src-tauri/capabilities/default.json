@@ -11,10 +11,19 @@
     {
       "identifier": "http:default",
       "allow": [
-        { "url": "https://*.tauri.app" },
-        { "url": "https://restapi.ladeklubben.dk" }
+        {
+          "url": "https://*.tauri.app"
+        },
+        {
+          "url": "https://restapi.ladeklubben.dk"
+        }
       ],
-      "deny": [{ "url": "https://private.tauri.app" }]
-    }
+      "deny": [
+        {
+          "url": "https://private.tauri.app"
+        }
+      ]
+    },
+    "store:default"
   ]
 }

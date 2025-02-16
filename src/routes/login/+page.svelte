@@ -25,14 +25,13 @@
         } else {
             errors.password = "";
         }
-        
-        // Login 
+
+        // Login
         // #TODO handle network errors
         if (valid) {
             if (await login(fields.email, fields.password)) {
                 goto("/"); // Redirect to home page
-            }
-            else {
+            } else {
                 errors.email = "Invalid email or password";
                 errors.password = "Invalid email or password";
             }
@@ -40,39 +39,37 @@
     };
 </script>
 
-<div class="container">
-    <div class="login">
-        <img src="/logo_white_trans.png" alt="Ladeklubben Logo" />
-        <form on:submit|preventDefault={submitHandler} novalidate>
-            <label for="email">Email</label>
-            <input
-                type="email"
-                id="email"
-                name="email"
-                bind:value={fields.email}
-                class:error-border={errors.email}
-            />
-            {#if errors.email}
-                <span class="error-text">{errors.email}</span>
-            {/if}
-            <label for="password">Password</label>
-            <input
-                type="password"
-                id="password"
-                name="password"
-                bind:value={fields.password}
-                class:error-border={errors.password}
-            />
-            {#if errors.password}
-                <span class="error-text">{errors.password}</span>
-            {/if}
-            <button type="submit">Login</button>
-        </form>
-    </div>
+<div class="login-container">
+    <img src="/logo_white_trans.png" alt="Ladeklubben Logo" />
+    <form on:submit|preventDefault={submitHandler} novalidate>
+        <label for="email">Email</label>
+        <input
+            type="email"
+            id="email"
+            name="email"
+            bind:value={fields.email}
+            class:error-border={errors.email}
+        />
+        {#if errors.email}
+            <span class="error-text">{errors.email}</span>
+        {/if}
+        <label for="password">Password</label>
+        <input
+            type="password"
+            id="password"
+            name="password"
+            bind:value={fields.password}
+            class:error-border={errors.password}
+        />
+        {#if errors.password}
+            <span class="error-text">{errors.password}</span>
+        {/if}
+        <button type="submit">Login</button>
+    </form>
 </div>
 
 <style>
-    .login {
+    .login-container {
         display: flex;
         flex-direction: column;
         gap: 10px;
