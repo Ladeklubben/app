@@ -1,5 +1,7 @@
 <script>
     import PhaseOverview from "$lib/PhaseOverview.svelte";
+    import { onMount } from "svelte";
+    import { login } from "$lib/stores/auth";
 </script>
 
 <div class="container">

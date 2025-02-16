@@ -1,5 +1,6 @@
 import { writable } from 'svelte/store';
 import { fetch } from '@tauri-apps/plugin-http';
+import { MD5 } from 'crypto-js';
 
 export const auth = writable({
   token: null,
@@ -9,9 +10,10 @@ export const auth = writable({
 
 export async function login(email: string, password: string) {
   try {
+    const hashedPassword = MD5(password).toString();
     const response = await fetch('https://restapi.ladeklubben.dk/user/login', {
       method: 'POST',
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ email, password: hashedPassword }),
       headers: {
         'Content-Type': 'application/json'
       }
