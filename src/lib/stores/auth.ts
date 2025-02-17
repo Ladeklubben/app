@@ -4,37 +4,50 @@ import { MD5 } from 'crypto-js';
 import { invoke } from '@tauri-apps/api/core';
 import { goto } from '$app/navigation';
 
-// Create a writable store to keep track of the login status
+interface AuthData {
+	email: string;
+	hashed_password: string;
+	token: string;
+}
+
+// Create writable stores
 export const isLoggedIn = writable(false);
+export const currentUser = writable<AuthData | null>(null);
 
-// Checks if the user is logged in by checking if the token is present and valid
+// Check login status and load auth data
 export async function checkLoginStatus(): Promise<boolean> {
-    try {
-        const token = await getToken();
-        if (token) {
-            isLoggedIn.set(true);
-            return true;
-        } else {
-            isLoggedIn.set(false);
-            return false;
-        }
-    } catch (error) {
-        isLoggedIn.set(false);
-        return false;
-    }
+	try {
+		const authData = await getAuth();
+		if (authData && authData.token) {
+			isLoggedIn.set(true);
+			currentUser.set(authData);
+			return true;
+		} else {
+			isLoggedIn.set(false);
+			currentUser.set(null);
+			return false;
+		}
+	} catch (error) {
+		isLoggedIn.set(false);
+		currentUser.set(null);
+		return false;
+	}
 }
 
-// Gets the auth token from the Tauri Rust store 
-export function getToken() {
-    return invoke('get_auth_token').catch(() => {
-        return false;
-    });
+// Get auth data from Rust store
+export async function getAuth(): Promise<AuthData | null> {
+	try {
+		return await invoke<AuthData>('get_auth');
+	} catch {
+		return null;
+	}
 }
 
-// Saves the auth token to the Tauri Rust store
+// Login and save auth data
 export async function login(email: string, password: string): Promise<boolean> {
 	try {
 		const hashedPassword = MD5(password).toString();
+
 		const response = await fetch('https://restapi.ladeklubben.dk/user/login', {
 			method: 'POST',
 			body: JSON.stringify({ email, password: hashedPassword }),
@@ -50,7 +63,21 @@ export async function login(email: string, password: string): Promise<boolean> {
 		}
 
 		const data = await response.json();
-		invoke('save_auth_token', { token: data.access_token });
+
+		// Create auth data object
+		const authData: AuthData = {
+			email,
+			hashed_password: hashedPassword,
+			token: data.access_token
+		};
+
+		// Save to Rust store
+		await invoke('save_auth', { auth: authData });
+
+		// Update stores
+		isLoggedIn.set(true);
+		currentUser.set(authData);
+
 		return true;
 	} catch (error) {
 		console.error('Error:', error);
@@ -58,7 +85,9 @@ export async function login(email: string, password: string): Promise<boolean> {
 	}
 }
 
-export function logout() {
-	invoke('log_out');
+export async function logout() {
+	await invoke('log_out');
+	isLoggedIn.set(false);
+	currentUser.set(null);
 	goto('/login');
 }

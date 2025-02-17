@@ -30,7 +30,7 @@
         // #TODO handle network errors
         if (valid) {
             if (await login(fields.email, fields.password)) {
-                goto("/"); // Redirect to home page
+                goto("/");
             } else {
                 errors.email = "Invalid email or password";
                 errors.password = "Invalid email or password";
