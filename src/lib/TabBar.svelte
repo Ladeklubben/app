@@ -1,6 +1,7 @@
 <script>
 	import HomeVariant from "~icons/mdi/home-variant";
 	import Menu from "~icons/mdi/menu";
+	import ChartBox from "~icons/mdi/chart-box";
 	import { page } from "$app/stores";
 	import { goto } from "$app/navigation";
 </script>
@@ -19,11 +20,11 @@
 	<button
 		type="button"
 		class="tab-element"
-		on:click={() => goto("/login")}
-		style="opacity: {$page.url.pathname === '/meter' ? '100%' : '60%'};"
+		on:click={() => goto("/prices")}
+		style="opacity: {$page.url.pathname === '/prices' ? '100%' : '60%'};"
 	>
-		<Menu style="font-size: 25px;" />
-		Meter
+		<ChartBox style="font-size: 25px;" />
+		Prices
 	</button>
 
 	<button

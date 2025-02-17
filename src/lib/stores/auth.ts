@@ -85,7 +85,7 @@ export async function login(email: string, password: string, preHashed: boolean)
 		// Update stores
 		isLoggedIn.set(true);
 		currentUser.set(authData);
-		console.log('Logged in:', authData.token);
+		console.log('Logged in:', authData.email);
 
 		return true;
 	} catch (error) {
