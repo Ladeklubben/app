@@ -10,6 +10,7 @@
         Title,
         CategoryScale,
         Filler,
+        Tooltip,
     } from "chart.js";
 
     Chart.register(
@@ -20,6 +21,7 @@
         Title,
         CategoryScale,
         Filler,
+        Tooltip,
     );
 
     let chart: Chart | null = null;
@@ -122,6 +124,23 @@
                         tooltip: {
                             mode: "index",
                             intersect: false,
+                            backgroundColor: "rgba(0, 0, 0, 0.8)",
+                            padding: 12,
+                            titleColor: "#ffffff",
+                            titleFont: {
+                                size: 14,
+                                weight: "normal",
+                            },
+                            bodyColor: "#ffffff",
+                            bodyFont: {
+                                size: 14,
+                            },
+                            displayColors: false,
+                            callbacks: {
+                                label: function (context) {
+                                    return `${context.parsed.y.toFixed(2)} kr.`;
+                                },
+                            },
                         },
                     },
                     scales: {
