@@ -1,6 +1,6 @@
 <script lang="ts">
     import { onMount } from "svelte";
-    import { prices } from "./stores/prices";
+    import { prices } from "$lib/stores/prices";
     import {
         Chart,
         LineController,
@@ -85,6 +85,7 @@
                             fill: true,
                             tension: 0.4,
                             pointRadius: 0,
+                            backgroundColor: "#2e4d59",
                         },
                     ],
                 },
@@ -104,11 +105,12 @@
                             ticks: {
                                 maxRotation: 0,
                                 autoSkip: true,
-                                maxTicksLimit: 4,
+                                maxTicksLimit: 5,
                                 color: "#dceef1",
                                 font: {
                                     size: 12,
                                 },
+                                align: "start",
                             },
                             border: {
                                 display: false,
@@ -120,11 +122,21 @@
                                 color: "rgba(156, 163, 175, 0.1)",
                             },
                             ticks: {
-                                padding: -40, // Adjust this value to move labels closer to the chart
+                                padding: -30,
                                 color: "#dceef1",
-                                maxTicksLimit: 8,
+                                maxTicksLimit: 6,
                                 font: {
                                     size: 12,
+                                },
+                                callback: function (value, index, values) {
+                                    // Only show labels if they're not at the edges
+                                    if (
+                                        index === 0 ||
+                                        index === values.length - 1
+                                    ) {
+                                        return "";
+                                    }
+                                    return value;
                                 },
                             },
                             border: {
@@ -145,7 +157,7 @@
 <style>
     .chart-container {
         position: relative;
-        height: 100%;
+        height: 300px;
         width: 100%;
     }
 </style>
