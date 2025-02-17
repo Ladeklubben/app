@@ -35,7 +35,7 @@ export async function fetchPrices() {
         const data = await response.json();
         prices.set(data.price_list);
     } catch (err) {
-        error.set(err.message);
+        error.set((err as Error).message);
     } finally {
         isLoading.set(false);
     }
