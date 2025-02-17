@@ -9,6 +9,7 @@
         LinearScale,
         Title,
         CategoryScale,
+        Filler,
     } from "chart.js";
 
     Chart.register(
@@ -18,11 +19,15 @@
         LinearScale,
         Title,
         CategoryScale,
+        Filler,
     );
 
     let chart: Chart | null = null;
     let chartCanvas: HTMLCanvasElement;
-    let width: number, height: number, gradient: CanvasGradient;
+    let width: number,
+        height: number,
+        gradient: CanvasGradient,
+        fillGradient: CanvasGradient;
 
     function getGradient(ctx: CanvasRenderingContext2D, chartArea: any) {
         const chartWidth = chartArea.right - chartArea.left;
@@ -37,10 +42,24 @@
                 chartArea.top,
             );
             gradient.addColorStop(0, "#5cf628");
-            gradient.addColorStop(0.5, "#59a6b7");
             gradient.addColorStop(1, "#e0227f");
+
+            // Create a separate gradient for the fill
+            fillGradient = ctx.createLinearGradient(
+                0,
+                chartArea.bottom,
+                0,
+                chartArea.top,
+            );
+            fillGradient.addColorStop(0, "rgba(92, 246, 40, 0.1)");
+            fillGradient.addColorStop(1, "rgba(224, 34, 127, 0.1)");
         }
         return gradient;
+    }
+
+    function getFillGradient(ctx: CanvasRenderingContext2D, chartArea: any) {
+        getGradient(ctx, chartArea); // Ensure both gradients are created
+        return fillGradient;
     }
 
     onMount(() => {
@@ -82,10 +101,17 @@
                                 }
                                 return getGradient(ctx, chartArea);
                             },
-                            fill: true,
+                            backgroundColor: function (context) {
+                                const chart = context.chart;
+                                const { ctx, chartArea } = chart;
+                                if (!chartArea) {
+                                    return;
+                                }
+                                return getFillGradient(ctx, chartArea);
+                            },
+                            fill: "origin",
                             tension: 0.4,
                             pointRadius: 0,
-                            backgroundColor: "#2e4d59",
                         },
                     ],
                 },
@@ -125,11 +151,11 @@
                                 padding: -30,
                                 color: "#dceef1",
                                 maxTicksLimit: 6,
+                                z: 1,
                                 font: {
                                     size: 12,
                                 },
                                 callback: function (value, index, values) {
-                                    // Only show labels if they're not at the edges
                                     if (
                                         index === 0 ||
                                         index === values.length - 1
@@ -157,7 +183,7 @@
 <style>
     .chart-container {
         position: relative;
-        height: 300px;
+        height: 250px;
         width: 100%;
     }
 </style>
