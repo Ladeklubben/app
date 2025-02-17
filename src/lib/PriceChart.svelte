@@ -110,8 +110,8 @@
                                 return getFillGradient(ctx, chartArea);
                             },
                             fill: "origin",
-                            tension: 0.4,
                             pointRadius: 0,
+                            stepped: true,
                         },
                     ],
                 },
@@ -119,8 +119,9 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
-                        legend: {
-                            display: false,
+                        tooltip: {
+                            mode: "index",
+                            intersect: false,
                         },
                     },
                     scales: {

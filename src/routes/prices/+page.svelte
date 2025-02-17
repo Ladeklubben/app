@@ -16,7 +16,7 @@
         <p>Error: {$error}</p>
     {:else}
         <Card title="Prices">
-            Costprice with VAT
+            Cost price with VAT
             <PriceChart />
         </Card>
     {/if}
