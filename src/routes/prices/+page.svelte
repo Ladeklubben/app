@@ -22,9 +22,9 @@
 
     let chart: Chart | null = null;
     let chartCanvas: HTMLCanvasElement;
-    let width, height, gradient;
+    let width: number, height: number, gradient: CanvasGradient;
 
-    function getGradient(ctx, chartArea) {
+    function getGradient(ctx: CanvasRenderingContext2D, chartArea: any) {
         const chartWidth = chartArea.right - chartArea.left;
         const chartHeight = chartArea.bottom - chartArea.top;
         if (!gradient || width !== chartWidth || height !== chartHeight) {
@@ -58,82 +58,84 @@
                     price.Timestamp * 1000 <= now + oneDayInMillis,
             );
 
-            chart = new Chart(ctx, {
-                type: "line",
-                data: {
-                    labels: filteredPrices.map((price) => {
-                        const date = new Date(price.Timestamp * 1000);
-                        return date.toLocaleTimeString("default", {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                        });
-                    }),
-                    datasets: [
-                        {
-                            label: "Cost Price (VAT)",
-                            data: filteredPrices.map(
-                                (price) => price.Costprice_VAT / 100,
-                            ),
-                            borderColor: function (context) {
-                                const chart = context.chart;
-                                const { ctx, chartArea } = chart;
-                                if (!chartArea) {
-                                    return;
-                                }
-                                return getGradient(ctx, chartArea);
+            if (ctx) {
+                chart = new Chart(ctx, {
+                    type: "line",
+                    data: {
+                        labels: filteredPrices.map((price) => {
+                            const date = new Date(price.Timestamp * 1000);
+                            return date.toLocaleTimeString("default", {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                            });
+                        }),
+                        datasets: [
+                            {
+                                label: "Cost Price (VAT)",
+                                data: filteredPrices.map(
+                                    (price) => price.Costprice_VAT / 100,
+                                ),
+                                borderColor: function (context) {
+                                    const chart = context.chart;
+                                    const { ctx, chartArea } = chart;
+                                    if (!chartArea) {
+                                        return;
+                                    }
+                                    return getGradient(ctx, chartArea);
+                                },
+                                fill: true,
+                                tension: 0.4,
+                                pointRadius: 0,
                             },
-                            fill: true,
-                            tension: 0.4,
-                            pointRadius: 0,
-                        },
-                    ],
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false,
-                        },
+                        ],
                     },
-                    scales: {
-                        x: {
-                            grid: {
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
                                 display: false,
                             },
-                            ticks: {
-                                maxRotation: 0,
-                                autoSkip: true,
-                                maxTicksLimit: 4,
-                                color: "#dceef1",
-                                font: {
-                                    size: 12,
+                        },
+                        scales: {
+                            x: {
+                                grid: {
+                                    display: false,
+                                },
+                                ticks: {
+                                    maxRotation: 0,
+                                    autoSkip: true,
+                                    maxTicksLimit: 4,
+                                    color: "#dceef1",
+                                    font: {
+                                        size: 12,
+                                    },
+                                },
+                                border: {
+                                    display: false,
                                 },
                             },
-                            border: {
-                                display: false,
-                            },
-                        },
-                        y: {
-                            position: "right",
-                            grid: {
-                                color: "rgba(156, 163, 175, 0.1)",
-                            },
-                            ticks: {
-                                padding: 8,
-                                color: "#dceef1",
-                                maxTicksLimit: 8,
-                                font: {
-                                    size: 12,
+                            y: {
+                                position: "right",
+                                grid: {
+                                    color: "rgba(156, 163, 175, 0.1)",
                                 },
-                            },
-                            border: {
-                                display: false,
+                                ticks: {
+                                    padding: -40, // Adjust this value to move labels closer to the chart
+                                    color: "#dceef1",
+                                    maxTicksLimit: 8,
+                                    font: {
+                                        size: 12,
+                                    },
+                                },
+                                border: {
+                                    display: false,
+                                },
                             },
                         },
                     },
-                },
-            });
+                });
+            }
         });
     });
 </script>
