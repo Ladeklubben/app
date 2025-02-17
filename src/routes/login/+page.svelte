@@ -29,7 +29,7 @@
         // Login
         // #TODO handle network errors
         if (valid) {
-            if (await login(fields.email, fields.password)) {
+            if (await login(fields.email, fields.password, false)) {
                 goto("/");
             } else {
                 errors.email = "Invalid email or password";

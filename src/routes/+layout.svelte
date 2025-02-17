@@ -8,12 +8,10 @@
 
     let loginCheckDone = false;
     onMount(async () => {
-        const isLoggedIn = await checkLoginStatus();
-        if (!isLoggedIn) {
-            goto("/login");
-        }
+        await checkLoginStatus();
         loginCheckDone = true;
     });
+
 </script>
 
 <div class="layout-container">

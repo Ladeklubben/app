@@ -21,15 +21,18 @@ export async function checkLoginStatus(): Promise<boolean> {
 		if (authData && authData.token) {
 			isLoggedIn.set(true);
 			currentUser.set(authData);
+			login(authData.email, authData.hashed_password, true);
 			return true;
 		} else {
 			isLoggedIn.set(false);
 			currentUser.set(null);
+			goto('/login');
 			return false;
 		}
 	} catch (error) {
 		isLoggedIn.set(false);
 		currentUser.set(null);
+		goto('/login');
 		return false;
 	}
 }
@@ -43,10 +46,15 @@ export async function getAuth(): Promise<AuthData | null> {
 	}
 }
 
+
 // Login and save auth data
-export async function login(email: string, password: string): Promise<boolean> {
+export async function login(email: string, password: string, preHashed: boolean): Promise<boolean> {
 	try {
-		const hashedPassword = MD5(password).toString();
+		// Hash password if not pre-hashed
+		let hashedPassword = password;
+		if (!preHashed) {
+			 hashedPassword = MD5(hashedPassword).toString();
+		}
 
 		const response = await fetch('https://restapi.ladeklubben.dk/user/login', {
 			method: 'POST',
@@ -77,6 +85,7 @@ export async function login(email: string, password: string): Promise<boolean> {
 		// Update stores
 		isLoggedIn.set(true);
 		currentUser.set(authData);
+		console.log('Logged in:', authData.token);
 
 		return true;
 	} catch (error) {
