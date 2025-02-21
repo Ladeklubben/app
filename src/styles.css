@@ -43,3 +43,8 @@
     --lk-red-900 : #861548;
     --lk-red-950 : #520528;
   }
+
+/* Font */
+body {
+  font-family: 'Montserrat', sans-serif;
+}
