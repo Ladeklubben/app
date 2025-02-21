@@ -1,7 +1,7 @@
 <!-- PhaseOverview.svelte -->
 <script>
-    import PhaseBar from "$lib/PhaseBar.svelte";
-    import Card from "$lib/Card.svelte";
+    import PhaseBar from "$lib/components/features/meter/PhaseBar.svelte";
+    import Card from "$lib/components/ui/Card.svelte";
 
     const phases = [
         { label: "L1", percentage: 85 },

@@ -1,6 +1,6 @@
 <!-- +layout.svelte -->
 <script>
-    import TabBar from "$lib/TabBar.svelte";
+    import TabBar from "$lib/components/ui/TabBar.svelte";
     import { page } from "$app/stores";
     import { goto } from "$app/navigation";
     import { checkLoginStatus } from "$lib/stores/auth";
