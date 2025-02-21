@@ -1,13 +1,16 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
     import { login } from "$lib/services/auth";
+    import { load } from "@tauri-apps/plugin-store";
 
     let fields = { email: "", password: "" };
     let errors = { email: "", password: "" };
     let valid = false;
+    let loading = false;
 
     const submitHandler = async () => {
         valid = true;
+        loading = true;
 
         // Validate email
         if (!fields.email) {
@@ -36,6 +39,7 @@
                 errors.password = "Invalid email or password";
             }
         }
+        loading = false;
     };
 </script>
 
@@ -64,7 +68,13 @@
         {#if errors.password}
             <span class="error-text">{errors.password}</span>
         {/if}
-        <button type="submit">Login</button>
+        <button type="submit" class:btnLoad={loading}>
+            {#if loading}
+                Loading...
+            {:else}
+                Login
+            {/if}
+        </button>
     </form>
 </div>
 
@@ -117,6 +127,12 @@
         color: white;
         margin-top: 1rem;
         cursor: pointer;
+    }
+
+    .btnLoad {
+        background-color: var(--lk-blue-800);
+        border-color: var(--lk-blue-800);
+        cursor: not-allowed;
     }
 
     .error-border {
