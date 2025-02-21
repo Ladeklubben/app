@@ -1,6 +1,6 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
-    import { login } from "$lib/stores/auth";
+    import { login } from "$lib/services/auth";
 
     let fields = { email: "", password: "" };
     let errors = { email: "", password: "" };

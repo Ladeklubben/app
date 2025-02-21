@@ -1,6 +1,6 @@
 <script lang="ts">
     import { onMount } from "svelte";
-    import { prices } from "$lib/stores/prices";
+    import { prices } from "$lib/services/prices";
     import {
         Chart,
         LineController,

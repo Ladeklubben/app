@@ -2,8 +2,7 @@
 <script>
     import TabBar from "$lib/components/ui/TabBar.svelte";
     import { page } from "$app/stores";
-    import { goto } from "$app/navigation";
-    import { checkLoginStatus } from "$lib/stores/auth";
+    import { checkLoginStatus } from "$lib/services/auth";
     import { onMount } from "svelte";
 
     let loginCheckDone = false;

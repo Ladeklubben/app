@@ -1,6 +1,6 @@
 <script lang="ts">
     import { onMount } from "svelte";
-    import { isLoading, error, fetchPrices } from "$lib/stores/prices";
+    import { isLoading, error, fetchPrices } from "$lib/services/prices";
     import Card from "$lib/components/ui/Card.svelte";
     import PriceChart from "$lib/components/features/prices/PriceChart.svelte";
 

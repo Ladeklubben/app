@@ -1,17 +1,13 @@
 import { writable } from 'svelte/store';
-import { fetch } from '@tauri-apps/plugin-http';
 import { MD5 } from 'crypto-js';
 import { invoke } from '@tauri-apps/api/core';
 import { goto } from '$app/navigation';
+import { post } from '$lib/services/api';
+import type { AuthData } from '$lib/types/auth';
 
-interface AuthData {
-	email: string;
-	hashed_password: string;
-	token: string;
-}
+// TODO: Implement token refresh
 
 // Create writable stores
-export const isLoggedIn = writable(false);
 export const currentUser = writable<AuthData | null>(null);
 
 // Check login status and load auth data
@@ -19,18 +15,15 @@ export async function checkLoginStatus(): Promise<boolean> {
 	try {
 		const authData = await getAuth();
 		if (authData && authData.token) {
-			isLoggedIn.set(true);
 			currentUser.set(authData);
 			login(authData.email, authData.hashed_password, true);
 			return true;
 		} else {
-			isLoggedIn.set(false);
 			currentUser.set(null);
 			goto('/login');
 			return false;
 		}
 	} catch (error) {
-		isLoggedIn.set(false);
 		currentUser.set(null);
 		goto('/login');
 		return false;
@@ -56,21 +49,7 @@ export async function login(email: string, password: string, preHashed: boolean)
 			 hashedPassword = MD5(hashedPassword).toString();
 		}
 
-		const response = await fetch('https://restapi.ladeklubben.dk/user/login', {
-			method: 'POST',
-			body: JSON.stringify({ email, password: hashedPassword }),
-			headers: {
-				'Content-Type': 'application/json'
-			}
-		});
-
-		if (!response.ok) {
-			const errorData = await response.json();
-			console.error('Error:', errorData.detail);
-			return false;
-		}
-
-		const data = await response.json();
+		const data = await post('/user/login', { email, password: hashedPassword }, false);
 
 		// Create auth data object
 		const authData: AuthData = {
@@ -83,7 +62,6 @@ export async function login(email: string, password: string, preHashed: boolean)
 		await invoke('save_auth', { auth: authData });
 
 		// Update stores
-		isLoggedIn.set(true);
 		currentUser.set(authData);
 		console.log('Logged in:', authData.email);
 
@@ -96,7 +74,6 @@ export async function login(email: string, password: string, preHashed: boolean)
 
 export async function logout() {
 	await invoke('log_out');
-	isLoggedIn.set(false);
 	currentUser.set(null);
 	goto('/login');
 }
