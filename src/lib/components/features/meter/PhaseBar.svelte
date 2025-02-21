@@ -25,7 +25,7 @@
     background-color: var(--lk-blue-800);
     border-radius: 1rem;
     overflow: hidden;
-    height: 60px;
+    height: 40px;
   }
 
   .progress-bar {
@@ -41,7 +41,7 @@
     top: 50%;
     transform: translateY(-50%);
     color: var(--lk-blue-100);
-    font-size: 1.2rem;
+    font-size: 1rem;
     font-weight: bold;
   }
 
@@ -51,6 +51,6 @@
     top: 50%;
     transform: translateY(-50%);
     color: var(--lk-blue-100);
-    font-size: 1.2rem;
+    font-size: 1rem;
   }
 </style>
