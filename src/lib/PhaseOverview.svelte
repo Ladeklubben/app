@@ -15,6 +15,3 @@
         <PhaseBar label={phase.label} percentage={phase.percentage} />
     {/each}
 </Card>
-
-<style>
-</style>
