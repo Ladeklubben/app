@@ -6,13 +6,13 @@
 
 </script>
 
-<div class="container">
+<div class="wrapper">
     <PhaseOverview />
 </div>
 
 
 <style>
-    .container {
+    .wrapper {
         display: flex;
         flex-direction: column;
         gap: 20px;

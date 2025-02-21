@@ -3,13 +3,13 @@
 
 </script>
 
-<div class="container">
+<div class="wrapper">
     <h1>{title}</h1>
     <slot></slot>
 </div>
 
 <style>
-    .container {
+    .wrapper {
         display: flex;
         flex-direction: column;
         gap: 20px;

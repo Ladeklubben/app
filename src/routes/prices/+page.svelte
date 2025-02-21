@@ -9,7 +9,7 @@
     });
 </script>
 
-<div class="container">
+<div class="wrapper">
     <Card title="Prices">
         {#if $isLoading}
             <p>Loading...</p>
@@ -23,7 +23,7 @@
 </div>
 
 <style>
-    .container {
+    .wrapper {
         display: flex;
         flex-direction: column;
         gap: 20px;

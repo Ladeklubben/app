@@ -10,7 +10,7 @@
     ];
 </script>
 
-<Card title="Fase Oversigt">
+<Card title="Phases">
     {#each phases as phase}
         <PhaseBar label={phase.label} percentage={phase.percentage} />
     {/each}
