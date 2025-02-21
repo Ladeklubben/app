@@ -3,11 +3,16 @@
     import { onMount } from 'svelte';
 
     let totalEnergyImport = 0;
+    let formattedEnergyImport = '';
+
+    // Formats the number with a thousands separator
+    const formatter = new Intl.NumberFormat('en-DK');
 
     onMount(async () => {
         try {
             const response = await get('/installation/mainmeter_tmp', true);
             totalEnergyImport = Math.round(response.total_energy_import);
+            formattedEnergyImport = formatter.format(totalEnergyImport);
         } catch (error) {
             console.error('Error fetching data:', error);
         }
@@ -17,7 +22,7 @@
 <div class="wrapper">
     Live Usage
 
-    <h2>{totalEnergyImport}<span>W</span></h2>
+    <h2>{formattedEnergyImport}<span>W</span></h2>
 </div>
 
 <style>
