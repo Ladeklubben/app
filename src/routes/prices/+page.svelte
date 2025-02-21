@@ -10,16 +10,16 @@
 </script>
 
 <div class="container">
-    {#if $isLoading}
-        <p>Loading...</p>
-    {:else if $error}
-        <p>Error: {$error}</p>
-    {:else}
-        <Card title="Prices">
+    <Card title="Prices">
+        {#if $isLoading}
+            <p>Loading...</p>
+        {:else if $error}
+            <p>Error: {$error}</p>
+        {:else}
             Cost price with VAT
             <PriceChart />
-        </Card>
-    {/if}
+        {/if}
+    </Card>
 </div>
 
 <style>
