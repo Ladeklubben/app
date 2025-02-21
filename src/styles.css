@@ -47,4 +47,7 @@
 /* Font */
 body {
   font-family: 'Montserrat', sans-serif;
+  background-color: var(--lk-blue-950); 
+  margin: 0px; 
+  color: var(--lk-blue-50);
 }
