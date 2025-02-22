@@ -108,7 +108,7 @@
         font-size: 1.1rem;
         background-color: transparent;
         border: 1px solid var(--lk-blue-500);
-        border-radius: 20px;
+        border-radius: var(--border-radius);
         color: var(--lk-blue-50);
     }
 
@@ -123,7 +123,7 @@
         font-weight: bold;
         background-color: var(--lk-blue-500);
         border: 1px solid var(--lk-blue-500);
-        border-radius: 20px;
+        border-radius: var(--border-radius);
         color: white;
         margin-top: 1rem;
         cursor: pointer;

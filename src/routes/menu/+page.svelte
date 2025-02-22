@@ -45,7 +45,7 @@
         padding: 2rem;
         text-align: center;
         margin-bottom: 1rem;
-        border-radius: 0.5rem;
+        border-radius: var(--border-radius);
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     }
 
@@ -69,7 +69,7 @@
         background: var(--button-bg, #f5f5f5);
         border: none;
         padding: 0.5rem 1rem;
-        border-radius: 1rem;
+        border-radius: var(--border-radius);
         cursor: pointer;
         font-size: 0.9rem;
     }
@@ -88,7 +88,7 @@
         border: none;
         padding: 1rem;
         margin-top: 1rem;
-        border-radius: 0.5rem;
+        border-radius: var(--border-radius);
         display: flex;
         align-items: center;
         justify-content: center;

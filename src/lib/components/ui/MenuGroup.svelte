@@ -12,8 +12,7 @@
 
 <style>
     .settings-group {
-        background: white;
-        border-radius: 0.5rem;
+        border-radius: var(--border-radius);
         overflow: hidden;
         margin-bottom: 1rem;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -26,9 +25,5 @@
         background: var(--group-header-bg, #f5f5f5);
         color: var(--group-header-color, #666);
         border-bottom: 1px solid var(--border-color, #eee);
-    }
-
-    .content {
-        background: white;
     }
 </style>

@@ -17,7 +17,7 @@
         gap: 10px;
         padding: 32px;
         align-items: center;
-        border-radius: 1.5rem;
+        border-radius: var(--border-radius);
         border: 1px solid var(--lk-blue-800);
         background: linear-gradient(to right, var(--lk-blue-400), var(--lk-blue-800));
     }

@@ -14,7 +14,7 @@
         flex-direction: column;
         gap: 20px;
         padding: 20px;
-        border-radius: 1.5rem;
+        border-radius: var(--border-radius);
         border: 1px solid var(--lk-blue-800);
     }
 
