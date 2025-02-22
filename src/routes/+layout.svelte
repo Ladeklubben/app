@@ -31,4 +31,10 @@
         flex-direction: column;
         min-height: 100%;
     }
+
+    main {
+        flex: 1;
+        overflow-y: auto;
+        padding-bottom: 70px;
+    }
 </style>
