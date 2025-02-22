@@ -47,10 +47,17 @@
 	--lk-red-950: #520528;
 }
 
-/* Font */
+/* Default classes */
 body {
 	font-family: 'Montserrat', sans-serif;
 	background-color: var(--lk-blue-950);
 	margin: 0px;
 	color: var(--lk-blue-50);
+}
+
+.wrapper {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+	padding: 20px;
 }

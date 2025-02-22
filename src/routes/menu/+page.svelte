@@ -5,7 +5,7 @@
     import MenuGroup from "$lib/components/ui/MenuGroup.svelte";
 </script>
 
-<div class="menu-page">
+<div class="wrapper">
     <div class="profile-section">
         <div class="avatar">
             <!-- Add User SVG icon here -->
@@ -34,19 +34,12 @@
 </div>
 
 <style>
-    .menu-page {
-        max-width: 600px;
-        margin: 0 auto;
-        padding: 1rem;
-    }
-
     .profile-section {
-        background: white;
         padding: 2rem;
         text-align: center;
         margin-bottom: 1rem;
         border-radius: var(--border-radius);
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        border: 1px solid var(--lk-blue-800);
     }
 
     .avatar {
@@ -61,7 +54,7 @@
     }
 
     .email {
-        color: var(--text-color, #666);
+        color: var(--lk-blue-100);
         margin: 0.5rem 0;
     }
 

@@ -43,7 +43,7 @@
     };
 </script>
 
-<div class="login-container">
+<div class="wrapper">
     <img src="/logo_white_trans.png" alt="Ladeklubben Logo" />
     <form on:submit|preventDefault={submitHandler} novalidate>
         <label for="email">Email</label>
@@ -79,12 +79,8 @@
 </div>
 
 <style>
-    .login-container {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
+    .wrapper {
         align-items: center;
-        padding: 20px;
     }
 
     img {
