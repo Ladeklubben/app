@@ -4,6 +4,7 @@
     import { page } from "$app/stores";
     import { checkLoginStatus } from "$lib/services/auth";
     import { onMount } from "svelte";
+    import "$lib/styles.css";
 
     let loginCheckDone = false;
     onMount(async () => {
