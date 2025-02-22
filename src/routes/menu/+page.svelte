@@ -3,7 +3,7 @@
     import { currentUser } from "$lib/services/auth";
 </script>
 
-<h1>Settings</h1>
+<h1>Menu</h1>
 {$currentUser?.email}
 <button on:click={logout}>Logout</button>
 
