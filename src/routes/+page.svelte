@@ -14,12 +14,3 @@
     <PhaseOverview />
     
 </div>
-
-<style>
-    .wrapper {
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-        padding: 20px;
-    }
-</style>

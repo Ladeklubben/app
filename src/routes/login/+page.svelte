@@ -43,7 +43,7 @@
     };
 </script>
 
-<div class="login-container">
+<div class="wrapper">
     <img src="/logo_white_trans.png" alt="Ladeklubben Logo" />
     <form on:submit|preventDefault={submitHandler} novalidate>
         <label for="email">Email</label>
@@ -79,12 +79,8 @@
 </div>
 
 <style>
-    .login-container {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
+    .wrapper {
         align-items: center;
-        padding: 20px;
     }
 
     img {
@@ -108,7 +104,7 @@
         font-size: 1.1rem;
         background-color: transparent;
         border: 1px solid var(--lk-blue-500);
-        border-radius: 20px;
+        border-radius: var(--border-radius);
         color: var(--lk-blue-50);
     }
 
@@ -123,7 +119,7 @@
         font-weight: bold;
         background-color: var(--lk-blue-500);
         border: 1px solid var(--lk-blue-500);
-        border-radius: 20px;
+        border-radius: var(--border-radius);
         color: white;
         margin-top: 1rem;
         cursor: pointer;

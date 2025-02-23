@@ -23,7 +23,7 @@
     position: relative;
     flex-grow: 1;
     background-color: var(--lk-blue-800);
-    border-radius: 1rem;
+    border-radius: var(--border-radius);
     overflow: hidden;
     height: 40px;
   }
@@ -31,7 +31,7 @@
   .progress-bar {
     height: 100%;
     background-color: var(--lk-blue-500);
-    border-radius: 1rem;
+    border-radius: var(--border-radius);
     transition: width 0.3s ease;
   }
 

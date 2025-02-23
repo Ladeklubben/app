@@ -157,7 +157,7 @@
                                 font: {
                                     size: 12,
                                 },
-                                align: "start",
+                                align: "inner",
                             },
                             border: {
                                 display: false,
@@ -169,7 +169,7 @@
                                 color: "rgba(156, 163, 175, 0.1)",
                             },
                             ticks: {
-                                padding: -30,
+                                padding: -26,
                                 color: "#dceef1",
                                 maxTicksLimit: 6,
                                 z: 1,
