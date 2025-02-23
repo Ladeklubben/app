@@ -3,6 +3,16 @@
     import { currentUser } from "$lib/services/auth";
     import MenuItem from "$lib/components/ui/MenuItem.svelte";
     import MenuGroup from "$lib/components/ui/MenuGroup.svelte";
+
+    // Import icons
+    import Email from "~icons/mdi/email";
+    import Document from "~icons/mdi/document";
+    import BatteryCharging from "~icons/mdi/battery-charging";
+    import BellRing from "~icons/mdi/bell-ring";
+    import Lock from "~icons/mdi/lock";
+    import { goto } from "$app/navigation";
+
+
 </script>
 
 <div class="wrapper">
@@ -16,14 +26,24 @@
 
     <div class="settings-container">
         <MenuGroup title="Account">
-            <MenuItem icon="📍" text="My Stores" />
-            <MenuItem icon="🔔" text="Notifications" hasToggle={true} />
-            <MenuItem icon="🔒" text="Security" />
+            <MenuItem text="Chargers">
+                <BatteryCharging />
+            </MenuItem>
+            <MenuItem text="Notifications" hasToggle={true}
+                ><BellRing />
+            </MenuItem>
+            <MenuItem text="Security">
+                <Lock />
+            </MenuItem>
         </MenuGroup>
 
         <MenuGroup title="Support">
-            <MenuItem icon="❓" text="Help Center" />
-            <MenuItem icon="✉️" text="Contact Us" />
+            <MenuItem text="Documentation">
+                <Document />
+            </MenuItem>
+            <MenuItem text="Contact Us" on:click={() => goto("https://ladeklubben.dk/kontakt-os/")}>
+                <Email />
+            </MenuItem>
         </MenuGroup>
     </div>
 </div>

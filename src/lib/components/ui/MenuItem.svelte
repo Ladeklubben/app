@@ -1,13 +1,12 @@
 <script lang="ts">
     // MenuItem.svelte
-    export let icon: string;
     export let text: string;
     export let hasToggle = false;
 </script>
 
 <div class="menu-item">
     <div class="menu-item-content">
-        <span class="icon">{@html icon}</span>
+        <slot></slot>
         <span class="text">{text}</span>
     </div>
     {#if hasToggle}
