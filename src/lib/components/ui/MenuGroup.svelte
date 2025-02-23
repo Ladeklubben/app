@@ -19,7 +19,7 @@
     }
 
     h2 {
-        font-size: 0.9rem;
+        font-size: 1rem;
         padding: 0.75rem 1rem;
         margin: 0;
         color: var(--lk-blue-100);

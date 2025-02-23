@@ -26,12 +26,8 @@
         justify-content: space-between;
         align-items: center;
         padding: 1rem;
-        border-bottom: 1px solid var(--border-color, #eee);
+        border-bottom: 1px solid var(--lk-blue-800);
         cursor: pointer;
-    }
-
-    .menu-item:hover {
-        background-color: var(--hover-bg, #f5f5f5);
     }
 
     .menu-item-content {
@@ -41,11 +37,11 @@
     }
 
     .text {
-        color: var(--text-color, #333);
+        color: var(--lk-blue-100);
     }
 
     .chevron {
-        color: var(--chevron-color, #666);
+        color: var(--lk-blue-100);
         font-size: 1.2rem;
     }
 
@@ -69,7 +65,7 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background-color: #ccc;
+        background-color: var(--lk-blue-100);
         border-radius: 1rem;
         transition: 0.3s;
     }
@@ -81,16 +77,17 @@
         width: 1.1rem;
         left: 0.2rem;
         bottom: 0.2rem;
-        background-color: white;
+        background-color: var(--lk-blue-400);
         border-radius: 50%;
         transition: 0.3s;
     }
 
     input:checked + .slider {
-        background-color: var(--accent-color, #2196f3);
+        background-color: var(--lk-green-200);
     }
 
     input:checked + .slider:before {
         transform: translateX(1.5rem);
+        background-color: var(--lk-green-700);
     }
 </style>
