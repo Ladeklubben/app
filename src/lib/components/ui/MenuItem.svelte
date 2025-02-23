@@ -35,7 +35,9 @@
         border-bottom: 1px solid var(--lk-blue-800);
         cursor: pointer;
     }
-
+    .menu-item:last-child {
+        border-bottom: none;
+    }
     .menu-item-content {
         display: flex;
         align-items: center;
