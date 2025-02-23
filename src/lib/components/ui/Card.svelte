@@ -3,13 +3,13 @@
 
 </script>
 
-<div class="wrapper">
+<div class="card">
     <h1>{title}</h1>
     <slot></slot>
 </div>
 
 <style>
-    .wrapper {
+    .card {
         display: flex;
         flex-direction: column;
         gap: 20px;
