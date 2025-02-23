@@ -11,7 +11,7 @@
 		type="button"
 		class="tab-element"
 		on:click={() => goto("/")}
-		style="opacity: {$page.url.pathname === '/' ? '100%' : '60%'};"
+		style="opacity: {$page.url.pathname !== '/prices' && $page.url.pathname !== '/menu' ? '100%' : '60%'};"
 	>
 		<HomeVariant style="font-size: 25px;" />
 		Home
