@@ -11,7 +11,7 @@
             <!-- Add User SVG icon here -->
         </div>
         <p class="email">{$currentUser?.email}</p>
-        <button class="edit-profile">Edit Profile</button>
+        <button class="logout-btn" on:click={logout}>Log Out</button>
     </div>
 
     <div class="settings-container">
@@ -25,11 +25,6 @@
             <MenuItem icon="❓" text="Help Center" />
             <MenuItem icon="✉️" text="Contact Us" />
         </MenuGroup>
-
-        <button class="logout-button" on:click={logout}>
-            <span class="icon">🚪</span>
-            <span>Log out</span>
-        </button>
     </div>
 </div>
 
@@ -40,6 +35,10 @@
         margin-bottom: 1rem;
         border-radius: var(--border-radius);
         border: 1px solid var(--lk-blue-800);
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+        align-items: center;
     }
 
     .avatar {
@@ -47,7 +46,7 @@
         height: 5rem;
         background: var(--avatar-bg, #e0e0e0);
         border-radius: 50%;
-        margin: 0 auto 1rem;
+        margin: 0 auto 0;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -58,40 +57,12 @@
         margin: 0.5rem 0;
     }
 
-    .edit-profile {
-        background: var(--button-bg, #f5f5f5);
+    .logout-btn {
+        background: var(--lk-blue-100);
         border: none;
         padding: 0.5rem 1rem;
         border-radius: var(--border-radius);
         cursor: pointer;
         font-size: 0.9rem;
-    }
-
-    .edit-profile:hover {
-        background: var(--button-hover-bg, #e0e0e0);
-    }
-
-    .settings-container {
-        margin-top: 2rem;
-    }
-
-    .logout-button {
-        width: 100%;
-        background: white;
-        border: none;
-        padding: 1rem;
-        margin-top: 1rem;
-        border-radius: var(--border-radius);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.5rem;
-        color: var(--danger-color, #dc3545);
-        cursor: pointer;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    }
-
-    .logout-button:hover {
-        background: var(--danger-hover-bg, #fff5f5);
     }
 </style>
