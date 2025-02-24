@@ -45,7 +45,7 @@
         background: none;
         border: none;
         cursor: pointer;
-        padding: 10px 20px 18px 20px;
+        padding: 10px 20px 18px 10px;
         color: var(--lk-blue-50);
         font-size: 25px;
     }
