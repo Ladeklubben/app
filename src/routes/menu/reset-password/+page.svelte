@@ -22,27 +22,35 @@
         if (!fields.oldPassword) {
             errors.oldPassword = "This fields is required";
             return;
+        } else {
+            errors.oldPassword = "";
         }
         if (!fields.newPassword) {
             errors.newPassword = "This fields is required";
             return;
+        } else {
+            errors.newPassword = "";
         }
         if (!fields.newPasswordRepeat) {
             errors.newPasswordRepeat = "This fields is required";
             return;
+        } else {
+            errors.newPasswordRepeat = "";
         }
         if (fields.newPassword.length < 8) {
             errors.newPassword = "Password must be at least 8 characters";
             return;
+        } else {
+            errors.newPassword = "";
         }
         if (fields.newPassword !== fields.newPasswordRepeat) {
             errors.newPasswordRepeat = "New passwords do not match";
             return;
+        } else {
+            errors.newPasswordRepeat = "";
         }
 
         if (valid) {
-            // Here you’d typically call an API to reset the password
-            // For now, simulate success
             errors = {
                 oldPassword: "",
                 newPassword: "",
