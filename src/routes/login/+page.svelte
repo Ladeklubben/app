@@ -3,8 +3,9 @@
     import { login } from "$lib/services/auth";
     import { showTabBar } from "$lib/services/layout";
     import { onDestroy, onMount } from "svelte";
+    import InputField from "$lib/components/ui/InputField.svelte";
 
-    let fields = { email: "", password: "" };
+    let fields: { [key: string]: string } = { email: "", password: "" };
     let errors = { email: "", password: "" };
     let valid = false;
     let loading = false;
@@ -50,33 +51,31 @@
     onDestroy(() => {
         $showTabBar = true;
     });
+
+    const handleInput = (field: string) => (event: Event) => {
+        fields[field] = (event.target as HTMLInputElement).value;
+    };
 </script>
 
 <div class="wrapper">
     <img src="/logo_white_trans.png" alt="Ladeklubben Logo" />
     <form on:submit|preventDefault={submitHandler} novalidate>
-        <label for="email">Email</label>
-        <input
-            type="email"
+        <InputField
             id="email"
-            name="email"
-            bind:value={fields.email}
-            class:error-border={errors.email}
+            type="email"
+            label="Email"
+            value={fields.email}
+            error={errors.email}
+            onInput={handleInput("email")}
         />
-        {#if errors.email}
-            <span class="error-text">{errors.email}</span>
-        {/if}
-        <label for="password">Password</label>
-        <input
-            type="password"
+        <InputField
             id="password"
-            name="password"
-            bind:value={fields.password}
-            class:error-border={errors.password}
+            type="password"
+            label="Password"
+            value={fields.password}
+            error={errors.password}
+            onInput={handleInput("password")}
         />
-        {#if errors.password}
-            <span class="error-text">{errors.password}</span>
-        {/if}
         <button type="submit" class:btnLoad={loading}>
             {#if loading}
                 Loading...
@@ -103,25 +102,6 @@
         width: 100%;
     }
 
-    label {
-        font-weight: bold;
-        margin: 0;
-    }
-
-    input {
-        padding: 0.9rem;
-        font-size: 1.1rem;
-        background-color: transparent;
-        border: 1px solid var(--lk-blue-500);
-        border-radius: var(--border-radius);
-        color: var(--lk-blue-50);
-    }
-
-    input:focus {
-        border-color: var(--lk-blue-300);
-        outline: none;
-    }
-
     button {
         padding: 1rem;
         font-size: 1.2rem;
@@ -138,15 +118,5 @@
         background-color: var(--lk-blue-800);
         border-color: var(--lk-blue-800);
         cursor: not-allowed;
-    }
-
-    .error-border {
-        border-color: var(--lk-red-700);
-    }
-
-    .error-text {
-        color: var(--lk-red-700);
-        text-align: center;
-        margin: -10px 0px;
     }
 </style>
