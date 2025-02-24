@@ -105,7 +105,8 @@
         width: 100%;
     }
     .success {
-        color: green;
+        color: var(--lk-blue-400);
+        text-align: center;
         margin-bottom: 10px;
     }
 </style>
