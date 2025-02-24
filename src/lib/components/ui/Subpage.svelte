@@ -1,53 +1,62 @@
 <!-- Subpage.svelte -->
 <script>
-    import { goto } from "$app/navigation"; // SvelteKit navigation (if you're using SvelteKit)
-
+    import { onDestroy, onMount } from "svelte";
+    import { showTabBar } from "$lib/services/layout";
     export let title = ""; // Title for the subpage header
 
     function goBack() {
         // Navigate back to the previous page
-        history.back(); // Simple browser back, or use goto('/') for a specific route
+        history.back();
     }
+
+    onMount(() => {
+        $showTabBar = false;
+    });
+
+    onDestroy(() => {
+        $showTabBar = true;
+    });
 </script>
 
-<div class="subpage">
+<div class="sub-page">
     <header>
-        <button class="back-btn" on:click={goBack}>← Back</button>
+        <button class="back-btn" on:click={goBack}>‹</button>
         <h1>{title}</h1>
+        <div class="spacer"></div>
     </header>
-    <main>
+    <div class="wrapper">
         <slot />
-    </main>
+    </div>
 </div>
 
 <style>
-    .subpage {
+    .sub-page {
         display: flex;
         flex-direction: column;
-        height: 100vh;
     }
     header {
         display: flex;
         align-items: center;
-        padding: 10px;
-        background-color: #f5f5f5;
-        border-bottom: 1px solid #ddd;
+        padding: 0 10px;
+        border-bottom: 1px solid var(--lk-blue-800);
+        position: relative;
     }
     .back-btn {
         background: none;
         border: none;
-        font-size: 16px;
         cursor: pointer;
-        padding: 0 10px;
+        padding: 10px 20px 18px 20px;
+        color: var(--lk-blue-50);
+        font-size: 25px;
     }
     h1 {
         margin: 0;
         font-size: 20px;
-        flex-grow: 1;
-        text-align: center;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
     }
-    main {
-        padding: 20px;
+    .spacer {
         flex-grow: 1;
     }
 </style>
