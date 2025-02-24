@@ -1,7 +1,8 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
     import { login } from "$lib/services/auth";
-    import { load } from "@tauri-apps/plugin-store";
+    import { showTabBar } from "$lib/services/layout";
+    import { onDestroy, onMount } from "svelte";
 
     let fields = { email: "", password: "" };
     let errors = { email: "", password: "" };
@@ -41,6 +42,14 @@
         }
         loading = false;
     };
+
+    onMount(() => {
+        $showTabBar = false;
+    });
+
+    onDestroy(() => {
+        $showTabBar = true;
+    });
 </script>
 
 <div class="wrapper">

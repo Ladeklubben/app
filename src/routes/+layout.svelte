@@ -4,6 +4,7 @@
     import { page } from "$app/stores";
     import { checkLoginStatus } from "$lib/services/auth";
     import { onMount } from "svelte";
+    import { showTabBar } from "$lib/services/layout";
     import "$lib/styles.css";
 
     let loginCheckDone = false;
@@ -19,7 +20,7 @@
         <main>
             <slot />
         </main>
-        {#if $page.url.pathname !== "/login"}
+        {#if $showTabBar}
             <TabBar />
         {/if}
     {/if}
