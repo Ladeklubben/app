@@ -4,6 +4,7 @@
     import { showTabBar } from "$lib/services/layout";
     import { onDestroy, onMount } from "svelte";
     import InputField from "$lib/components/ui/InputField.svelte";
+    import Button from "$lib/components/ui/Button.svelte";
 
     let fields: { [key: string]: string } = { email: "", password: "" };
     let errors = { email: "", password: "" };
@@ -76,13 +77,7 @@
             error={errors.password}
             onInput={handleInput("password")}
         />
-        <button type="submit" class:btnLoad={loading}>
-            {#if loading}
-                Loading...
-            {:else}
-                Login
-            {/if}
-        </button>
+        <Button type="submit" {loading}>Login</Button>
     </form>
 </div>
 
@@ -100,23 +95,5 @@
         flex-direction: column;
         gap: 1rem;
         width: 100%;
-    }
-
-    button {
-        padding: 1rem;
-        font-size: 1.2rem;
-        font-weight: bold;
-        background-color: var(--lk-blue-500);
-        border: 1px solid var(--lk-blue-500);
-        border-radius: var(--border-radius);
-        color: white;
-        margin-top: 1rem;
-        cursor: pointer;
-    }
-
-    .btnLoad {
-        background-color: var(--lk-blue-800);
-        border-color: var(--lk-blue-800);
-        cursor: not-allowed;
     }
 </style>

@@ -2,6 +2,7 @@
 <script lang="ts">
     import Subpage from "$lib/components/ui/Subpage.svelte";
     import InputField from "$lib/components/ui/InputField.svelte";
+    import Button from "$lib/components/ui/Button.svelte";
 
     let fields: { [key: string]: string } = {
         oldPassword: "",
@@ -88,7 +89,7 @@
             onInput={handleInput("newPasswordRepeat")}
         />
 
-        <button type="submit">Reset Password</button>
+        <Button type="submit" {loading}>Reset Password</Button>
 
         {#if success}
             <p class="success">{success}</p>
@@ -102,19 +103,6 @@
         flex-direction: column;
         gap: 1rem;
         width: 100%;
-    }
-    
-    button {
-        width: 100%;
-        padding: 10px;
-        background-color: #007bff;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-    }
-    button:hover {
-        background-color: #0056b3;
     }
     .success {
         color: green;
