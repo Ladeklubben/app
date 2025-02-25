@@ -47,4 +47,11 @@
         text-align: center;
         margin: -10px 0px;
     }
+
+    /* Hide the up and down arrows in the number input field */
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
 </style>
