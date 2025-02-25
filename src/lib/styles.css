@@ -55,6 +55,10 @@ body {
 	color: var(--lk-blue-50);
 }
 
+p {
+	line-height: 1.8rem;
+}
+
 .wrapper {
 	display: flex;
 	flex-direction: column;
