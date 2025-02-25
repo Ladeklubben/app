@@ -5,6 +5,7 @@
     import { onDestroy, onMount } from "svelte";
     import InputField from "$lib/components/ui/InputField.svelte";
     import Button from "$lib/components/ui/Button.svelte";
+    import { put } from "$lib/services/api";
 
     let fields: { [key: string]: string } = { email: "", password: "" };
     let errors = { email: "", password: "" };
@@ -45,6 +46,29 @@
         loading = false;
     };
 
+    const handleForgotPassword = async () => {
+        valid = true;
+        loading = true;
+
+        // Validate email
+        if (!fields.email) {
+            errors.email = "Email is required";
+            valid = false;
+        } else {
+            errors.email = "";
+        }
+
+        if (valid) {
+            try {
+                await put("/user/reset_password", { email: fields.email });
+                goto("/login/forgot-password");
+            } catch (error) {
+                errors.email = "Email not found";
+            }
+        }
+        loading = false;
+    };
+
     onMount(() => {
         $showTabBar = false;
     });
@@ -79,6 +103,9 @@
         />
         <Button type="submit" {loading}>Login</Button>
     </form>
+    <button on:click={handleForgotPassword} class="link-button">
+        Forgot Password
+    </button>
 </div>
 
 <style>
@@ -95,5 +122,15 @@
         flex-direction: column;
         gap: 1rem;
         width: 100%;
+    }
+
+    .link-button {
+        background: none;
+        color: var(--lk-blue-500);
+        text-decoration: underline;
+        border: none;
+        padding: 0;
+        font: inherit;
+        cursor: pointer;
     }
 </style>
