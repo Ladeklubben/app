@@ -4,11 +4,6 @@
     export let label: string;
     export let value: string;
     export let error: string;
-    export let onInput: (event: Event) => void;
-
-    const handleInput = (event: Event) => {
-        onInput(event);
-    };
 </script>
 
 <label for={id}>{label}</label>
@@ -18,7 +13,6 @@
     name={id}
     bind:value
     class:error-border={error}
-    on:input={handleInput}
 />
 {#if error}
     <span class="error-text">{error}</span>

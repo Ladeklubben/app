@@ -37,6 +37,7 @@
         // #TODO handle network errors
         if (valid) {
             if (await login(fields.email, fields.password, false)) {
+                $showTabBar = true;
                 goto("/");
             } else {
                 errors.email = "Invalid email or password";
@@ -72,14 +73,6 @@
     onMount(() => {
         $showTabBar = false;
     });
-
-    onDestroy(() => {
-        $showTabBar = true;
-    });
-
-    const handleInput = (field: string) => (event: Event) => {
-        fields[field] = (event.target as HTMLInputElement).value;
-    };
 </script>
 
 <div class="wrapper">
@@ -89,17 +82,15 @@
             id="email"
             type="email"
             label="Email"
-            value={fields.email}
+            bind:value={fields.email}
             error={errors.email}
-            onInput={handleInput("email")}
         />
         <InputField
             id="password"
             type="password"
             label="Password"
-            value={fields.password}
+            bind:value={fields.password}
             error={errors.password}
-            onInput={handleInput("password")}
         />
         <Button type="submit" {loading}>Login</Button>
     </form>
