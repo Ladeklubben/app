@@ -9,6 +9,7 @@ import type { AuthData } from '$lib/types/auth';
 
 // Create writable stores
 export const currentUser = writable<AuthData | null>(null);
+export const forgotPasswordEmail = writable<string | null>(null);
 
 // Check login status and load auth data
 export async function checkLoginStatus(): Promise<boolean> {

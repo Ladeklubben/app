@@ -1,6 +1,6 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
-    import { login } from "$lib/services/auth";
+    import { forgotPasswordEmail, login } from "$lib/services/auth";
     import { showTabBar } from "$lib/services/layout";
     import { onDestroy, onMount } from "svelte";
     import InputField from "$lib/components/ui/InputField.svelte";
@@ -62,7 +62,8 @@
         if (valid) {
             try {
                 await put("/user/reset_password", { email: fields.email });
-                goto("/login/forgot-password");
+                $forgotPasswordEmail = fields.email;
+                goto("/login/reset-password");
             } catch (error) {
                 errors.email = "Email not found";
             }
