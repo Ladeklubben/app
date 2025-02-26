@@ -20,7 +20,7 @@
 
 <div class="sub-page">
     <header>
-        <button class="back-btn" on:click={goBack}>‹</button>
+        <button class="back-btn" on:click={goBack} aria-label="Go back">‹</button>
         <h1>{title}</h1>
         <div class="spacer"></div>
     </header>
