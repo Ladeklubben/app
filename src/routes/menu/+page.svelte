@@ -85,5 +85,6 @@
         border-radius: var(--border-radius);
         cursor: pointer;
         font-size: 0.9rem;
+        color: var(--lk-blue-800);
     }
 </style>
