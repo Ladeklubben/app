@@ -5,6 +5,8 @@
     import Button from "$lib/components/ui/Button.svelte";
     import { put } from "$lib/services/api";
     import { forgotPasswordEmail } from "$lib/services/auth";
+    import { MD5 } from "crypto-js";
+    import { goto } from "$app/navigation";
 
     let fields: { [key: string]: string } = {
         newPassword: "",
@@ -58,13 +60,10 @@
                     "/user/set_new_password",
                     {
                         email: $forgotPasswordEmail,
-                        password: fields.newPassword,
+                        password: MD5(fields.newPassword).toString(),
                     },
                 );
-                status = {
-                    success: true,
-                    message: "Password reset successfully",
-                };
+                goto("/login");
             } catch (error: any) {
                 console.log("Error occurred:", error.message);
                 status = { success: false, message: error.message };
