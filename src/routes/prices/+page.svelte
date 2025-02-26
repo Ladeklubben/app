@@ -17,7 +17,7 @@
         return { time, price };
     }
     
-    let currentPrice = { time: "00:00", price: "N/A" };
+    let currentPrice = { time: "", price: "" };
     
     onMount(async () => {
         await fetchPrices();
