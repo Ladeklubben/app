@@ -33,7 +33,7 @@
             <MenuItem text="Notifications" hasToggle={true}
                 ><BellRing />
             </MenuItem>
-            <MenuItem text="Reset Password" on:click={() => goto("/menu/reset-password")}>
+            <MenuItem text="Privacy">
                 <Lock />
             </MenuItem>
         </MenuGroup>
