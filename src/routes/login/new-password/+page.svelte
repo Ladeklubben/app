@@ -4,7 +4,7 @@
     import InputField from "$lib/components/ui/InputField.svelte";
     import Button from "$lib/components/ui/Button.svelte";
     import { put } from "$lib/services/api";
-    import { forgotPasswordEmail } from "$lib/services/auth";
+    import { forgotPasswordEmail, login } from "$lib/services/auth";
     import { MD5 } from "crypto-js";
     import { goto } from "$app/navigation";
 
@@ -56,14 +56,17 @@
         if (valid) {
             try {
                 loading = true;
-                await put(
-                    "/user/set_new_password",
-                    {
+                if ($forgotPasswordEmail) {
+                    await put("/user/set_new_password", {
                         email: $forgotPasswordEmail,
                         password: MD5(fields.newPassword).toString(),
-                    },
-                );
-                goto("/login");
+                    });
+                    await login($forgotPasswordEmail, fields.newPassword, false);
+                    goto("/");
+                } else {
+                    throw new Error("Email not provided");
+                }
+                
             } catch (error: any) {
                 console.log("Error occurred:", error.message);
                 status = { success: false, message: error.message };
@@ -89,7 +92,7 @@
 
         <InputField
             id="new-password"
-            type="password"
+            type="text"
             label="New Password"
             bind:value={fields.newPassword}
             error={errors.newPassword}
@@ -97,7 +100,7 @@
 
         <InputField
             id="new-password-repeat"
-            type="password"
+            type="text"
             label="Repeat New Password"
             bind:value={fields.newPasswordRepeat}
             error={errors.newPasswordRepeat}
