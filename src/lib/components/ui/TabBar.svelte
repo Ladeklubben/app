@@ -45,7 +45,7 @@
 		align-items: center;
 		padding: 10px 0 10px 0;
 		background-color: var(--lk-blue-950);
-		color: white;
+		color: var(--lk-blue-50);
 		position: fixed;
 		bottom: 0;
 		width: 100%;

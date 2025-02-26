@@ -24,25 +24,30 @@ async function request(method: string, endpoint: string, data?: any, auth: boole
     });
 
     if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.detail || 'API request failed');
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.detail || `API request failed with status ${response.status}`);
+    }
+
+    // Only parse JSON if there’s a body (check status isn’t 204)
+    if (response.status === 204) {
+        return { success: true }; // Return a simple success object
     }
 
     return response.json();
 }
 
 export async function get(endpoint: string, auth: boolean = true) {
-	return request('GET', endpoint, undefined, auth);
+    return request('GET', endpoint, undefined, auth);
 }
 
 export async function post(endpoint: string, data: any, auth: boolean = true) {
-	return request('POST', endpoint, data, auth);
+    return request('POST', endpoint, data, auth);
 }
 
 export async function put(endpoint: string, data: any, auth: boolean = true) {
-	return request('PUT', endpoint, data, auth);
+    return request('PUT', endpoint, data, auth);
 }
 
 export async function del(endpoint: string, auth: boolean = true) {
-	return request('DELETE', endpoint, undefined, auth);
+    return request('DELETE', endpoint, undefined, auth);
 }

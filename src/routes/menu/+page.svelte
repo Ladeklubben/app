@@ -33,7 +33,7 @@
             <MenuItem text="Notifications" hasToggle={true}
                 ><BellRing />
             </MenuItem>
-            <MenuItem text="Security">
+            <MenuItem text="Privacy">
                 <Lock />
             </MenuItem>
         </MenuGroup>
