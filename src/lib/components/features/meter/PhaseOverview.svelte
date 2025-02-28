@@ -1,13 +1,27 @@
 <!-- PhaseOverview.svelte -->
-<script>
+<script lang="ts">
     import PhaseBar from "$lib/components/features/meter/PhaseBar.svelte";
     import Card from "$lib/components/ui/Card.svelte";
+    import { meterData } from "$lib/services/meter";
 
-    const phases = [
-        { label: "L1", percentage: 85 },
-        { label: "L2", percentage: 25 },
-        { label: "L3", percentage: 95 },
-    ];
+    let phases: any = [];
+
+    $: if ($meterData) {
+        phases = [
+            {
+                label: "L1",
+                percentage: Math.floor(($meterData.current[0] / 16) * 100),
+            },
+            {
+                label: "L2",
+                percentage: Math.floor(($meterData.current[1] / 16) * 100),
+            },
+            {
+                label: "L3",
+                percentage: Math.floor(($meterData.current[2] / 16) * 100),
+            },
+        ];
+    }
 </script>
 
 <Card title="Phases">
