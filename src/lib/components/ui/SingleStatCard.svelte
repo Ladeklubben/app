@@ -6,7 +6,7 @@
 </script>
 
 <div class="wrapper">
-    <span in:fade={{ duration: 300 }}>
+    <span in:fade={{ duration: 300 }} style="text-align: center;">
         {description}
 
         <h2>{stat}<span class="unit">{unit}</span></h2>
