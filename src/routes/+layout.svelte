@@ -1,7 +1,6 @@
 <!-- +layout.svelte -->
 <script>
     import TabBar from "$lib/components/ui/TabBar.svelte";
-    import { page } from "$app/stores";
     import { checkLoginStatus } from "$lib/services/auth";
     import { onMount } from "svelte";
     import { showTabBar } from "$lib/services/layout";
@@ -17,7 +16,7 @@
 
 <div class="layout-container">
     {#if loginCheckDone}
-        <main>
+        <main style="{$showTabBar ? 'padding-bottom: 70px' : ''}">
             <slot />
         </main>
         {#if $showTabBar}
@@ -36,6 +35,5 @@
     main {
         flex: 1;
         overflow-y: auto;
-        padding-bottom: 70px;
     }
 </style>
