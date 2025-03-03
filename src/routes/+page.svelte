@@ -7,6 +7,7 @@
         meterData,
         lastFetch,
     } from "$lib/services/meter";
+    import { goto } from "$app/navigation";
 
     onMount(() => {
         fetchpowerImport();
@@ -24,7 +25,7 @@
 <div class="wrapper">
     <div class="header">
         <h1>Home</h1>
-        <button class="add-button">
+        <button class="add-button" on:click={() => goto("/setup/installation")}>
             <span class="add-icon">+</span>
         </button>
     </div>
@@ -53,5 +54,6 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        cursor: pointer;
     }
 </style>
