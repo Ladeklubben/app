@@ -2,20 +2,56 @@
     import PhaseOverview from "$lib/components/features/meter/PhaseOverview.svelte";
     import SingleStatCard from "$lib/components/ui/SingleStatCard.svelte";
     import { onMount } from "svelte";
-    import { fetchpowerImport, meterData, lastFetch } from "$lib/services/meter";
+    import {
+        fetchpowerImport,
+        meterData,
+        lastFetch,
+    } from "$lib/services/meter";
 
     onMount(() => {
         fetchpowerImport();
     });
 
-    const formatter = new Intl.NumberFormat('en-DK');
+    const formatter = new Intl.NumberFormat("en-DK");
     let total_power_import = "";
     $: if ($meterData) {
-        total_power_import = formatter.format($meterData.totals.total_power_import * 1000);
+        total_power_import = formatter.format(
+            $meterData.totals.total_power_import * 1000,
+        );
     }
 </script>
 
 <div class="wrapper">
-    <SingleStatCard description="Live Usage - {$lastFetch}" stat={total_power_import} unit="W" />
+    <div class="header">
+        <h1>Home</h1>
+        <button class="add-button">
+            <span class="add-icon">+</span>
+        </button>
+    </div>
+    <SingleStatCard
+        description="Live Usage - {$lastFetch}"
+        stat={total_power_import}
+        unit="W"
+    />
     <PhaseOverview />
 </div>
+
+<style>
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .add-button {
+        background-color: var(--lk-blue-200);
+        font-size: 32px;
+        border: none;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+</style>
