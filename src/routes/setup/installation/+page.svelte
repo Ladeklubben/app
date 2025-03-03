@@ -18,6 +18,8 @@
         address: "",
         city: "",
         zip: "",
+        rebate: "",
+        solarPanels: "",
     };
 
     async function handleSubmit(event: Event) {
@@ -64,13 +66,12 @@
             error={errors.zip}
         />
 
-        <Button type="submit">Add Installation</Button>
-
-        <!-- <InputField
+        <InputField
             id="rebate"
             type="checkbox"
             label="Rebate"
             bind:value={fields.rebate}
+            error={errors.rebate}
         />
 
         <InputField
@@ -78,7 +79,10 @@
             type="checkbox"
             label="Solar Panels"
             bind:value={fields.solarPanels}
-        /> -->
+            error={errors.solarPanels}
+        />
+
+        <Button type="submit">Add Installation</Button>
 
         <!-- <Button type="submit" {loading}>Reset Password</Button>
 
