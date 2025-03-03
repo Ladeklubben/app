@@ -4,6 +4,7 @@
     import { showTabBar } from "$lib/services/layout";
     import { onDestroy, onMount } from "svelte";
     import InputField from "$lib/components/ui/InputField.svelte";
+    import Form from "$lib/components/ui/Form.svelte";
     import Button from "$lib/components/ui/Button.svelte";
     import { put } from "$lib/services/api";
 
@@ -12,7 +13,8 @@
     let valid = false;
     let loading = false;
 
-    const submitHandler = async () => {
+    async function handleSubmit(event: Event) {
+        event.preventDefault();
         valid = true;
         loading = true;
 
@@ -47,7 +49,7 @@
         loading = false;
     };
 
-    const handleForgotPassword = async () => {
+    async function handleForgotPassword() {
         valid = true;
         loading = true;
 
@@ -78,7 +80,7 @@
 
 <div class="wrapper">
     <img src="/logo_white_trans.png" alt="Ladeklubben Logo" />
-    <form on:submit|preventDefault={submitHandler} novalidate>
+    <Form on:submit={handleSubmit}>
         <InputField
             id="email"
             type="email"
@@ -94,7 +96,7 @@
             error={errors.password}
         />
         <Button type="submit" {loading}>Login</Button>
-    </form>
+    </Form>
     <button on:click={handleForgotPassword} class="link-button">
         Forgot Password
     </button>
@@ -107,13 +109,6 @@
 
     img {
         width: 100px;
-    }
-
-    form {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-        width: 100%;
     }
 
     .link-button {

@@ -2,6 +2,7 @@
     import Subpage from "$lib/components/ui/Subpage.svelte";
     import InputField from "$lib/components/ui/InputField.svelte";
     import Button from "$lib/components/ui/Button.svelte";
+    import Form from "$lib/components/ui/Form.svelte";
 
     let fields = {
         installationName: "",
@@ -25,7 +26,7 @@
 </script>
 
 <Subpage title="Add installation">
-    <form on:submit|preventDefault={handleSubmit} novalidate>
+    <Form on:submit={handleSubmit} >
         <p>
             An installation is a physical location, like a home, summer house or
             office, where you have a power meter installed.
@@ -63,6 +64,8 @@
             error={errors.zip}
         />
 
+        <Button type="submit">Add Installation</Button>
+
         <!-- <InputField
             id="rebate"
             type="checkbox"
@@ -89,16 +92,10 @@
                 {status.message}
             </p>
         {/if} -->
-    </form>
+    </Form>
 </Subpage>
 
 <style>
-    form {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-        width: 100%;
-    }
     .status {
         text-align: center;
         margin-bottom: 10px;

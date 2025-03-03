@@ -2,6 +2,7 @@
 <script lang="ts">
     import Subpage from "$lib/components/ui/Subpage.svelte";
     import InputField from "$lib/components/ui/InputField.svelte";
+    import Form from "$lib/components/ui/Form.svelte";
     import Button from "$lib/components/ui/Button.svelte";
     import { put } from "$lib/services/api";
     import { forgotPasswordEmail, login } from "$lib/services/auth";
@@ -36,6 +37,7 @@
     async function handleSubmit(event: Event) {
         event.preventDefault();
         valid = true;
+        loading = true;
 
         // Basic validation
         errors.newPassword = validatePassword(fields.newPassword);
@@ -55,7 +57,6 @@
 
         if (valid) {
             try {
-                loading = true;
                 if ($forgotPasswordEmail) {
                     await put("/user/set_new_password", {
                         email: $forgotPasswordEmail,
@@ -80,11 +81,12 @@
                 fields.newPasswordRepeat = "";
             }
         }
+        loading = false;
     }
 </script>
 
 <Subpage title="Reset Password">
-    <form on:submit={handleSubmit} novalidate>
+    <Form on:submit={handleSubmit}>
         <p>
             Password needs to be at least 6 characters, 1 big letter, 1 small
             letter and 1 number.
@@ -118,16 +120,10 @@
                 {status.message}
             </p>
         {/if}
-    </form>
+        </Form>
 </Subpage>
 
 <style>
-    form {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-        width: 100%;
-    }
     .status {
         text-align: center;
         margin-bottom: 10px;
