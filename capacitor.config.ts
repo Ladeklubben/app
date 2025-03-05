@@ -1,7 +1,7 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'dk.ladeklubben.app.new',
+  appId: 'dk.ladeklubben.apps',
   appName: 'Ladeklubben',
   webDir: 'build',
   plugins: {

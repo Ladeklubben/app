@@ -1,4 +1,4 @@
-package dk.ladeklubben.app.new;
+package dk.ladeklubben.apps;
 
 import com.getcapacitor.BridgeActivity;
 

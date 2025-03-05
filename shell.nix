@@ -1,24 +1,17 @@
 with import <nixpkgs> {};
 
-let
-  androidComposition = androidenv.composeAndroidPackages {
-    includeNDK = true;
-    platformVersions = ["23"];
-  };
-in
 pkgs.mkShell {
-  nativeBuildInputs = with pkgs; [
+  buildInputs = with pkgs; [
     nodejs_22
-  ];
-
-  buildInputs = with pkgs;[
-    openssl
-    openjdk
-    androidComposition.androidsdk
+    jdk21
+    android-tools
+    android-studio
   ];
 
   shellHook = ''
-    export ANDROID_HOME=${androidComposition.androidsdk}/libexec/android-sdk
-    export NDK_HOME=$ANDROID_HOME/ndk-bundle
-    '';
+    export CAPACITOR_ANDROID_STUDIO_PATH=/run/current-system/sw/bin/android-studio
+    export ANDROID_SDK_ROOT=/home/aw/Android/Sdk
+    export JAVA_HOME=${pkgs.jdk21}/lib/openjdk
+    export PATH=$JAVA_HOME/bin:$PATH
+  '';
 }
