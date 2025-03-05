@@ -1,8 +1,0 @@
-<resources>
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:statusBarColor">@color/lk_blue_950</item>
-        <item name="android:navigationBarColor">@color/lk_blue_950</item>
-        <item name="android:windowBackground">@color/lk_blue_950</item>
-        <item name="android:windowSplashScreenBackground">@color/lk_blue_950</item>
-    </style>
-</resources>

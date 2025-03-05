@@ -1,29 +1,34 @@
 <!-- +layout.svelte -->
-<script>
+<script lang="ts">
+    import { i18n } from "$lib/i18n";
+    import { ParaglideJS } from "@inlang/paraglide-sveltekit";
     import TabBar from "$lib/components/ui/TabBar.svelte";
     import { checkLoginStatus } from "$lib/services/auth";
     import { onMount } from "svelte";
     import { showTabBar } from "$lib/services/layout";
-    import "$lib/styles.css";
-
+    import '../app.css';
+    
+    let { children } = $props();
     let loginCheckDone = false;
+    
     onMount(async () => {
         await checkLoginStatus();
         loginCheckDone = true;
     });
-
 </script>
 
-<div class="layout-container">
-    {#if loginCheckDone}
-        <main style="{$showTabBar ? 'padding-bottom: 70px' : ''}">
-            <slot />
-        </main>
-        {#if $showTabBar}
-            <TabBar />
+<ParaglideJS {i18n}>
+    <div class="layout-container">
+        {#if loginCheckDone}
+            <main style="{$showTabBar ? 'padding-bottom: 70px' : ''}">
+                {@render children()}
+            </main>
+            {#if $showTabBar}
+                <TabBar />
+            {/if}
         {/if}
-    {/if}
-</div>
+    </div>
+</ParaglideJS>
 
 <style>
     .layout-container {
@@ -31,7 +36,6 @@
         flex-direction: column;
         min-height: 100%;
     }
-
     main {
         flex: 1;
         overflow-y: auto;
