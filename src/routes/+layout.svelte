@@ -9,8 +9,8 @@
     import '../app.css';
     
     let { children } = $props();
-    let loginCheckDone = false;
-    
+    let loginCheckDone = $state(false);
+
     onMount(async () => {
         await checkLoginStatus();
         loginCheckDone = true;

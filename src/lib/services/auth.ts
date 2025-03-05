@@ -1,11 +1,12 @@
 import { writable } from 'svelte/store';
 import { MD5 } from 'crypto-js';
-import { invoke } from '@tauri-apps/api/core';
 import { goto } from '$app/navigation';
 import { post } from '$lib/services/api';
 import type { AuthData } from '$lib/types/auth';
+import { Preferences } from '@capacitor/preferences';
 
-// TODO: Implement token refresh
+// Auth data storage key
+const AUTH_DATA_KEY = 'auth_data';
 
 // Create writable stores
 export const currentUser = writable<AuthData | null>(null);
@@ -31,15 +32,18 @@ export async function checkLoginStatus(): Promise<boolean> {
 	}
 }
 
-// Get auth data from Rust store
+// Get auth data from Capacitor Preferences
 export async function getAuth(): Promise<AuthData | null> {
 	try {
-		return await invoke<AuthData>('get_auth');
+		const { value } = await Preferences.get({ key: AUTH_DATA_KEY });
+		if (value) {
+			return JSON.parse(value) as AuthData;
+		}
+		return null;
 	} catch {
 		return null;
 	}
 }
-
 
 // Login and save auth data
 export async function login(email: string, password: string, preHashed: boolean): Promise<boolean> {
@@ -47,7 +51,7 @@ export async function login(email: string, password: string, preHashed: boolean)
 		// Hash password if not pre-hashed
 		let hashedPassword = password;
 		if (!preHashed) {
-			 hashedPassword = MD5(hashedPassword).toString();
+			hashedPassword = MD5(hashedPassword).toString();
 		}
 
 		const data = await post('/user/login', { email, password: hashedPassword }, false);
@@ -59,13 +63,15 @@ export async function login(email: string, password: string, preHashed: boolean)
 			token: data.access_token
 		};
 
-		// Save to Rust store
-		await invoke('save_auth', { auth: authData });
+		// Save to Capacitor Preferences
+		await Preferences.set({
+			key: AUTH_DATA_KEY,
+			value: JSON.stringify(authData)
+		});
 
 		// Update stores
 		currentUser.set(authData);
 		console.log('Logged in:', authData.email);
-
 		return true;
 	} catch (error) {
 		console.error('Error:', error);
@@ -74,7 +80,8 @@ export async function login(email: string, password: string, preHashed: boolean)
 }
 
 export async function logout() {
-	await invoke('log_out');
+	// Clear auth data from Preferences
+	await Preferences.remove({ key: AUTH_DATA_KEY });
 	currentUser.set(null);
 	goto('/login');
 }

@@ -3,7 +3,6 @@
     import { currentUser } from "$lib/services/auth";
     import MenuItem from "$lib/components/ui/MenuItem.svelte";
     import MenuGroup from "$lib/components/ui/MenuGroup.svelte";
-    import { openUrl } from "@tauri-apps/plugin-opener";
 
     // Import icons
     import Email from "~icons/mdi/email";
@@ -39,10 +38,10 @@
         </MenuGroup>
 
         <MenuGroup title="Support">
-            <MenuItem text="Documentation" on:click={async () => await openUrl("https://wiki.ladeklubben.dk")}>
+            <MenuItem text="Documentation #TODO-link">
                 <Document />
             </MenuItem>
-            <MenuItem text="Contact Us" on:click={async () => await openUrl("https://ladeklubben.dk/kontakt-os/")}>
+            <MenuItem text="Contact Us #TODO-link">
                 <Email />
             </MenuItem>
         </MenuGroup>
