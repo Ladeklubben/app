@@ -6,10 +6,18 @@
     import { checkLoginStatus } from "$lib/services/auth";
     import { onMount } from "svelte";
     import { showTabBar } from "$lib/services/layout";
-    import '../app.css';
-    
+    import { TextZoom } from "@capacitor/text-zoom";
+    import { App } from "@capacitor/app";
+    import { Capacitor } from "@capacitor/core";
+    import "../app.css";
+
     let { children } = $props();
     let loginCheckDone = $state(false);
+
+    // In your app initialization
+    if (Capacitor.getPlatform() === "android") {
+        TextZoom.set({ value: 0.8 });
+    }
 
     onMount(async () => {
         await checkLoginStatus();
@@ -20,7 +28,7 @@
 <ParaglideJS {i18n}>
     <div class="layout-container">
         {#if loginCheckDone}
-            <main style="{$showTabBar ? 'padding-bottom: 70px' : ''}">
+            <main style={$showTabBar ? "padding-bottom: 70px" : ""}>
                 {@render children()}
             </main>
             {#if $showTabBar}
