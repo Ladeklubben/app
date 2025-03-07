@@ -7,7 +7,6 @@
     import { onMount } from "svelte";
     import { showTabBar } from "$lib/services/layout";
     import { TextZoom } from "@capacitor/text-zoom";
-    import { App } from "@capacitor/app";
     import { Capacitor } from "@capacitor/core";
     import "../app.css";
 
