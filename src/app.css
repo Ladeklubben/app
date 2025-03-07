@@ -3,7 +3,7 @@
 
 :root {
 	/* Default */
-	--border-radius: 1rem;
+	--border-radius: 16px;
 
 	/* Colors Generated from https://uicolors.app/create */
 
@@ -59,7 +59,7 @@ body {
 }
 
 p {
-	line-height: 1.8rem;
+	line-height: 28px;
 }
 
 h1 {

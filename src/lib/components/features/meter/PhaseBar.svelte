@@ -41,7 +41,7 @@
     top: 50%;
     transform: translateY(-50%);
     color: var(--lk-blue-100);
-    font-size: 1rem;
+    font-size: 16px;
     font-weight: bold;
   }
 
@@ -51,6 +51,6 @@
     top: 50%;
     transform: translateY(-50%);
     color: var(--lk-blue-100);
-    font-size: 1rem;
+    font-size: 16px;
   }
 </style>

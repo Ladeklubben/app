@@ -20,7 +20,7 @@
 
     h1 {
         color: var(--lk-blue-100);
-        font-size: 1.5rem;
+        font-size: 24px;
         margin: 0;
     }
 </style>

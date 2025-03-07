@@ -30,7 +30,7 @@
     }
 
     h2 {
-        font-size: 4rem;
+        font-size: 64px;
         font-weight: bold;
         color: var(--lk-blue-100);
         margin: 0;
@@ -38,7 +38,7 @@
     }
 
     .unit {
-        font-size: 1rem;
+        font-size: 16px;
         font-weight: normal;
     }
 </style>

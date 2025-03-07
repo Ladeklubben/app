@@ -38,8 +38,8 @@
     }
 
     input {
-        padding: 0.9rem;
-        font-size: 1.1rem;
+        padding: 14px;
+        font-size: 18px;
         background-color: transparent;
         border: 1px solid var(--lk-blue-500);
         border-radius: var(--border-radius);
@@ -75,20 +75,20 @@
     }
 
     .check-wrapper input[type="checkbox"] {
-        width: 1.5rem;
-        height: 1.5rem;
+        width: 24px;
+        height: 24px;
         appearance: none;
         background-color: transparent;
         border: 1px solid var(--lk-blue-500);
-        border-radius: 0.25rem;
+        border-radius: 4px;
         display: grid;
         place-content: center;
     }
 
     .check-wrapper input[type="checkbox"]::before {
         content: "";
-        width: 1rem;
-        height: 1rem;
+        width: 16px;
+        height: 16px;
         clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 20%, 80% 0, 43% 62%);
         background-color: var(--lk-blue-400);
         transform: scale(0);

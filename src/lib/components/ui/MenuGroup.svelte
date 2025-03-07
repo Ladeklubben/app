@@ -15,12 +15,12 @@
         border: 1px solid var(--lk-blue-800);
         border-radius: var(--border-radius);
         overflow: hidden;
-        margin-bottom: 1rem;
+        margin-bottom: 16px;
     }
 
     h2 {
-        font-size: 1rem;
-        padding: 0.75rem 1rem;
+        font-size: 16px;
+        padding: 12px 16px;
         margin: 0;
         color: var(--lk-blue-100);
         border-bottom: 1px solid var(--lk-blue-800);

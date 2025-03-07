@@ -31,7 +31,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 1rem;
+        padding: 16px;
         border-bottom: 1px solid var(--lk-blue-800);
         cursor: pointer;
     }
@@ -41,7 +41,7 @@
     .menu-item-content {
         display: flex;
         align-items: center;
-        gap: 1rem;
+        gap: 16px;
     }
 
     .text {
@@ -50,14 +50,14 @@
 
     .chevron {
         color: var(--lk-blue-100);
-        font-size: 1.2rem;
+        font-size: 20px;
     }
 
     .toggle {
         position: relative;
         display: inline-block;
-        width: 3rem;
-        height: 1.5rem;
+        width: 48px;
+        height: 24px;
     }
 
     .toggle input {
@@ -74,17 +74,17 @@
         right: 0;
         bottom: 0;
         background-color: var(--lk-blue-100);
-        border-radius: 1rem;
+        border-radius: 16px;
         transition: 0.3s;
     }
 
     .slider:before {
         position: absolute;
         content: "";
-        height: 1.1rem;
-        width: 1.1rem;
-        left: 0.2rem;
-        bottom: 0.2rem;
+        height: 18px;
+        width: 18px;
+        left: 4px;
+        bottom: 4px;
         background-color: var(--lk-blue-400);
         border-radius: 50%;
         transition: 0.3s;
@@ -95,7 +95,7 @@
     }
 
     input:checked + .slider:before {
-        transform: translateX(1.5rem);
+        transform: translateX(24px);
         background-color: var(--lk-green-700);
     }
 </style>

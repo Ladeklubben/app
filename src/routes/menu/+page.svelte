@@ -50,20 +50,20 @@
 
 <style>
     .profile-section {
-        padding: 2rem;
+        padding: 32px;
         text-align: center;
-        margin-bottom: 1rem;
+        margin-bottom: 16px;
         border-radius: var(--border-radius);
         border: 1px solid var(--lk-blue-800);
         display: flex;
         flex-direction: column;
-        gap: 0.6rem;
+        gap: 10px;
         align-items: center;
     }
 
     .avatar {
-        width: 5rem;
-        height: 5rem;
+        width: 80px;
+        height: 80px;
         background: var(--avatar-bg, #e0e0e0);
         border-radius: 50%;
         margin: 0 auto 0;
@@ -74,16 +74,16 @@
 
     .email {
         color: var(--lk-blue-100);
-        margin: 0.5rem 0;
+        margin: 8px 0;
     }
 
     .logout-btn {
         background: var(--lk-blue-100);
         border: none;
-        padding: 0.5rem 1rem;
+        padding: 8px 16px;
         border-radius: var(--border-radius);
         cursor: pointer;
-        font-size: 0.9rem;
+        font-size: 14px;
         color: var(--lk-blue-800);
     }
 </style>
