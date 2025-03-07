@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import HomeVariant from "~icons/mdi/home-variant";
 	import Menu from "~icons/mdi/menu";
 	import ChartBox from "~icons/mdi/chart-box";
@@ -6,10 +6,12 @@
 	import { goto } from "$app/navigation";
 </script>
 
-<div class="tabbar">
+<div
+	class="flex justify-around items-center pt-2 pb-[env(safe-area-inset-bottom,40px)] fixed bottom-0 w-full z-1000 border-t border-lk-blue-800 bg-lk-blue-950 text-lk-blue-50"
+>
 	<button
 		type="button"
-		class="tab-element"
+		class="flex flex-col items-center gap-0.5 text-xs w-full bg-none border-none cursor-pointer tap-highlight-transparent"
 		on:click={() => goto("/")}
 		style="opacity: {$page.url.pathname !== '/prices' && $page.url.pathname !== '/menu' ? '100%' : '60%'};"
 	>
@@ -19,7 +21,7 @@
 
 	<button
 		type="button"
-		class="tab-element"
+		class="flex flex-col items-center gap-0.5 text-xs w-full bg-none border-none cursor-pointer tap-highlight-transparent"
 		on:click={() => goto("/prices")}
 		style="opacity: {$page.url.pathname === '/prices' ? '100%' : '60%'};"
 	>
@@ -29,7 +31,7 @@
 
 	<button
 		type="button"
-		class="tab-element"
+		class="flex flex-col items-center gap-0.5 text-xs w-full bg-none border-none cursor-pointer tap-highlight-transparent"
 		on:click={() => goto("/menu")}
 		style="opacity: {$page.url.pathname === '/menu' ? '100%' : '60%'};"
 	>
@@ -37,34 +39,3 @@
 		Menu
 	</button>
 </div>
-
-<style>
-	.tabbar {
-		display: flex;
-		justify-content: space-around;
-		align-items: center;
-		padding-top: 10px;
-		padding-bottom: env(safe-area-inset-bottom, 40px);
-		background-color: var(--lk-blue-950);
-		color: var(--lk-blue-50);
-		position: fixed;
-		bottom: 0;
-		width: 100%;
-		z-index: 1000;
-		border-top: 1px solid var(--lk-blue-800);
-	}
-
-	.tab-element {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		gap: 2px;
-		font-size: 10px;
-		width: 100%;
-		background: none;
-		border: none;
-		color: inherit;
-		cursor: pointer;
-		-webkit-tap-highlight-color: transparent;
-	}
-</style>

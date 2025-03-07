@@ -1,25 +1,9 @@
 <script lang="ts">
-	export let title: string;
+	let { title } = $props();
 </script>
 
-<div class="card">
-	<h1>{title}</h1>
-	<slot></slot>
+<div class="flex flex-col gap-5 p-5 rounded-2xl border border-lk-blue-800">
+    <h1 class="text-lk-blue-100 text-2xl m-0">{title}</h1>
+    <slot></slot>
+	
 </div>
-
-<style>
-	.card {
-		display: flex;
-		flex-direction: column;
-		gap: 20px;
-		padding: 20px;
-		border-radius: var(--border-radius);
-		border: 1px solid var(--lk-blue-800);
-	}
-
-	h1 {
-		color: var(--lk-blue-100);
-		font-size: 24px;
-		margin: 0;
-	}
-</style>
