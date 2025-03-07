@@ -43,7 +43,8 @@
 		display: flex;
 		justify-content: space-around;
 		align-items: center;
-		padding: 10px 0 10px 0;
+		padding-top: 10px;
+		padding-bottom: env(safe-area-inset-bottom, 40px);
 		background-color: var(--lk-blue-950);
 		color: var(--lk-blue-50);
 		position: fixed;

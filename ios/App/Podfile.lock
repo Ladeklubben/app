@@ -1,28 +1,40 @@
 PODS:
   - Capacitor (7.0.1):
     - CapacitorCordova
+  - CapacitorApp (7.0.0):
+    - Capacitor
   - CapacitorCordova (7.0.1)
   - CapacitorPreferences (7.0.0):
+    - Capacitor
+  - CapacitorTextZoom (7.0.0):
     - Capacitor
 
 DEPENDENCIES:
   - "Capacitor (from `../../node_modules/@capacitor/ios`)"
+  - "CapacitorApp (from `../../node_modules/@capacitor/app`)"
   - "CapacitorCordova (from `../../node_modules/@capacitor/ios`)"
   - "CapacitorPreferences (from `../../node_modules/@capacitor/preferences`)"
+  - "CapacitorTextZoom (from `../../node_modules/@capacitor/text-zoom`)"
 
 EXTERNAL SOURCES:
   Capacitor:
     :path: "../../node_modules/@capacitor/ios"
+  CapacitorApp:
+    :path: "../../node_modules/@capacitor/app"
   CapacitorCordova:
     :path: "../../node_modules/@capacitor/ios"
   CapacitorPreferences:
     :path: "../../node_modules/@capacitor/preferences"
+  CapacitorTextZoom:
+    :path: "../../node_modules/@capacitor/text-zoom"
 
 SPEC CHECKSUMS:
   Capacitor: de199cba6c8b20995428ad0b7cb0bc6ca625ffd4
+  CapacitorApp: 9cb31064a6c6bb2b1438583733a7bf45557fc1da
   CapacitorCordova: 63d476958d5022d76f197031e8b7ea3519988c64
   CapacitorPreferences: 8e4bef1f937fc991a19d7ea99330c36a62edd24b
+  CapacitorTextZoom: 254c75dffb54d34d582a4f14cc7ba432fcfb5cad
 
-PODFILE CHECKSUM: bc4412675d30bc194ab5961211929e1e7de79579
+PODFILE CHECKSUM: 1a5cd939fa95e66f266184f62f9d1523abe073da
 
 COCOAPODS: 1.16.2

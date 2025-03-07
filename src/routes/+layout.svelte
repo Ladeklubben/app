@@ -42,6 +42,8 @@
         display: flex;
         flex-direction: column;
         min-height: 100%;
+        padding-top: env(safe-area-inset-top, 40px); 
+        padding-bottom: env(safe-area-inset-bottom, 40px);
     }
     main {
         flex: 1;
