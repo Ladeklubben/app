@@ -12,7 +12,7 @@
 	<button
 		type="button"
 		class="flex flex-col items-center gap-0.5 text-xs w-full bg-none border-none cursor-pointer tap-highlight-transparent"
-		on:click={() => goto("/")}
+		onclick={() => goto("/")}
 		style="opacity: {$page.url.pathname !== '/prices' && $page.url.pathname !== '/menu' ? '100%' : '60%'};"
 	>
 		<HomeVariant style="font-size: 25px;" />
@@ -22,7 +22,7 @@
 	<button
 		type="button"
 		class="flex flex-col items-center gap-0.5 text-xs w-full bg-none border-none cursor-pointer tap-highlight-transparent"
-		on:click={() => goto("/prices")}
+		onclick={() => goto("/prices")}
 		style="opacity: {$page.url.pathname === '/prices' ? '100%' : '60%'};"
 	>
 		<ChartBox style="font-size: 25px;" />
@@ -32,7 +32,7 @@
 	<button
 		type="button"
 		class="flex flex-col items-center gap-0.5 text-xs w-full bg-none border-none cursor-pointer tap-highlight-transparent"
-		on:click={() => goto("/menu")}
+		onclick={() => goto("/menu")}
 		style="opacity: {$page.url.pathname === '/menu' ? '100%' : '60%'};"
 	>
 		<Menu style="font-size: 25px;" />

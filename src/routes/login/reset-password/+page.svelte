@@ -8,9 +8,9 @@
 	import { forgotPasswordEmail } from "$lib/services/auth";
 	import { goto } from "$app/navigation";
 
-	let code = "";
-	let error = "";
-	let loading = false;
+	let code = $state("");
+	let error = $state("");
+	let loading = $state(false);
 
 	async function handleSubmit(event: Event) {
 		loading = true;

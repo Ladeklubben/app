@@ -17,7 +17,7 @@
 		return { time, price };
 	}
 
-	let currentPrice = { time: "", price: "" };
+	let currentPrice = $state({ time: "", price: "" });
 
 	onMount(async () => {
 		await fetchPrices();

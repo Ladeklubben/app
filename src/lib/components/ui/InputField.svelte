@@ -1,12 +1,22 @@
 <script lang="ts">
-	export let id: string;
-	export let type: string = "text";
-	export let label: string;
-	export let value: string | boolean;
-	export let error: string;
+	interface Props {
+		id: string;
+		type?: string;
+		label: string;
+		value: string | boolean;
+		error: string;
+	}
+
+	let {
+		id,
+		type = "text",
+		label,
+		value = $bindable(),
+		error
+	}: Props = $props();
 
 	// Type guard to ensure value is boolean for checkboxes
-	let isChecked: boolean | null = null;
+	let isChecked: boolean | null = $state(null);
 	if (type === "checkbox" && typeof value === "boolean") {
 		isChecked = value;
 	}

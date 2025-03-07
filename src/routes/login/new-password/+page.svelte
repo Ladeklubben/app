@@ -9,14 +9,14 @@
 	import { MD5 } from "crypto-js";
 	import { goto } from "$app/navigation";
 
-	let fields: { [key: string]: string } = {
+	let fields: { [key: string]: string } = $state({
 		newPassword: "",
 		newPasswordRepeat: "",
-	};
-	let errors = { newPassword: "", newPasswordRepeat: "" };
+	});
+	let errors = $state({ newPassword: "", newPasswordRepeat: "" });
 	let valid = false;
-	let loading = false;
-	let status = { success: true, message: "" };
+	let loading = $state(false);
+	let status = $state({ success: true, message: "" });
 
 	function validatePassword(password: string): string {
 		if (password.length < 6) {

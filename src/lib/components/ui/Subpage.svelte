@@ -1,8 +1,13 @@
 <!-- Subpage.svelte -->
-<script>
+<script lang="ts">
 	import { onDestroy, onMount } from "svelte";
 	import { showTabBar } from "$lib/services/layout";
-	export let title = ""; // Title for the subpage header
+	interface Props {
+		title?: string; // Title for the subpage header
+		children?: import('svelte').Snippet;
+	}
+
+	let { title = "", children }: Props = $props();
 
 	function goBack() {
 		// Navigate back to the previous page
@@ -20,12 +25,12 @@
 
 <div class="sub-page">
 	<header>
-		<button class="back-btn" on:click={goBack} aria-label="Go back">‹</button>
+		<button class="back-btn" onclick={goBack} aria-label="Go back">‹</button>
 		<h1>{title}</h1>
 		<div class="spacer"></div>
 	</header>
 	<div class="wrapper">
-		<slot />
+		{@render children?.()}
 	</div>
 </div>
 

@@ -8,10 +8,10 @@
 	import Button from "$lib/components/ui/Button.svelte";
 	import { put } from "$lib/services/api";
 
-	let fields: { [key: string]: string } = { email: "", password: "" };
-	let errors = { email: "", password: "" };
+	let fields: { [key: string]: string } = $state({ email: "", password: "" });
+	let errors = $state({ email: "", password: "" });
 	let valid = false;
-	let loading = false;
+	let loading = $state(false);
 
 	async function handleSubmit(event: Event) {
 		event.preventDefault();
@@ -91,7 +91,7 @@
 		/>
 		<Button type="submit" {loading}>Login</Button>
 	</Form>
-	<button on:click={handleForgotPassword} class="link-button">Forgot Password</button>
+	<button onclick={handleForgotPassword} class="link-button">Forgot Password</button>
 </div>
 
 <style>

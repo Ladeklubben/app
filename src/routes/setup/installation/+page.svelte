@@ -4,14 +4,14 @@
 	import Button from "$lib/components/ui/Button.svelte";
 	import Form from "$lib/components/ui/Form.svelte";
 
-	let fields = {
+	let fields = $state({
 		installationName: "",
 		address: "",
 		city: "",
 		zip: "",
 		rebate: false,
 		solarPanels: false,
-	};
+	});
 
 	let errors = {
 		installationName: "",

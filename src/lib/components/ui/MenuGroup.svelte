@@ -1,12 +1,18 @@
 <script lang="ts">
-	// MenuGroup.svelte
-	export let title: string;
+	
+	interface Props {
+		// MenuGroup.svelte
+		title: string;
+		children?: import('svelte').Snippet;
+	}
+
+	let { title, children }: Props = $props();
 </script>
 
 <div class="menu-group">
 	<h2>{title}</h2>
 	<div class="content">
-		<slot />
+		{@render children?.()}
 	</div>
 </div>
 

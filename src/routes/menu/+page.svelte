@@ -19,7 +19,7 @@
 			<!-- Add User SVG icon here -->
 		</div>
 		<p class="email">{$currentUser?.email}</p>
-		<button class="logout-btn" on:click={logout}>Log Out</button>
+		<button class="logout-btn" onclick={logout}>Log Out</button>
 	</div>
 
 	<div class="settings-container">
