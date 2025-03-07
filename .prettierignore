@@ -1,0 +1,7 @@
+build
+android
+ios
+node_modules
+project.inlang
+.svelte-kit
+.vscode

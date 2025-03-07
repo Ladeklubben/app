@@ -1,12 +1,12 @@
 <form on:submit novalidate>
-    <slot></slot>
+	<slot></slot>
 </form>
 
 <style>
-    form {
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-        width: 100%;
-    }
+	form {
+		display: flex;
+		flex-direction: column;
+		gap: 16px;
+		width: 100%;
+	}
 </style>
