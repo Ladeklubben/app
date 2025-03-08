@@ -10,16 +10,13 @@
 	});
 
 	const formatter = new Intl.NumberFormat("en-DK");
-	let total_power_import = "";
-	$: if ($meterData) {
-		total_power_import = formatter.format($meterData.totals.total_power_import * 1000);
-	}
+	const total_power_import = $derived($meterData ? formatter.format($meterData.totals.total_power_import * 1000) : "");
 </script>
 
 <div class="wrapper">
 	<div class="header">
 		<h1>Home</h1>
-		<button class="add-button" on:click={() => goto("/setup/installation")}>
+		<button class="add-button" onclick={() => goto("/setup/installation")}>
 			<span class="add-icon">+</span>
 		</button>
 	</div>

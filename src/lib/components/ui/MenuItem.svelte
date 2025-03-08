@@ -1,18 +1,12 @@
 <script lang="ts">
-	import { createEventDispatcher } from "svelte";
-
-	// MenuItem.svelte
-	export let text: string;
-	export let hasToggle = false;
-
-	const dispatch = createEventDispatcher();
+	let { text, hasToggle = false, children } = $props();
 </script>
 
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <!-- svelte-ignore a11y_click_events_have_key_events -->
-<div class="menu-item" on:click={() => dispatch("click")}>
+<div class="menu-item">
 	<div class="menu-item-content">
-		<slot></slot>
+		{@render children?.()}
 		<span class="text">{text}</span>
 	</div>
 	{#if hasToggle}

@@ -1,5 +1,9 @@
-<form on:submit novalidate>
-	<slot></slot>
+<script lang="ts">
+	let { children, handleSubmit } = $props();
+</script>
+
+<form onsubmit={handleSubmit} novalidate>
+	{@render children?.()}
 </form>
 
 <style>

@@ -4,24 +4,25 @@
 	import Card from "$lib/components/ui/Card.svelte";
 	import { meterData } from "$lib/services/meter";
 
-	let phases: any = [];
-
-	$: if ($meterData) {
-		phases = [
-			{
-				label: "L1",
-				percentage: Math.floor(($meterData.current[0] / 16) * 100),
-			},
-			{
-				label: "L2",
-				percentage: Math.floor(($meterData.current[1] / 16) * 100),
-			},
-			{
-				label: "L3",
-				percentage: Math.floor(($meterData.current[2] / 16) * 100),
-			},
-		];
-	}
+	// Define phases as a derived state
+	const phases = $derived(
+		$meterData
+			? [
+					{
+						label: "L1",
+						percentage: Math.floor(($meterData.current[0] / 16) * 100),
+					},
+					{
+						label: "L2",
+						percentage: Math.floor(($meterData.current[1] / 16) * 100),
+					},
+					{
+						label: "L3",
+						percentage: Math.floor(($meterData.current[2] / 16) * 100),
+					},
+				]
+			: [],
+	);
 </script>
 
 <Card title="Phases">

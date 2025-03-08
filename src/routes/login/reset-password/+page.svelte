@@ -41,7 +41,7 @@
 <Subpage title="Reset Password">
 	<p>Enter the code you received in your email to reset your password.</p>
 
-	<Form on:submit={handleSubmit}>
+	<Form {handleSubmit}>
 		<InputField id="code" type="number" label="Code from email" bind:value={code} {error} />
 
 		<Button type="submit" {loading}>Reset Password</Button>

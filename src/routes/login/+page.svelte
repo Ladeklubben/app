@@ -80,7 +80,7 @@
 
 <div class="wrapper">
 	<img src="/logo_white_trans.png" alt="Ladeklubben Logo" />
-	<Form on:submit={handleSubmit}>
+	<Form {handleSubmit}>
 		<InputField id="email" type="email" label="Email" bind:value={fields.email} error={errors.email} />
 		<InputField
 			id="password"

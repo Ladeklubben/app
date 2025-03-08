@@ -28,7 +28,7 @@
 </script>
 
 <Subpage title="Add installation">
-	<Form on:submit={handleSubmit}>
+	<Form {handleSubmit}>
 		<p>
 			An installation is a physical location, like a home, summer house or office, where you have a power meter
 			installed.

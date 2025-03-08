@@ -85,7 +85,7 @@
 </script>
 
 <Subpage title="Reset Password">
-	<Form on:submit={handleSubmit}>
+	<Form {handleSubmit}>
 		<p>Password needs to be at least 6 characters, 1 big letter, 1 small letter and 1 number.</p>
 
 		<InputField
