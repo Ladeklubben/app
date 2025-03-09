@@ -59,25 +59,5 @@
 		/>
 
 		<Button type="submit">Add Installation</Button>
-
-		<!-- <Button type="submit" {loading}>Reset Password</Button>
-
-        {#if status.message}
-            <p
-                class="status"
-                style="color: {status.success
-                    ? 'var(--lk-blue-400)'
-                    : 'var(--lk-red-700)'}"
-            >
-                {status.message}
-            </p>
-        {/if} -->
 	</Form>
 </Subpage>
-
-<style>
-	.status {
-		text-align: center;
-		margin-bottom: 10px;
-	}
-</style>

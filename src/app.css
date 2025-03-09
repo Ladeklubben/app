@@ -39,6 +39,8 @@
 	--color-lk-red-950: #520528;
 }
 
+/* TODO: Migrate to TailwindCSS */
+
 :root {
 	/* Default */
 	--border-radius: 16px;

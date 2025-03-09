@@ -78,8 +78,8 @@
 	});
 </script>
 
-<div class="wrapper">
-	<img src="/logo_white_trans.png" alt="Ladeklubben Logo" />
+<div class="wrapper items-center">
+	<img src="/logo_white_trans.png" alt="Ladeklubben Logo" class="w-24" />
 	<Form {handleSubmit}>
 		<InputField id="email" type="email" label="Email" bind:value={fields.email} error={errors.email} />
 		<InputField
@@ -91,25 +91,7 @@
 		/>
 		<Button type="submit" {loading}>Login</Button>
 	</Form>
-	<button onclick={handleForgotPassword} class="link-button">Forgot Password</button>
+	<button onclick={handleForgotPassword} class="bg-none text-lk-blue-500 underline border-0 p-0 cursor-pointer">
+		Forgot Password
+	</button>
 </div>
-
-<style>
-	.wrapper {
-		align-items: center;
-	}
-
-	img {
-		width: 100px;
-	}
-
-	.link-button {
-		background: none;
-		color: var(--lk-blue-500);
-		text-decoration: underline;
-		border: none;
-		padding: 0;
-		font: inherit;
-		cursor: pointer;
-	}
-</style>

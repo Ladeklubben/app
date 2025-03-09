@@ -16,33 +16,15 @@
 </script>
 
 <div class="wrapper">
-	<div class="header">
+	<div class=" flex justify-between items-center">
 		<h1>Home</h1>
-		<button class="add-button" onclick={() => goto("/setup/installation")}>
+		<button
+			class="bg-lk-blue-300 text-4xl border-0 rounded-4xl w-8 h-8"
+			onclick={() => goto("/setup/installation")}
+		>
 			<span class="add-icon">+</span>
 		</button>
 	</div>
 	<SingleStatCard description="Live Usage - {$lastFetch}" stat={total_power_import} unit="W" />
 	<PhaseOverview />
 </div>
-
-<style>
-	.header {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-	}
-
-	.add-button {
-		background-color: var(--lk-blue-200);
-		font-size: 32px;
-		border: none;
-		border-radius: 50%;
-		width: 40px;
-		height: 40px;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		cursor: pointer;
-	}
-</style>

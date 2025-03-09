@@ -9,30 +9,16 @@
 	let { type = "button", loading = false, disabled = false, children }: Props = $props();
 </script>
 
-<button {type} class:btnLoad={loading} disabled={disabled || loading}>
+<button
+	{type}
+	disabled={disabled || loading}
+	class="p-3 font-bold bg-lk-blue-500 border border-lk-blue-500 rounded-xl text-lk-blue-50
+	mt-4 cursor-pointer disabled:cursor-not-allowed
+	{loading ? 'bg-lk-blue-800 border-lk-blue-800' : ''}"
+>
 	{#if loading}
 		Loading...
 	{:else}
 		{@render children?.()}
 	{/if}
 </button>
-
-<style>
-	button {
-		padding: 16px;
-		font-size: 20px;
-		font-weight: bold;
-		background-color: var(--lk-blue-500);
-		border: 1px solid var(--lk-blue-500);
-		border-radius: var(--border-radius);
-		color: var(--lk-blue-50);
-		margin-top: 16px;
-		cursor: pointer;
-	}
-
-	.btnLoad {
-		background-color: var(--lk-blue-800);
-		border-color: var(--lk-blue-800);
-		cursor: not-allowed;
-	}
-</style>

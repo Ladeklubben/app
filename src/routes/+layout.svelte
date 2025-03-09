@@ -25,7 +25,10 @@
 </script>
 
 <ParaglideJS {i18n}>
-	<div class="layout-container">
+	<div
+		class="flex flex-col min-h-full"
+		style="padding-top: env(safe-area-inset-top, 40px); padding-bottom: env(safe-area-inset-bottom, 40px);"
+	>
 		{#if loginCheckDone}
 			<main style={$showTabBar ? "padding-bottom: 70px" : ""}>
 				{@render children()}
@@ -36,17 +39,3 @@
 		{/if}
 	</div>
 </ParaglideJS>
-
-<style>
-	.layout-container {
-		display: flex;
-		flex-direction: column;
-		min-height: 100%;
-		padding-top: env(safe-area-inset-top, 40px);
-		padding-bottom: env(safe-area-inset-bottom, 40px);
-	}
-	main {
-		flex: 1;
-		overflow-y: auto;
-	}
-</style>
