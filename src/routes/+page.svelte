@@ -10,7 +10,9 @@
 	});
 
 	const formatter = new Intl.NumberFormat("en-DK");
-	const total_power_import = $derived($meterData ? formatter.format($meterData.totals.total_power_import * 1000) : "");
+	const total_power_import = $derived(
+		$meterData ? formatter.format($meterData.totals.total_power_import * 1000) : "",
+	);
 </script>
 
 <div class="wrapper">

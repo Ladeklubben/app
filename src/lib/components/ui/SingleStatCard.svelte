@@ -12,10 +12,9 @@
 <div class="wrapper">
 	<span in:fade={{ duration: 300 }} style="text-align: center;">
 		{description}
-
+		<!-- prettier-ignore -->
 		<h2>
-			{stat}
-			<span class="unit">{unit}</span>
+			{stat}<span class="unit">{unit}</span>
 		</h2>
 	</span>
 </div>

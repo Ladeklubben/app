@@ -4,7 +4,7 @@
 	import { showTabBar } from "$lib/services/layout";
 	interface Props {
 		title?: string; // Title for the subpage header
-		children?: import('svelte').Snippet;
+		children?: import("svelte").Snippet;
 	}
 
 	let { title = "", children }: Props = $props();

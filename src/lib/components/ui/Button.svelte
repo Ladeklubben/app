@@ -3,15 +3,10 @@
 		type?: "button" | "submit" | "reset";
 		loading?: boolean;
 		disabled?: boolean;
-		children?: import('svelte').Snippet;
+		children?: import("svelte").Snippet;
 	}
 
-	let {
-		type = "button",
-		loading = false,
-		disabled = false,
-		children
-	}: Props = $props();
+	let { type = "button", loading = false, disabled = false, children }: Props = $props();
 </script>
 
 <button {type} class:btnLoad={loading} disabled={disabled || loading}>

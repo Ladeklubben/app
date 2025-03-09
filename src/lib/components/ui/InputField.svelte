@@ -7,13 +7,7 @@
 		error: string;
 	}
 
-	let {
-		id,
-		type = "text",
-		label,
-		value = $bindable(),
-		error
-	}: Props = $props();
+	let { id, type = "text", label, value = $bindable(), error }: Props = $props();
 
 	// Type guard to ensure value is boolean for checkboxes
 	let isChecked: boolean | null = $state(null);
