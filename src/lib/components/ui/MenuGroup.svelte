@@ -1,28 +1,16 @@
 <script lang="ts">
-    // MenuGroup.svelte
-    export let title: string;
+	interface Props {
+		// MenuGroup.svelte
+		title: string;
+		children?: import("svelte").Snippet;
+	}
+
+	let { title, children }: Props = $props();
 </script>
 
-<div class="menu-group">
-    <h2>{title}</h2>
-    <div class="content">
-        <slot />
-    </div>
+<div class="border border-lk-blue-800 rounded-2xl mb-4">
+	<h2 class="py-3 px-4 m-0 text-lk-blue-100 border-b border-b-lk-blue-800 font-bold">{title}</h2>
+	<div class="content">
+		{@render children?.()}
+	</div>
 </div>
-
-<style>
-    .menu-group {
-        border: 1px solid var(--lk-blue-800);
-        border-radius: var(--border-radius);
-        overflow: hidden;
-        margin-bottom: 1rem;
-    }
-
-    h2 {
-        font-size: 1rem;
-        padding: 0.75rem 1rem;
-        margin: 0;
-        color: var(--lk-blue-100);
-        border-bottom: 1px solid var(--lk-blue-800);
-    }
-</style>

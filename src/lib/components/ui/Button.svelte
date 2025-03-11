@@ -1,33 +1,24 @@
 <script lang="ts">
-    export let type: "button" | "submit" | "reset" = "button";
-    export let loading: boolean = false;
-    export let disabled: boolean = false;
+	interface Props {
+		type?: "button" | "submit" | "reset";
+		loading?: boolean;
+		disabled?: boolean;
+		children?: import("svelte").Snippet;
+	}
+
+	let { type = "button", loading = false, disabled = false, children }: Props = $props();
 </script>
 
-<button type={type} class:btnLoad={loading} disabled={disabled || loading}>
-    {#if loading}
-        Loading...
-    {:else}
-        <slot />
-    {/if}
+<button
+	{type}
+	disabled={disabled || loading}
+	class="p-3 font-bold bg-lk-blue-500 border border-lk-blue-500 rounded-xl text-lk-blue-50
+	mt-4 cursor-pointer disabled:cursor-not-allowed
+	{loading ? 'bg-lk-blue-800 border-lk-blue-800' : ''}"
+>
+	{#if loading}
+		Loading...
+	{:else}
+		{@render children?.()}
+	{/if}
 </button>
-
-<style>
-    button {
-        padding: 1rem;
-        font-size: 1.2rem;
-        font-weight: bold;
-        background-color: var(--lk-blue-500);
-        border: 1px solid var(--lk-blue-500);
-        border-radius: var(--border-radius);
-        color: var(--lk-blue-50);
-        margin-top: 1rem;
-        cursor: pointer;
-    }
-
-    .btnLoad {
-        background-color: var(--lk-blue-800);
-        border-color: var(--lk-blue-800);
-        cursor: not-allowed;
-    }
-</style>

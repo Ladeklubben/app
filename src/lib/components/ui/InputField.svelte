@@ -1,57 +1,45 @@
 <script lang="ts">
-    export let id: string;
-    export let type: string = "text";
-    export let label: string;
-    export let value: string;
-    export let error: string;
+	interface Props {
+		id: string;
+		type?: string;
+		label: string;
+		value: string | boolean;
+		error: string;
+	}
+
+	let { id, type = "text", label, value = $bindable(), error }: Props = $props();
+
+	// Type guard to ensure value is boolean for checkboxes
+	let isChecked: boolean | null = $state(null);
+	if (type === "checkbox" && typeof value === "boolean") {
+		isChecked = value;
+	}
 </script>
 
-<label for={id}>{label}</label>
-<input
-    {type}
-    {id}
-    name={id}
-    bind:value
-    class:error-border={error}
-/>
-{#if error}
-    <span class="error-text">{error}</span>
+{#if type === "checkbox"}
+	<div class="flex items-center justify-between">
+		<label for={id} class="font-bold">{label}</label>
+		<input
+			type="checkbox"
+			{id}
+			name={id}
+			bind:checked={isChecked}
+			class="h-6 w-6 appearance-none rounded-md border border-lk-blue-500 bg-transparent checked:before:scale-100 checked:before:bg-lk-blue-400 focus:outline-none focus:ring-2 focus:ring-lk-blue-300
+				before:m-[4px] before:h-4 before:w-4 before:scale-0 before:clip-path-[polygon(14%_44%,0_65%,50%_100%,100%_20%,80%_0,43%_62%)] before:transition-transform before:duration-200 before:ease-in-out
+				{error ? 'border-lk-red-700' : ''}"
+		/>
+	</div>
+{:else}
+	<label for={id} class="font-bold">{label}</label>
+	<input
+		{type}
+		{id}
+		name={id}
+		bind:value
+		class="rounded-2xl border border-lk-blue-500 bg-transparent p-3 text-lg text-lk-blue-50 focus:border-lk-blue-300 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none
+			{error ? 'border-lk-red-700' : ''}"
+	/>
 {/if}
-
-<style>
-    label {
-        font-weight: bold;
-        margin: 0;
-    }
-
-    input {
-        padding: 0.9rem;
-        font-size: 1.1rem;
-        background-color: transparent;
-        border: 1px solid var(--lk-blue-500);
-        border-radius: var(--border-radius);
-        color: var(--lk-blue-50);
-    }
-
-    input:focus {
-        border-color: var(--lk-blue-300);
-        outline: none;
-    }
-
-    .error-border {
-        border-color: var(--lk-red-700);
-    }
-
-    .error-text {
-        color: var(--lk-red-700);
-        text-align: center;
-        margin: -10px 0px;
-    }
-
-    /* Hide the up and down arrows in the number input field */
-    input[type="number"]::-webkit-outer-spin-button,
-    input[type="number"]::-webkit-inner-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
-    }
-</style>
+{#if error}
+	<span class="mt-[-10px] block text-center text-lk-red-700">{error}</span>
+{/if}

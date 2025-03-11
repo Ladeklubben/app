@@ -1,62 +1,38 @@
 <!-- Subpage.svelte -->
-<script>
-    import { onDestroy, onMount } from "svelte";
-    import { showTabBar } from "$lib/services/layout";
-    export let title = ""; // Title for the subpage header
+<script lang="ts">
+	import { onDestroy, onMount } from "svelte";
+	import { showTabBar } from "$lib/services/layout";
+	interface Props {
+		title?: string; // Title for the subpage header
+		children?: import("svelte").Snippet;
+	}
 
-    function goBack() {
-        // Navigate back to the previous page
-        history.back();
-    }
+	let { title = "", children }: Props = $props();
 
-    onMount(() => {
-        $showTabBar = false;
-    });
+	function goBack() {
+		// Navigate back to the previous page
+		history.back();
+	}
 
-    onDestroy(() => {
-        $showTabBar = true;
-    });
+	onMount(() => {
+		$showTabBar = false;
+	});
+
+	onDestroy(() => {
+		$showTabBar = true;
+	});
 </script>
 
-<div class="sub-page">
-    <header>
-        <button class="back-btn" on:click={goBack} aria-label="Go back">‹</button>
-        <h1>{title}</h1>
-        <div class="spacer"></div>
-    </header>
-    <div class="wrapper">
-        <slot />
-    </div>
+<header class="flex items-center py-0 px-2.5 border-b border-b-lk-blue-800 relative">
+	<button
+		class="bg-none border-0 cursor-pointer pt-2.5 pr-5 pb-[18px] pl-2.5 text-lk-blue-50 text-2xl"
+		onclick={goBack}
+		aria-label="Go back"
+	>
+		‹
+	</button>
+	<h1 class="m-0 text-xl absolute left-1/2 -translate-x-1/2">{title}</h1>
+</header>
+<div class="wrapper">
+	{@render children?.()}
 </div>
-
-<style>
-    .sub-page {
-        display: flex;
-        flex-direction: column;
-    }
-    header {
-        display: flex;
-        align-items: center;
-        padding: 0 10px;
-        border-bottom: 1px solid var(--lk-blue-800);
-        position: relative;
-    }
-    .back-btn {
-        background: none;
-        border: none;
-        cursor: pointer;
-        padding: 10px 20px 18px 10px;
-        color: var(--lk-blue-50);
-        font-size: 25px;
-    }
-    h1 {
-        margin: 0;
-        font-size: 20px;
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
-    }
-    .spacer {
-        flex-grow: 1;
-    }
-</style>

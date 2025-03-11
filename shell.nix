@@ -1,39 +1,17 @@
 with import <nixpkgs> {};
 
-let
-  androidComposition = androidenv.composeAndroidPackages {
-    includeNDK = true;
-    platformVersions = ["34"]; # Update this to include the SDK version you want to use. If Android automatically tries to install a version and fails, add it here instead.
-  };
-in
 pkgs.mkShell {
-  nativeBuildInputs = with pkgs; [
-    pkg-config
-    gobject-introspection
-    rustup
-    cargo-tauri
-    nodejs_20
-  ];
-
-  buildInputs = with pkgs;[
-    at-spi2-atk
-    atkmm
-    cairo
-    gdk-pixbuf
-    glib
-    gtk3
-    harfbuzz
-    librsvg
-    libsoup_3
-    pango
-    webkitgtk_4_1
-    openssl
-    openjdk
-    androidComposition.androidsdk
+  buildInputs = with pkgs; [
+    nodejs_22
+    jdk21
+    android-tools
+    android-studio
   ];
 
   shellHook = ''
-    export ANDROID_HOME=${androidComposition.androidsdk}/libexec/android-sdk
-    export NDK_HOME=$ANDROID_HOME/ndk-bundle
-    '';
+    export CAPACITOR_ANDROID_STUDIO_PATH=/run/current-system/sw/bin/android-studio
+    export ANDROID_SDK_ROOT=/home/aw/Android/Sdk
+    export JAVA_HOME=${pkgs.jdk21}/lib/openjdk
+    export PATH=$JAVA_HOME/bin:$PATH
+  '';
 }

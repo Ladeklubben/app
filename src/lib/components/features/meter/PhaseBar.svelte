@@ -1,56 +1,18 @@
-<!-- PhaseBar.svelte -->
 <script>
-  export let label = '';
-  export let percentage = 0;
+	let { label = "", percentage = 0 } = $props();
 </script>
 
-<div class="phase-bar">
-  <div class="bar-container">
-    <span class="label">{label}</span>
-    <div class="progress-bar" style="width: {percentage}%"></div>
-    <span class="percentage">{percentage}%</span>
-  </div>
+<div class="flex items-center gap-5">
+	<div class="relative flex-grow overflow-hidden h-10 bg-lk-blue-800 rounded-2xl">
+		<span class="absolute left-5 top-1/2 transform -translate-y-1/2 text-lk-blue-100 text-lg font-bold">
+			{label}
+		</span>
+		<div
+			class="h-full bg-lk-blue-500 rounded-2xl transition-width duration-300 ease"
+			style="width: {percentage}%"
+		></div>
+		<span class="absolute right-5 top-1/2 transform -translate-y-1/2 text-lk-blue-100 text-lg">
+			{percentage}%
+		</span>
+	</div>
 </div>
-
-<style>
-  .phase-bar {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-  }
-
-  .bar-container {
-    position: relative;
-    flex-grow: 1;
-    background-color: var(--lk-blue-800);
-    border-radius: var(--border-radius);
-    overflow: hidden;
-    height: 40px;
-  }
-
-  .progress-bar {
-    height: 100%;
-    background-color: var(--lk-blue-500);
-    border-radius: var(--border-radius);
-    transition: width 0.3s ease;
-  }
-
-  .label {
-    position: absolute;
-    left: 20px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--lk-blue-100);
-    font-size: 1rem;
-    font-weight: bold;
-  }
-
-  .percentage {
-    position: absolute;
-    right: 20px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--lk-blue-100);
-    font-size: 1rem;
-  }
-</style>

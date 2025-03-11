@@ -1,44 +1,23 @@
 <script lang="ts">
-    import { fade } from "svelte/transition";
-    export let description: string;
-    export let stat: string;
-    export let unit: string;
+	import { fade } from "svelte/transition";
+	interface Props {
+		description: string;
+		stat: string;
+		unit: string;
+	}
+
+	let { description, stat, unit }: Props = $props();
 </script>
 
-<div class="wrapper">
-    <span in:fade={{ duration: 300 }} style="text-align: center;">
-        {description}
-
-        <h2>{stat}<span class="unit">{unit}</span></h2>
-    </span>
+<div
+	class="p-6 items-center rounded-2xl border border-lk-blue-800"
+	style="background: linear-gradient(to right, #59a6b7, #2e4d59);"
+>
+	<span in:fade={{ duration: 300 }} class="flex flex-col text-center gap-3">
+		{description}
+		<!-- prettier-ignore -->
+		<h2 class="text-6xl/12 font-bold text-lk-blue-100 spacing -mb-2">
+			{stat}<span class="text-base font-medium pl-1">{unit}</span>
+		</h2>
+	</span>
 </div>
-
-<style>
-    .wrapper {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        padding: 32px;
-        align-items: center;
-        border-radius: var(--border-radius);
-        border: 1px solid var(--lk-blue-800);
-        background: linear-gradient(
-            to right,
-            var(--lk-blue-400),
-            var(--lk-blue-800)
-        );
-    }
-
-    h2 {
-        font-size: 4rem;
-        font-weight: bold;
-        color: var(--lk-blue-100);
-        margin: 0;
-        margin-bottom: -10px;
-    }
-
-    .unit {
-        font-size: 1rem;
-        font-weight: normal;
-    }
-</style>

@@ -1,0 +1,78 @@
+@import "tailwindcss";
+@plugin '@tailwindcss/forms';
+
+@theme {
+	--color-lk-blue-50: #f1f9fa;
+	--color-lk-blue-100: #dceef1;
+	--color-lk-blue-200: #bddee4;
+	--color-lk-blue-300: #8fc7d1;
+	--color-lk-blue-400: #59a6b7;
+	--color-lk-blue-500: #3e8a9c;
+	--color-lk-blue-600: #367284;
+	--color-lk-blue-700: #315e6d;
+	--color-lk-blue-800: #2e4d59;
+	--color-lk-blue-900: #2b444e;
+	--color-lk-blue-950: #182b34;
+
+	--color-lk-green-50: #eeffe5;
+	--color-lk-green-100: #d9ffc7;
+	--color-lk-green-200: #b5ff95;
+	--color-lk-green-300: #83ff57;
+	--color-lk-green-400: #5cf628;
+	--color-lk-green-500: #38dc06;
+	--color-lk-green-600: #26b000;
+	--color-lk-green-700: #1e8605;
+	--color-lk-green-800: #1d690b;
+	--color-lk-green-900: #1a590e;
+	--color-lk-green-950: #083201;
+
+	--color-lk-red-50: #fdf2f9;
+	--color-lk-red-100: #fde6f4;
+	--color-lk-red-200: #fcceea;
+	--color-lk-red-300: #fba6d8;
+	--color-lk-red-400: #f86ebd;
+	--color-lk-red-500: #f143a2;
+	--color-lk-red-600: #e0227f;
+	--color-lk-red-700: #bf1363;
+	--color-lk-red-800: #a11353;
+	--color-lk-red-900: #861548;
+	--color-lk-red-950: #520528;
+}
+
+@layer base {
+	body {
+		font-family: "Montserrat", sans-serif;
+		background-color: var(--color-lk-blue-950);
+		margin: 0px;
+		color: var(--color-lk-blue-50);
+	}
+
+	p {
+		line-height: 28px;
+	}
+
+	h1 {
+		margin: 0px;
+	}
+
+	.wrapper {
+		display: flex;
+		flex-direction: column;
+		gap: 20px;
+		padding: 20px;
+	}
+}
+
+@font-face {
+	font-family: "Montserrat";
+	src: url("/fonts/Montserrat-VariableFont_wght.ttf") format("truetype");
+	font-weight: 100 900;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: "Montserrat";
+	src: url("/fonts/Montserrat-Italic-VariableFont_wght.ttf") format("truetype");
+	font-weight: 100 900;
+	font-style: italic;
+}
