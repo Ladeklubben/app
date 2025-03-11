@@ -19,7 +19,7 @@
 	<div class=" flex justify-between items-center">
 		<h1>Home</h1>
 		<button
-			class="bg-lk-blue-300 text-4xl border-0 rounded-4xl w-8 h-8"
+			class="flex flex-col justify-center items-center cursor-pointer bg-lk-blue-300 text-4xl border-0 rounded-4xl w-8 h-8"
 			onclick={() => goto("/setup/installation")}
 		>
 			<span class="add-icon">+</span>
