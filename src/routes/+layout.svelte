@@ -6,13 +6,12 @@
 	import { checkLoginStatus } from "$lib/services/auth";
 	import { onMount } from "svelte";
 	import { showTabBar } from "$lib/services/layout";
-	
 	import { setDevice, device } from "$lib/services/layout";
 	import "../app.css";
 
 	let { children } = $props();
 	let loginCheckDone = $state(false);
-	
+
 	onMount(async () => {
 		await checkLoginStatus();
 		loginCheckDone = true;
