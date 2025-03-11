@@ -17,7 +17,7 @@
 </script>
 
 <div class="wrapper">
-	<Map />
+	<Map isSatellite={true}/>
 	<div class=" flex justify-between items-center">
 		<h1>Home</h1>
 		<button
