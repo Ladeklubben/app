@@ -7,7 +7,7 @@
 	import { onMount } from "svelte";
 	import { showTabBar } from "$lib/services/layout";
 	
-	import { setDevice } from "$lib/services/layout";
+	import { setDevice, device } from "$lib/services/layout";
 	import "../app.css";
 
 	let { children } = $props();
@@ -23,7 +23,8 @@
 <ParaglideJS {i18n}>
 	<div
 		class="flex flex-col min-h-full"
-		style="padding-top: env(safe-area-inset-top, 40px); padding-bottom: env(safe-area-inset-bottom, 40px);"
+		class:pt-[env(safe-area-inset-top,40px)]={$device.isIOS}
+		class:pb-[env(safe-area-inset-bottom,40px)]={$device.isIOS}
 	>
 		{#if loginCheckDone}
 			<main style={$showTabBar ? "padding-bottom: 70px" : ""}>
