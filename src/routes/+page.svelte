@@ -4,6 +4,7 @@
 	import { onMount } from "svelte";
 	import { fetchpowerImport, meterData, lastFetch } from "$lib/services/meter";
 	import { goto } from "$app/navigation";
+	import Map from "$lib/components/features/Map.svelte";
 
 	onMount(() => {
 		fetchpowerImport();
@@ -16,6 +17,7 @@
 </script>
 
 <div class="wrapper">
+	<Map />
 	<div class=" flex justify-between items-center">
 		<h1>Home</h1>
 		<button

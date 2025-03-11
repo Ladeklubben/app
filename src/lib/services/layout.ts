@@ -19,7 +19,7 @@ export function setDevice() {
 
 	if (platform === "android") {
 		TextZoom.set({ value: 0.75 });
-	} else {
+	} else if (platform !== "web") {
 		TextZoom.set({ value: 1 });
 	}
 }
