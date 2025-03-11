@@ -6,21 +6,17 @@
 	import { checkLoginStatus } from "$lib/services/auth";
 	import { onMount } from "svelte";
 	import { showTabBar } from "$lib/services/layout";
-	import { TextZoom } from "@capacitor/text-zoom";
-	import { Capacitor } from "@capacitor/core";
+	
+	import { setDevice } from "$lib/services/layout";
 	import "../app.css";
 
 	let { children } = $props();
 	let loginCheckDone = $state(false);
-
-	// In your app initialization
-	if (Capacitor.getPlatform() === "android") {
-		TextZoom.set({ value: 0.8 });
-	}
-
+	
 	onMount(async () => {
 		await checkLoginStatus();
 		loginCheckDone = true;
+		setDevice();
 	});
 </script>
 
