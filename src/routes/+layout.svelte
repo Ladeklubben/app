@@ -6,7 +6,7 @@
 	import { checkLoginStatus } from "$lib/services/auth";
 	import { onMount } from "svelte";
 	import { showTabBar } from "$lib/services/layout";
-	import { setDevice, device } from "$lib/services/layout";
+	import { setDevice, device, Platform } from "$lib/services/layout";
 	import "../app.css";
 
 	let { children } = $props();
@@ -22,8 +22,8 @@
 <ParaglideJS {i18n}>
 	<div
 		class="flex flex-col min-h-full"
-		class:pt-[env(safe-area-inset-top,40px)]={$device.isIOS}
-		class:pb-[env(safe-area-inset-bottom,40px)]={$device.isIOS}
+		class:pt-[env(safe-area-inset-top,40px)]={$device === Platform.IOS}
+		class:pb-[env(safe-area-inset-bottom,40px)]={$device === Platform.IOS}
 	>
 		{#if loginCheckDone}
 			<main style={$showTabBar ? "padding-bottom: 70px" : ""}>
