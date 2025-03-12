@@ -1,80 +1,131 @@
 <script lang="ts">
-	import { onDestroy, onMount } from "svelte";
+	import { onMount, onDestroy } from "svelte";
 	import * as L from "leaflet";
 	import "leaflet/dist/leaflet.css";
-	import { type Position, type PermissionStatus, Geolocation } from "@capacitor/geolocation";
-	import { device, Platform } from "$lib/services/layout";
+	import { type Position } from "@capacitor/geolocation";
+	import { pos, getPosition } from "$lib/services/map";
 
 	// Props
-	let { isSatellite = false } = $props();
+	let { isSatellite = false } = $props<{
+		isSatellite?: boolean;
+	}>();
 
-	let mapContainer: HTMLDivElement;
+	// Reactive variables
+	let mapContainer: HTMLDivElement | undefined;
 	let map: L.Map | undefined;
-	let pos: Position | undefined = $state();
-	let userMarker: L.Marker | undefined; // Track the marker to update it later
+	let userMarker: L.Marker | undefined;
+	let clickMarker: L.Marker | undefined;
 
-	// Define a custom icon for a "live location" look
+	// Constants
+	const DEFAULT_ZOOM = 18;
+	const MAX_ZOOM = 20;
+	const TILE_SERVERS = {
+		satellite: "https://tiles.stadiamaps.com/tiles/alidade_satellite/{z}/{x}/{y}{r}.jpg",
+		dark: "https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png",
+	};
+
+	// Custom icons
 	const liveLocationIcon = L.divIcon({
 		html: `
-			<div style="
-				background-color: #00A3FF;
-				width: 16px;
-				height: 16px;
-				border-radius: 50%;
-				border: 2px solid white;
-				box-shadow: 0 0 8px rgba(0, 163, 255, 0.6);
-			"></div>
-		`,
-		className: "", // Remove default Leaflet class to avoid conflicts
-		iconSize: [16, 16], // Size of the icon
-		iconAnchor: [8, 8], // Center the icon on the position
+		<div style="
+		  background-color: #00A3FF;
+		  width: 16px;
+		  height: 16px;
+		  border-radius: 50%;
+		  border: 2px solid white;
+		  box-shadow: 0 0 8px rgba(0, 163, 255, 0.6);
+		"></div>
+	  `,
+		className: "",
+		iconSize: [16, 16],
+		iconAnchor: [8, 8],
 	});
 
-	// Initialize and update the map
-	$effect(() => {
+	const clickLocationIcon = L.icon({
+		iconUrl: "/LK_waypoint.svg",
+		iconSize: [48, 48],
+		iconAnchor: [24, 48],
+	});
+
+	// Function to update map position
+	function updateMapPosition(position: Position | null) {
+		if (!map || !position) return;
+
+		const latLng = [position.coords.latitude, position.coords.longitude] as L.LatLngTuple;
+		map.setView(latLng, DEFAULT_ZOOM, { animate: true });
+
+		if (userMarker) {
+			userMarker.setLatLng(latLng);
+		} else {
+			userMarker = L.marker(latLng, { icon: liveLocationIcon }).addTo(map);
+		}
+	}
+
+	// Initialize map
+	function initializeMap() {
 		if (!mapContainer) return;
 
-		// Set the map center to the user's current position
-		if (pos && map) {
-			map.setView([pos.coords.latitude, pos.coords.longitude], 16);
-			L.marker([pos.coords.latitude, pos.coords.longitude], { icon: liveLocationIcon }).addTo(map);
+		try {
+			map = L.map(mapContainer, {
+				zoomControl: false,
+				attributionControl: false,
+			}).setView([56, 10.5], 6); // Default view
+
+			L.tileLayer(TILE_SERVERS[isSatellite ? "satellite" : "dark"], {
+				maxZoom: MAX_ZOOM,
+			}).addTo(map);
+
+			map.on("click", handleMapClick);
+		} catch (error) {
+			console.error("Failed to initialize map:", error);
 		}
-	});
+	}
 
-	let tileServer = isSatellite
-		? "https://tiles.stadiamaps.com/tiles/alidade_satellite/{z}/{x}/{y}{r}.jpg"
-		: "https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png";
+	// Handle map clicks
+	function handleMapClick(e: L.LeafletMouseEvent) {
+		if (!map) return;
 
-	onMount(async () => {
-		if ($device !== Platform.Web) {
-			Geolocation.requestPermissions().then((status: PermissionStatus) => {
-				if (status.location === "granted") {
-					Geolocation.getCurrentPosition().then((position: Position) => {
-						console.log("Current position:", position);
-						pos = position;
-					});
-				}
-			});
+		const { lat, lng } = e.latlng;
+		console.log("Clicked coordinates:", { latitude: lat, longitude: lng });
+
+		if (clickMarker) {
+			clickMarker.remove();
 		}
 
-		map = L.map(mapContainer, {
-			center: [56, 10.5], // Center of Denmark
-			zoom: 6,
-			zoomControl: true,
+		clickMarker = L.marker([lat, lng], { icon: clickLocationIcon }).addTo(map);
+	}
+
+	// Lifecycle hooks
+	onMount(() => {
+		initializeMap();
+
+		// Subscribe to position changes
+		const unsubscribe = pos.subscribe((newPosition) => {
+			updateMapPosition(newPosition);
 		});
 
-		map.attributionControl.setPrefix(""); // Remove default Leaflet attribution
-		map.zoomControl.remove(); // Remove default Leaflet zoom control
+		// Kick off position retrieval
+		getPosition();
 
-		// Add dark tile layer from CartoDB
-		L.tileLayer(tileServer, { maxZoom: 19 }).addTo(map);
+		// Cleanup subscription on unmount
+		return () => {
+			unsubscribe();
+		};
 	});
 
 	onDestroy(() => {
 		if (map) {
+			map.off("click", handleMapClick);
 			map.remove();
+			map = undefined;
 		}
+		userMarker = undefined;
+		clickMarker = undefined;
 	});
 </script>
 
-<div bind:this={mapContainer} class="w-full h-100 border border-lk-blue-800 rounded-2xl" style="background-color: #182b34;"></div>
+<div
+	bind:this={mapContainer}
+	class="w-full h-[400px] border border-lk-blue-800 rounded-2xl"
+	style="background-color: #182b34; cursor: pointer;"
+></div>
