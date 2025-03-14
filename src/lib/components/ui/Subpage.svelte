@@ -38,7 +38,6 @@
 		if (heightCheckDiv) {
 			const pageHeight = heightCheckDiv.offsetHeight;
 			const screenHeight = window.innerHeight;
-			console.log(screenHeight, pageHeight);
 			$bottomButtonFixed = screenHeight > pageHeight + 220;
 		}
 	}
