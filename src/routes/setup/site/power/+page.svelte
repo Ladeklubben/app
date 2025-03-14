@@ -17,7 +17,7 @@
 
 </script>
 
-<Subpage title="Power Company">
+<Subpage title="Power Company" backURL="/setup/site/rebate">
 	<div id="height-check">
 		<Form {handleSubmit} id="form">
 			<p>

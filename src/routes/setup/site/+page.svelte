@@ -22,7 +22,7 @@
 	});
 </script>
 
-<Subpage title="Add Site">
+<Subpage title="Add Site" backURL="/">
 	<div id="height-check">
 		<Form {handleSubmit} id="form">
 			<p>

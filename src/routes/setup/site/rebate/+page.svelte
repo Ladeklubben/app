@@ -28,7 +28,7 @@
 	}
 </script>
 
-<Subpage title="Electricity Rebate">
+<Subpage title="Electricity Rebate" backURL="/setup/site/location">
 	<div id="height-check">
 		<Form {handleSubmit} id="form">
 			<p>

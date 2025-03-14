@@ -3,12 +3,17 @@
 	import { onDestroy, onMount } from "svelte";
 	import { showTabBar } from "$lib/services/layout";
 	import { bottomButtonFixed } from "$lib/services/layout";
+	import { goto } from "$app/navigation";
 
-	let { title = "", children } = $props();
+	let { title = "", backURL="", children } = $props();
 
 	function goBack() {
 		// Navigate back to the previous page
-		history.back();
+		if (backURL !== "") {
+			goto(backURL);
+		} else {
+			history.back();
+		}
 	}
 
 	onMount(() => {
