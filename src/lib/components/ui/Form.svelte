@@ -1,7 +1,7 @@
 <script lang="ts">
-	let { children, handleSubmit } = $props();
+	let { id="form", children, handleSubmit } = $props();
 </script>
 
-<form onsubmit={handleSubmit} novalidate class="flex flex-col gap-5 w-full">
+<form onsubmit={handleSubmit} {id} novalidate class="flex flex-col gap-5 w-full">
 	{@render children?.()}
 </form>
