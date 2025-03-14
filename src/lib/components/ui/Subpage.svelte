@@ -1,4 +1,3 @@
-<!-- Subpage.svelte -->
 <script lang="ts">
 	import { onDestroy, onMount } from "svelte";
 	import { showTabBar } from "$lib/services/layout";
@@ -6,7 +5,7 @@
 	import { goto } from "$app/navigation";
 	import ChevronLeft from "~icons/mdi/chevron-left";
 
-	let { title = "", backURL="", children } = $props();
+	let { title = "", backURL = "", children } = $props();
 
 	function goBack() {
 		// Navigate back to the previous page
@@ -24,6 +23,7 @@
 		if (typeof window !== "undefined") {
 			checkHeight();
 			window.addEventListener("resize", checkHeight);
+			window.addEventListener("popstate", goBack);
 		}
 	});
 
@@ -33,6 +33,7 @@
 		// Cleanup button fixed state
 		if (typeof window !== "undefined") {
 			window.removeEventListener("resize", checkHeight);
+			window.removeEventListener("popstate", goBack);
 		}
 	});
 
@@ -55,7 +56,7 @@
 		onclick={goBack}
 		aria-label="Go back"
 	>
-		<ChevronLeft font-size={20}/>
+		<ChevronLeft font-size={20} />
 	</button>
 	<h1 class="m-0 text-xl absolute left-1/2 -translate-x-1/2">{title}</h1>
 </header>
