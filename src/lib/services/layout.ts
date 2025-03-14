@@ -9,7 +9,8 @@ export enum Platform {
 }
 
 export const showTabBar = writable(true);
-export const device = writable<Platform>(Platform.Web); // Default to web
+export const bottomButtonFixed = writable(false);
+export const device = writable<Platform>(Platform.Web);
 
 export function setDevice() {
   const platform = Capacitor.getPlatform() as Platform;

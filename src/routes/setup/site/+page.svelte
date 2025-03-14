@@ -23,7 +23,7 @@
 </script>
 
 <Subpage title="Add Site">
-	<Form {handleSubmit} id="siteForm">
+	<Form {handleSubmit} id="form">
 		<p>
 			A site is a physical location, like a home, summer house, office or other property, where you have a power
 			meter installed. You can add multiple sites to your account.
@@ -32,5 +32,5 @@
 		<InputField id="name" type="text" label="Site Name" bind:value={$siteFormData.name} error={errors.name} />
 	</Form>
 
-	<BottomButton formID="siteForm" buttonText="Next" />
+	<BottomButton activeDot={0} totalDots={4} formID="form" buttonText="Next" />
 </Subpage>
