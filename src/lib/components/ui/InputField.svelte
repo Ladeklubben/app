@@ -30,6 +30,7 @@
 		/>
 	</div>
 {:else}
+<div class="flex flex-col gap-3">
 	<label for={id} class="font-bold">{label}</label>
 	<input
 		{type}
@@ -39,6 +40,7 @@
 		class="rounded-2xl border border-lk-blue-500 bg-transparent p-3 text-lg text-lk-blue-50 focus:border-lk-blue-300 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none
 			{error ? 'border-lk-red-700' : ''}"
 	/>
+</div>
 {/if}
 {#if error}
 	<span class="mt-[-10px] block text-center text-lk-red-700">{error}</span>
