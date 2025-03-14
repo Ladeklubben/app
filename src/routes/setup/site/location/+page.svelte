@@ -46,5 +46,5 @@
 			<InputField id="zip" type="text" label="Zip" bind:value={$siteFormData.location.zip} error={errors.zip} />
 		</Form>
 	</div>
-	<BottomButton activeDot={1} totalDots={4} formID="form" buttonText="Next" />
+	<BottomButton activeDot={2} totalDots={4} formID="form" buttonText="Next" />
 </Subpage>

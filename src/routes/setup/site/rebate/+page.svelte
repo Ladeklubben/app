@@ -23,9 +23,8 @@
 
 	async function handleSubmit(event: Event) {
 		event.preventDefault();
-		if (formData.solarPanels || formData.heatPump || formData.electricHeating) {
-			console.log($siteFormData);
-		}
+        $siteFormData.taxRebate = isEligible;
+		goto("/setup/site/power");
 	}
 </script>
 
@@ -63,5 +62,5 @@
 			{/if}
 		</Form>
 	</div>
-	<BottomButton activeDot={2} totalDots={4} formID="form" buttonText="Next" />
+	<BottomButton activeDot={3} totalDots={4} formID="form" buttonText="Next" />
 </Subpage>

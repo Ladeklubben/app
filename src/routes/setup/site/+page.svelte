@@ -33,5 +33,5 @@
 			<InputField id="name" type="text" label="Site Name" bind:value={$siteFormData.name} error={errors.name} />
 		</Form>
 	</div>
-	<BottomButton activeDot={0} totalDots={4} formID="form" buttonText="Next" />
+	<BottomButton activeDot={1} totalDots={4} formID="form" buttonText="Next" />
 </Subpage>
