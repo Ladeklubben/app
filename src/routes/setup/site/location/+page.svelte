@@ -5,18 +5,18 @@
 	import Map from "$lib/components/features/Map.svelte";
 	import { siteFormData } from "$lib/services/site";
 	import BottomButton from "$lib/components/ui/BottomButton.svelte";
+	import { goto } from "$app/navigation";
 
 	let errors = {
-		installationName: "",
 		address: "",
 		city: "",
 		zip: "",
-		rebate: "",
-		solarPanels: "",
 	};
 
 	async function handleSubmit(event: Event) {
-		console.log("submit");
+		event.preventDefault();
+		console.log($siteFormData);
+		goto("/setup/site/rebate");
 	}
 </script>
 
@@ -28,7 +28,7 @@
 				calculate energy tariffs automatically.
 			</p>
 
-			<Map isSatellite={true} height={200} />
+			<Map isSatellite={true} height={300} />
 			<InputField
 				id="address"
 				type="text"
