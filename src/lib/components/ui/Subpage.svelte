@@ -4,6 +4,7 @@
 	import { showTabBar } from "$lib/services/layout";
 	import { bottomButtonFixed } from "$lib/services/layout";
 	import { goto } from "$app/navigation";
+	import ChevronLeft from "~icons/mdi/chevron-left";
 
 	let { title = "", backURL="", children } = $props();
 
@@ -50,11 +51,11 @@
 
 <header class="flex items-center py-0 px-2.5 border-b border-b-lk-blue-800 relative">
 	<button
-		class="bg-none border-0 cursor-pointer pt-2.5 pr-5 pb-[18px] pl-2.5 text-lk-blue-50 text-2xl"
+		class="bg-none border-0 cursor-pointer px-2 py-3 text-lk-blue-50 text-2xl"
 		onclick={goBack}
 		aria-label="Go back"
 	>
-		‹
+		<ChevronLeft font-size={20}/>
 	</button>
 	<h1 class="m-0 text-xl absolute left-1/2 -translate-x-1/2">{title}</h1>
 </header>
