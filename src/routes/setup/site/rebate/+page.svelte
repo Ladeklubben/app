@@ -53,7 +53,7 @@
 			/>
 
 			{#if !isEligible}
-				<div class="w-full p-4 bg-lk-red-700 rounded-2xl mt-5">
+				<div class="w-full p-4 bg-lk-red-600 rounded-2xl mt-5">
 					<p class="text-lk-blue-50">
 						Sorry, you don't qualify for the rebate due to your setup. However, you can still enjoy all the
 						benefits of Ladeklubben. Click Next to continue the setup.

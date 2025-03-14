@@ -107,7 +107,7 @@
 		<Button type="submit" {loading}>Reset Password</Button>
 
 		{#if status.message}
-			<p class=" text-center mb-0 {status.success ? 'text-lk-blue-400' : 'text-lk-red-700'}">
+			<p class=" text-center mb-0 {status.success ? 'text-lk-blue-400' : 'text-lk-red-600'}">
 				{status.message}
 			</p>
 		{/if}
