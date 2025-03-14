@@ -29,12 +29,12 @@
 	const liveLocationIcon = L.divIcon({
 		html: `
 		<div style="
-		  background-color: #00A3FF;
+		  background-color: #59a6b7;
 		  width: 16px;
 		  height: 16px;
 		  border-radius: 50%;
 		  border: 2px solid white;
-		  box-shadow: 0 0 8px rgba(0, 163, 255, 0.6);
+		  box-shadow: 0 0 8px #59a6b799;
 		"></div>
 	  `,
 		className: "",
@@ -45,7 +45,7 @@
 	const clickLocationIcon = L.icon({
 		iconUrl: "/LK_waypoint.svg",
 		iconSize: [48, 48],
-		iconAnchor: [24, 48],
+		iconAnchor: [24, 48]
 	});
 
 	// Function to update map position
