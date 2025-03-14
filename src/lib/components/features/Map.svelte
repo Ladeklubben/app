@@ -6,8 +6,9 @@
 	import { pos, getPosition } from "$lib/services/map";
 
 	// Props
-	let { isSatellite = false } = $props<{
+	let { isSatellite = false, height = 300 } = $props<{
 		isSatellite?: boolean;
+		height?: number;
 	}>();
 
 	// Reactive variables
@@ -124,8 +125,10 @@
 	});
 </script>
 
+<!-- Extra style is needed due to the way Leaflet.js works -->
 <div
 	bind:this={mapContainer}
-	class="w-full h-[400px] border border-lk-blue-800 rounded-2xl"
-	style="background-color: #182b34; cursor: pointer;"
+	class="w-full border border-lk-blue-800 rounded-2xl"
+	style="background-color: #182b34; cursor: pointer; height: {height}px;"
+	
 ></div>
