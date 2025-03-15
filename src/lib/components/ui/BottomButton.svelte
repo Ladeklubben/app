@@ -11,7 +11,7 @@
     } = $props();
 </script>
 
-<div class="{$bottomButtonFixed ? 'fixed bottom-0 left-0 p-5' : 'mt-4'} w-full flex flex-col ">
+<div class="{$bottomButtonFixed ? 'fixed bottom-0 left-0 p-5' : 'mt-4'} w-full flex flex-col mb-4">
     {#if activeDot !== undefined && totalDots !== undefined}
         <ProgressDots {activeDot} {totalDots} />
     {/if}
