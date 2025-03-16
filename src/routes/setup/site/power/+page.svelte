@@ -21,7 +21,7 @@
 	<div id="height-check">
 		<Form {handleSubmit} id="form">
 			<p>
-				To calculate your live electricity prices, and therefore charger your car in a price-efficient manner,
+				To calculate your live electricity prices, and therefore charge your car in a price-efficient manner,
 				please select the power company you use.
 			</p>
 
