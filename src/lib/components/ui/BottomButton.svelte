@@ -8,6 +8,7 @@
         totalDots, 
         formID, 
         buttonText = "Submit",
+        disabled = false,
     } = $props();
 </script>
 
@@ -15,5 +16,5 @@
     {#if activeDot !== undefined && totalDots !== undefined}
         <ProgressDots {activeDot} {totalDots} />
     {/if}
-    <Button type="submit" {formID}>{buttonText}</Button>
+    <Button type="submit" {formID} {disabled}>{buttonText}</Button>
 </div>
