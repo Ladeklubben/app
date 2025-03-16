@@ -4,14 +4,13 @@
 	import Form from "$lib/components/ui/Form.svelte";
 	import { fetchPowerCompanies, siteFormData, powerCompanies } from "$lib/services/site";
 	import BottomButton from "$lib/components/ui/BottomButton.svelte";
-	import { goto } from "$app/navigation";
 	import { onMount } from "svelte";
 
 	async function handleSubmit(event: Event) {
 		event.preventDefault();
 	}
 
-	onMount(() => {
+	onMount(async () => {
 		fetchPowerCompanies();
 	});
 
@@ -29,7 +28,7 @@
 				id="company"
 				type="dropdown"
 				label="Power Company"
-				value={$siteFormData.powerCompany}
+				bind:value={$siteFormData.powerCompany}
 				options={$powerCompanies}
 				error=""
 			/>

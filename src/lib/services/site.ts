@@ -7,8 +7,6 @@ const siteInitialState = {
         address: "",
         city: "",
         zip: "",
-        latitude: "",
-        longitude: "",
     },
     taxRebate: {
         solarPanels: false,
@@ -16,7 +14,7 @@ const siteInitialState = {
 		electricHeating: false,
 		noneOfTheAbove: true,
     },
-    powerCompany: "",
+    powerCompany: 0,
 };
 
 export const siteFormData = writable(siteInitialState);
