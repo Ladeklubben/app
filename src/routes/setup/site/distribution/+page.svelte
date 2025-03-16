@@ -2,12 +2,19 @@
 	import Subpage from "$lib/components/ui/Subpage.svelte";
 	import InputField from "$lib/components/ui/InputField.svelte";
 	import Form from "$lib/components/ui/Form.svelte";
-	import { fetchPowerCompanies, siteFormData, powerCompanies } from "$lib/services/site";
+	import { fetchPowerCompanies, siteFormData, powerCompanies, createNewSite } from "$lib/services/site";
 	import BottomButton from "$lib/components/ui/BottomButton.svelte";
 	import { onMount } from "svelte";
+	import { goto } from "$app/navigation";
+
+	let loading = false;
 
 	async function handleSubmit(event: Event) {
 		event.preventDefault();
+		loading = true;
+		await createNewSite($siteFormData);
+		loading = false;
+		goto("/")
 	}
 
 	onMount(async () => {
@@ -34,5 +41,5 @@
 			/>
 		</Form>
 	</div>
-	<BottomButton activeDot={4} totalDots={4} formID="form" buttonText="Done" />
+	<BottomButton activeDot={4} totalDots={4} formID="form" buttonText="Done" {loading} />
 </Subpage>

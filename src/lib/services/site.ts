@@ -1,5 +1,5 @@
 import { writable } from "svelte/store";
-import { get } from "$lib/services/api";
+import { get, post } from "$lib/services/api";
 
 const siteInitialState = {
     name: "",
@@ -21,6 +21,14 @@ export const siteFormData = writable(siteInitialState);
 
 export function resetSiteFormData() {
     siteFormData.set(siteInitialState);
+}
+
+export async function createNewSite(data: any) {
+    try {
+        await post("/site/new", data, true);
+    } catch (err) {
+        console.error((err as Error).message);
+    }
 }
 
 //
