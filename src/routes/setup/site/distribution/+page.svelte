@@ -16,19 +16,19 @@
 
 </script>
 
-<Subpage title="Power Company" backURL="/setup/site/rebate">
+<Subpage title="Distribution Company" backURL="/setup/site/rebate">
 	<div id="height-check">
 		<Form {handleSubmit} id="form">
 			<p>
 				To calculate your live electricity prices, and therefore charge your car in a price-efficient manner,
-				please select the power company you use.
+				please select the power distribution company you use.
 			</p>
 
 			<InputField
 				id="company"
 				type="dropdown"
-				label="Power Company"
-				bind:value={$siteFormData.powerCompany}
+				label="Distribution Company"
+				bind:value={$siteFormData.distributionCompany}
 				options={$powerCompanies}
 				error=""
 			/>

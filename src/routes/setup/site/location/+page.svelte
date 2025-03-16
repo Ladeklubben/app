@@ -55,7 +55,7 @@
 	}
 </script>
 
-<Subpage title="Add Installation" backURL="/setup/site">
+<Subpage title="Site Location" backURL="/setup/site">
 	<div id="height-check">
 		<Form {handleSubmit} id="form">
 			<p>

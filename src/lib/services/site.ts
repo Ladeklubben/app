@@ -14,7 +14,7 @@ const siteInitialState = {
 		electricHeating: false,
 		noneOfTheAbove: true,
     },
-    powerCompany: 0,
+    distributionCompany: 0,
 };
 
 export const siteFormData = writable(siteInitialState);

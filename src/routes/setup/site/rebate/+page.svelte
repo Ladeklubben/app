@@ -24,7 +24,7 @@
 
 	async function handleSubmit(event: Event) {
 		event.preventDefault();
-		goto("/setup/site/power");
+		goto("/setup/site/distribution");
 	}
 </script>
 
