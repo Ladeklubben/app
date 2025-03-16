@@ -6,24 +6,24 @@
 	import BottomButton from "$lib/components/ui/BottomButton.svelte";
 	import { goto } from "$app/navigation";
 
-	let formData = $state({
-		solarPanels: false,
-		heatPump: false,
-		electricHeating: false,
-	});
+	const isEligible = $derived(
+		!(
+			$siteFormData.taxRebate.solarPanels ||
+			$siteFormData.taxRebate.heatPump ||
+			$siteFormData.taxRebate.electricHeating
+		),
+	);
 
-	let isEligible = $state(true);
 	$effect(() => {
-		if (formData.solarPanels || formData.heatPump || formData.electricHeating) {
-			isEligible = false;
+		if (!isEligible) {
+			$siteFormData.taxRebate.noneOfTheAbove = false;
 		} else {
-			isEligible = true;
+			$siteFormData.taxRebate.noneOfTheAbove = true;
 		}
 	});
 
 	async function handleSubmit(event: Event) {
 		event.preventDefault();
-        $siteFormData.taxRebate = isEligible;
 		goto("/setup/site/power");
 	}
 </script>
@@ -40,15 +40,29 @@
 				id="solarPanels"
 				type="checkbox"
 				label="Solar Panels"
-				bind:value={formData.solarPanels}
+				bind:value={$siteFormData.taxRebate.solarPanels}
 				error={""}
 			/>
-			<InputField id="heatPump" type="checkbox" label="Heat Pump" bind:value={formData.heatPump} error={""} />
+			<InputField
+				id="heatPump"
+				type="checkbox"
+				label="Heat Pump"
+				bind:value={$siteFormData.taxRebate.heatPump}
+				error={""}
+			/>
 			<InputField
 				id="electricHeating"
 				type="checkbox"
 				label="Electric Heating"
-				bind:value={formData.electricHeating}
+				bind:value={$siteFormData.taxRebate.electricHeating}
+				error={""}
+			/>
+			<InputField
+				id="noneOfTheAbove"
+				type="checkbox"
+				label="None of the above"
+				bind:value={$siteFormData.taxRebate.noneOfTheAbove}
+				disabled={!isEligible}
 				error={""}
 			/>
 

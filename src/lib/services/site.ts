@@ -10,7 +10,12 @@ const siteInitialState = {
         latitude: "",
         longitude: "",
     },
-    taxRebate: false,
+    taxRebate: {
+        solarPanels: false,
+		heatPump: false,
+		electricHeating: false,
+		noneOfTheAbove: true,
+    },
     powerCompany: "",
 };
 
