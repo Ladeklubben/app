@@ -62,7 +62,7 @@
 				type="checkbox"
 				label="None of the above"
 				bind:value={$siteFormData.taxRebate.noneOfTheAbove}
-				disabled={!isEligible}
+				disabled={true}
 				error={""}
 			/>
 
