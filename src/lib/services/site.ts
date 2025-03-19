@@ -20,7 +20,9 @@ const siteInitialState = {
 export const siteFormData = writable(siteInitialState);
 
 export function resetSiteFormData() {
-    siteFormData.set(siteInitialState);
+    // Necessary to properly reset the form data
+    const freshState = JSON.parse(JSON.stringify(siteInitialState));
+    siteFormData.set(freshState);
 }
 
 export async function createNewSite(data: any) {
