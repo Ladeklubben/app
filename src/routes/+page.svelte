@@ -5,6 +5,7 @@
 	import { fetchpowerImport, meterData, lastFetch } from "$lib/services/meter";
 	import { getPosition } from "$lib/services/map";
 	import { goto } from "$app/navigation";
+	import SmartCharge from "$lib/components/features/charger/SmartCharge.svelte";
 
 	onMount(() => {
 		fetchpowerImport();
@@ -27,6 +28,7 @@
 			<span class="add-icon">+</span>
 		</button>
 	</div>
+	<SmartCharge />
 	<SingleStatCard description="Live Usage - {$lastFetch}" stat={total_power_import} unit="W" />
 	<PhaseOverview />
 </div>
