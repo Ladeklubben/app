@@ -1,10 +1,11 @@
 <script lang="ts">
 	let {
-		id,
+		id = "",
 		type = "text",
 		label,
+		labelBold = true,
 		value = $bindable(),
-		error,
+		error = "",
 		disabled = false,
 		options = [],
 	} = $props();
@@ -12,7 +13,7 @@
 
 {#if type === "checkbox"}
 	<div class="flex items-center justify-between">
-		<label for={id} class="font-bold">{label}</label>
+		<label for={id} class:font-bold={labelBold}>{label}</label>
 		<input
 			type="checkbox"
 			{id}
@@ -26,7 +27,7 @@
 	</div>
 {:else if type === "toggle"}
 	<div class="flex items-center justify-between">
-		<label for={id} class="font-bold">{label}</label>
+		<label for={id} class:font-bold={labelBold}>{label}</label>
 		<label class="inline-flex items-center cursor-pointer">
 			<input
 				type="checkbox"
@@ -37,8 +38,8 @@
 				class="sr-only peer"
 			/>
 			<div
-				class="relative w-11 h-6 bg-lk-blue-500/20 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-lk-blue-300 rounded-full peer peer-checked:bg-lk-blue-400 
-                after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border after:border-lk-blue-500/50 after:rounded-full after:h-5 after:w-5 after:transition-all 
+				class="relative w-11 h-6 bg-lk-blue-500/20 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-lk-blue-300 rounded-full peer peer-checked:bg-lk-blue-400
+                after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border after:border-lk-blue-500/50 after:rounded-full after:h-5 after:w-5 after:transition-all
                 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
                 {disabled ? 'opacity-50 cursor-not-allowed' : ''}"
 			></div>
@@ -75,5 +76,7 @@
 	</div>
 {/if}
 {#if error}
-	<span class="mt-[-16px] mb-[-22px] block text-center text-lk-red-600">{error}</span>
+	<span class="mt-[-16px] mb-[-22px] block text-center text-lk-red-600">
+		{error}
+	</span>
 {/if}
