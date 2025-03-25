@@ -1,14 +1,12 @@
 <script lang="ts">
 	import { onMount } from "svelte";
 
-	// Add export prop for binding
-	export let selectedHour: string = "00";
-
 	let container: HTMLDivElement;
 	const h = 48; // Height per hour in pixels
 	const cycles = 100; // Number of 24-hour cycles
 	const totalHours = cycles * 24;
 	let hours = [];
+	let selectedHour: string = "12"; // Default selected hour (middle of day)
 
 	// Generate hours for multiple cycles
 	for (let i = 0; i < totalHours; i++) {
@@ -16,38 +14,59 @@
 		hours.push(`${hour.toString().padStart(2, "0")}`);
 	}
 
-	function handleScroll() {
-		if (!container) return;
-
-		// Calculate the center position
-		const containerMiddle = container.offsetHeight / 2;
+	// Function to update selectedHour based on scroll position
+	function updateSelectedHour() {
 		const scrollTop = container.scrollTop;
-
-		// Find which hour is closest to center
-		const centerIndex = Math.round(scrollTop / h);
-		const hour = hours[centerIndex+1];
-
-		// Update the selected hour only if it changed
-		if (hour !== selectedHour) {
-			selectedHour = hour;
-		}
+		const hourIndex = Math.round(scrollTop / h) % 24; // Mod 24 to get 0-23
+		selectedHour = hours[hourIndex + 1]; // Update selected hour
 	}
 
-	// Set initial scroll position to the middle on mount
+	// Scroll handling
 	onMount(() => {
 		const middleCycleStart = Math.floor(cycles / 2) * 24 * h;
 		container.scrollTop = middleCycleStart;
-		handleScroll(); // Initialize selected hour
+		updateSelectedHour(); // Set initial selected hour
+
+		let scrollTimeout: number | undefined;
+
+		// Add wheel event listener for custom scrolling
+		container.addEventListener(
+			"wheel",
+			(e: WheelEvent) => {
+				e.preventDefault(); // Prevent default scroll behavior
+
+				// Determine scroll direction (up or down)
+				const delta = e.deltaY > 0 ? h : -h;
+				const newScrollTop = container.scrollTop + delta;
+
+				// Smoothly scroll to the new position
+				container.scrollTo({ top: newScrollTop});
+
+				// Debounce rapid scroll events for selectedHour update
+				clearTimeout(scrollTimeout);
+				scrollTimeout = setTimeout(() => {
+					updateSelectedHour(); // Update selected hour after scrolling stops
+				}, 150); // Adjust timeout as needed
+			},
+			{ passive: false }
+		);
+
+		// Add scroll event listener to update selectedHour during other scroll methods (e.g., keyboard)
+		container.addEventListener("scroll", () => {
+			clearTimeout(scrollTimeout);
+			scrollTimeout = setTimeout(updateSelectedHour, 150);
+		});
 	});
 </script>
 
-<div bind:this={container} class="container" on:scroll={handleScroll}>
+<div bind:this={container} class="container">
 	{#each hours as hour, i}
 		<div class="hour" style="height: {h}px; scroll-snap-align: start;">{hour}</div>
 	{/each}
-	
 </div>
-Selected hour: {selectedHour}
+
+<!-- Display the selected hour -->
+<div>Selected Hour: {selectedHour}</div>
 
 <style>
 	.container {
@@ -56,9 +75,9 @@ Selected hour: {selectedHour}
 		scroll-snap-type: y mandatory; /* Enables snapping on vertical scroll */
 		scrollbar-width: none; /* Firefox */
 		-ms-overflow-style: none; /* IE and Edge */
-		&::-webkit-scrollbar {
-			display: none; /* Hide WebKit (Chrome, Safari, etc.) scrollbar */
-		}
+	}
+	.container::-webkit-scrollbar {
+		display: none; /* Hide WebKit (Chrome, Safari, etc.) scrollbar */
 	}
 	.hour {
 		display: flex;
