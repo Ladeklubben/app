@@ -1,14 +1,13 @@
 <script lang="ts">
 	import { onMount } from "svelte";
 
-	let { align = "center", maxValue = 24, jump = 1 } = $props();
+	let { align = "center", maxValue = 24, jump = 1, defaultTime = 12, selectedTime = $bindable() } = $props();
 
 	let container: HTMLDivElement;
 	const h = 48; // Height per time unit in pixels
 	const cycles = 100; // Number of cycles
 	const totalTimeUnits = cycles * maxValue;
 	let timeUnits: string[] = [];
-	let selectedTime: string = "12"; // Default selected time
 
 	// Generate timeUnits for multiple cycles
 	for (let i = 0; i < totalTimeUnits; i += jump) {
@@ -25,8 +24,8 @@
 
 	// Scroll handling
 	onMount(() => {
-		const middleCycleStart = (Math.floor(cycles / 2) * maxValue * h) / jump;
-		container.scrollTop = middleCycleStart;
+		const middleCycleStart = (Math.floor(cycles / 2) * maxValue * h) / jump - h;
+		container.scrollTop = middleCycleStart + h * (Math.round(defaultTime / jump));
 		updateSelectedTime();
 
 		let scrollTimeout: ReturnType<typeof setTimeout> | undefined;
@@ -72,7 +71,7 @@
 >
 	{#each timeUnits as timeUnit, i}
 		<div
-			class="flex items-center text-4xl tabular-nums"
+			class="flex items-center text-4xl font-medium tabular-nums"
 			class:justify-end={align === "right"}
 			class:justify-center={align === "center"}
 			style="height: {h}px; scroll-snap-align: start;"
