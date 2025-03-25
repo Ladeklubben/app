@@ -8,6 +8,10 @@
 
 <Card title="Smart Charge">
 	<p>Select when you need your car and we will charge it when electricity is cheap.</p>
-	<TimePicker />
+	<div class="flex flex-row justify-center gap-4">
+		<TimePicker maxValue={24} align="right"/>
+		<TimePicker maxValue={60} jump={15} align="left"/>
+	</div>
+	
 	<InputField label="Charge Now" labelBold={false} type="toggle" bind:value={chargeNow} />
 </Card>
