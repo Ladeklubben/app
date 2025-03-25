@@ -1,33 +1,39 @@
 <script lang="ts">
 	import { onMount } from "svelte";
 
-	let container: HTMLDivElement;
-	const h = 48; // Height per hour in pixels
-	const cycles = 100; // Number of 24-hour cycles
-	const totalHours = cycles * 24;
-	let hours = [];
-	let selectedHour: string = "12"; // Default selected hour (middle of day)
+	let { 
+		align = "center",
+		maxValue = 24,
+		jump = 1,
+	} = $props();
 
-	// Generate hours for multiple cycles
-	for (let i = 0; i < totalHours; i++) {
-		let hour = i % 24;
-		hours.push(`${hour.toString().padStart(2, "0")}`);
+	let container: HTMLDivElement;
+	const h = 48; // Height per time unit in pixels
+	const cycles = 100; // Number of cycles
+	const totalTimeUnits = cycles * maxValue;
+	let timeUnits: string[] = [];
+	let selectedTime: string = "12"; // Default selected time
+
+	// Generate timeUnits for multiple cycles
+	for (let i = 0; i < totalTimeUnits; i += jump) {
+		let timeUnit = i % maxValue;
+		timeUnits.push(`${timeUnit.toString().padStart(2, "0")}`);
 	}
 
-	// Function to update selectedHour based on scroll position
-	function updateSelectedHour() {
+	// Function to update selectedTime based on scroll position
+	function updateSelectedTime() {
 		const scrollTop = container.scrollTop;
-		const hourIndex = Math.round(scrollTop / h) % 24; // Mod 24 to get 0-23
-		selectedHour = hours[hourIndex + 1]; // Update selected hour
+		const timeUnitIndex = Math.round(scrollTop / h) % maxValue; // Mod maxValue to fx get 0-23 with 24
+		selectedTime = timeUnits[timeUnitIndex + 1]; // Update selected time unit
 	}
 
 	// Scroll handling
 	onMount(() => {
-		const middleCycleStart = Math.floor(cycles / 2) * 24 * h;
+		const middleCycleStart = Math.floor(cycles / 2) * maxValue * h / jump;
 		container.scrollTop = middleCycleStart;
-		updateSelectedHour(); // Set initial selected hour
+		updateSelectedTime(); // Set initial selected time unit
 
-		let scrollTimeout: number | undefined;
+		let scrollTimeout: ReturnType<typeof setTimeout> | undefined;
 
 		// Add wheel event listener for custom scrolling
 		container.addEventListener(
@@ -40,50 +46,34 @@
 				const newScrollTop = container.scrollTop + delta;
 
 				// Smoothly scroll to the new position
-				container.scrollTo({ top: newScrollTop});
+				container.scrollTo({ top: newScrollTop });
 
-				// Debounce rapid scroll events for selectedHour update
+				// Debounce rapid scroll events for selectedTime update
 				clearTimeout(scrollTimeout);
 				scrollTimeout = setTimeout(() => {
-					updateSelectedHour(); // Update selected hour after scrolling stops
+					updateSelectedTime(); // Update selected time unit after scrolling stops
 				}, 150); // Adjust timeout as needed
 			},
-			{ passive: false }
+			{ passive: false },
 		);
 
-		// Add scroll event listener to update selectedHour during other scroll methods (e.g., keyboard)
+		// Add scroll event listener to update selectedTime during other scroll methods (e.g., keyboard)
 		container.addEventListener("scroll", () => {
 			clearTimeout(scrollTimeout);
-			scrollTimeout = setTimeout(updateSelectedHour, 150);
+			scrollTimeout = setTimeout(updateSelectedTime, 150);
 		});
 	});
 </script>
 
-<div bind:this={container} class="container">
-	{#each hours as hour, i}
-		<div class="hour" style="height: {h}px; scroll-snap-align: start;">{hour}</div>
+<div bind:this={container} class="h-36 overflow-y-scroll snap-y no-scrollbar w-full">
+	{#each timeUnits as timeUnit, i}
+		<div
+			class="flex items-center text-4xl tabular-nums"
+			class:justify-end={align === "right"}
+			class:justify-center={align === "center"}
+			style="height: {h}px; scroll-snap-align: start;"
+		>
+			{timeUnit}
+		</div>
 	{/each}
 </div>
-
-<!-- Display the selected hour -->
-<div>Selected Hour: {selectedHour}</div>
-
-<style>
-	.container {
-		height: 140px; /* Fixed height to show a few hours */
-		overflow-y: scroll;
-		scroll-snap-type: y mandatory; /* Enables snapping on vertical scroll */
-		scrollbar-width: none; /* Firefox */
-		-ms-overflow-style: none; /* IE and Edge */
-	}
-	.container::-webkit-scrollbar {
-		display: none; /* Hide WebKit (Chrome, Safari, etc.) scrollbar */
-	}
-	.hour {
-		display: flex;
-		align-items: center;
-		justify-content: center; /* Center the hour text */
-		font-size: 32px;
-		font-variant-numeric: tabular-nums;
-	}
-</style>
