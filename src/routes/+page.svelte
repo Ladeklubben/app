@@ -29,6 +29,6 @@
 		</button>
 	</div>
 	<SmartCharge />
-	<SingleStatCard description="Live Usage - {$lastFetch}" stat={total_power_import} unit="W" />
 	<PhaseOverview />
+	<SingleStatCard description="Live Usage - {$lastFetch}" stat={total_power_import} unit="W" />
 </div>
