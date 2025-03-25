@@ -8,7 +8,7 @@
 
 <Card title="Smart Charge">
 	<p>Select when you need your car and we will charge it when electricity is cheap.</p>
-	<div class="flex flex-row justify-center gap-4">
+	<div class="flex flex-row justify-center gap-4 rounded-2xl border border-lk-blue-800" style="background: linear-gradient(to right, #59a6b7, #2e4d59);">
 		<TimePicker maxValue={24} align="right"/>
 		<TimePicker maxValue={60} jump={15} align="left"/>
 	</div>
