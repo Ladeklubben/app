@@ -153,7 +153,7 @@
 							color: "rgba(156, 163, 175, 0.1)",
 						},
 						ticks: {
-							padding: -26,
+							padding: -34,
 							color: "#dceef1",
 							maxTicksLimit: 6,
 							z: 1,
@@ -164,7 +164,7 @@
 								if (index === 0 || index === values.length - 1) {
 									return "";
 								}
-								return value;
+								return typeof value === 'number' ? value.toFixed(2) : value;
 							},
 						},
 						border: {
