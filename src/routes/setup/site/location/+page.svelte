@@ -76,7 +76,13 @@
 				bind:value={$siteFormData.location.city}
 				error={errors.city}
 			/>
-			<InputField id="postCode" type="text" label="Postcode" bind:value={$siteFormData.location.zip} error={errors.zip} />
+			<InputField
+				id="postCode"
+				type="text"
+				label="Postcode"
+				bind:value={$siteFormData.location.zip}
+				error={errors.zip}
+			/>
 		</Form>
 	</div>
 	<BottomButton activeDot={2} totalDots={4} formID="form" buttonText="Next" />

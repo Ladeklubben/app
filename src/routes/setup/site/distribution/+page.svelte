@@ -26,7 +26,6 @@
 	onMount(async () => {
 		fetchPowerCompanies();
 	});
-
 </script>
 
 <Subpage title="Distribution Company" backURL="/setup/site/rebate">

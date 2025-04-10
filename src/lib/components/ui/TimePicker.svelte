@@ -25,7 +25,7 @@
 	// Scroll handling
 	onMount(() => {
 		const middleCycleStart = (Math.floor(cycles / 2) * maxValue * h) / jump - h;
-		container.scrollTop = middleCycleStart + h * (Math.round(defaultTime / jump));
+		container.scrollTop = middleCycleStart + h * Math.round(defaultTime / jump);
 		updateSelectedTime();
 
 		let scrollTimeout: ReturnType<typeof setTimeout> | undefined;

@@ -29,14 +29,7 @@
 	<div class="flex items-center justify-between">
 		<label for={id} class:font-bold={labelBold}>{label}</label>
 		<label class="inline-flex items-center cursor-pointer">
-			<input
-				type="checkbox"
-				{id}
-				name={id}
-				{disabled}
-				bind:checked={value}
-				class="sr-only peer"
-			/>
+			<input type="checkbox" {id} name={id} {disabled} bind:checked={value} class="sr-only peer" />
 			<div
 				class="relative w-11 h-6 bg-lk-blue-500/20 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-lk-blue-300 rounded-full peer peer-checked:bg-lk-blue-400
                 after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border after:border-lk-blue-500/50 after:rounded-full after:h-5 after:w-5 after:transition-all

@@ -18,7 +18,11 @@
 		type="button"
 		class="flex flex-col items-center gap-0.5 text-xs w-full bg-none border-none cursor-pointer tap-highlight-transparent"
 		onclick={() => goto("/")}
-		style="opacity: {$page.url.pathname !== '/map' && $page.url.pathname !== '/info' && $page.url.pathname !== '/menu' ? '100%' : '60%'};"
+		style="opacity: {$page.url.pathname !== '/map' &&
+		$page.url.pathname !== '/info' &&
+		$page.url.pathname !== '/menu'
+			? '100%'
+			: '60%'};"
 	>
 		<HomeVariant style="font-size: 25px;" />
 		Home

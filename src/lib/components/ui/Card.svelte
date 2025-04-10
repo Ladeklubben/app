@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Dots from "~icons/mdi/dots-horizontal"
+	import Dots from "~icons/mdi/dots-horizontal";
 	let { children, title, dotsPath = "" } = $props();
 </script>
 

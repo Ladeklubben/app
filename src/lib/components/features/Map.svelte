@@ -45,7 +45,7 @@
 	const clickLocationIcon = L.icon({
 		iconUrl: "/LK_waypoint.svg",
 		iconSize: [48, 48],
-		iconAnchor: [24, 48]
+		iconAnchor: [24, 48],
 	});
 
 	// Function to update map position
@@ -130,5 +130,4 @@
 	bind:this={mapContainer}
 	class="w-full border border-lk-blue-800 rounded-2xl"
 	style="background-color: #182b34; cursor: pointer; height: {height}px;"
-	
 ></div>
