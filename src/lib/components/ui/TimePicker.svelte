@@ -30,25 +30,30 @@
 
 		let scrollTimeout: ReturnType<typeof setTimeout> | undefined;
 
-		container.addEventListener(
-			"wheel",
-			(e: WheelEvent) => {
-				e.preventDefault();
-				const delta = e.deltaY > 0 ? h : -h;
-				const newScrollTop = container.scrollTop + delta;
-				container.scrollTo({ top: newScrollTop });
-				clearTimeout(scrollTimeout);
-				scrollTimeout = setTimeout(() => {
-					updateSelectedTime();
-				}, 150);
-			},
-			{ passive: false },
-		);
+		const wheelHandler = (e: WheelEvent) => {
+			e.preventDefault();
+			const delta = e.deltaY > 0 ? h : -h;
+			const newScrollTop = container.scrollTop + delta;
+			container.scrollTo({ top: newScrollTop });
+			clearTimeout(scrollTimeout);
+			scrollTimeout = setTimeout(() => {
+				updateSelectedTime();
+			}, 150);
+		};
 
-		container.addEventListener("scroll", () => {
+		const scrollHandler = () => {
 			clearTimeout(scrollTimeout);
 			scrollTimeout = setTimeout(updateSelectedTime, 150);
-		});
+		};
+
+		container.addEventListener("wheel", wheelHandler, { passive: false });
+		container.addEventListener("scroll", scrollHandler);
+
+		// Clean up event listeners when component is destroyed
+		return () => {
+			container.removeEventListener("wheel", wheelHandler);
+			container.removeEventListener("scroll", scrollHandler);
+		};
 	});
 </script>
 
