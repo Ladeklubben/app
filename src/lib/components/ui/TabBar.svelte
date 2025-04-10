@@ -6,12 +6,15 @@
 	import { page } from "$app/stores";
 	import { goto } from "$app/navigation";
 	import { device, Platform } from "$lib/services/layout";
+
+	const ICON_SIZE = 20;
+
 </script>
 
 <div
-	class="flex justify-around items-center pt-2 fixed bottom-0 w-full z-1000 border-t border-lk-blue-800 bg-lk-blue-950 text-lk-blue-50"
+	class="flex justify-around items-center pt-3 fixed bottom-0 w-full z-1000 border-t border-lk-blue-800 bg-lk-blue-950 text-lk-blue-50"
 	class:pb-[env(safe-area-inset-bottom,40px)]={$device === Platform.IOS}
-	class:pb-2={$device === Platform.Android}
+	class:pb-3={$device === Platform.Android}
 	class:pb-4={$device === Platform.Web}
 >
 	<button
@@ -24,7 +27,7 @@
 			? '100%'
 			: '60%'};"
 	>
-		<HomeVariant style="font-size: 25px;" />
+		<HomeVariant style="font-size: {ICON_SIZE}px;" />
 		Home
 	</button>
 
@@ -34,7 +37,7 @@
 		onclick={() => goto("/map")}
 		style="opacity: {$page.url.pathname === '/map' ? '100%' : '60%'};"
 	>
-		<MapMarker style="font-size: 25px;" />
+		<MapMarker style="font-size: {ICON_SIZE}px;" />
 		Map
 	</button>
 
@@ -44,7 +47,7 @@
 		onclick={() => goto("/info")}
 		style="opacity: {$page.url.pathname === '/info' ? '100%' : '60%'};"
 	>
-		<ChartBox style="font-size: 25px;" />
+		<ChartBox style="font-size: {ICON_SIZE}px;" />
 		Info
 	</button>
 
@@ -54,7 +57,7 @@
 		onclick={() => goto("/menu")}
 		style="opacity: {$page.url.pathname === '/menu' ? '100%' : '60%'};"
 	>
-		<Menu style="font-size: 25px;" />
+		<Menu style="font-size: {ICON_SIZE}px;" />
 		Menu
 	</button>
 </div>
