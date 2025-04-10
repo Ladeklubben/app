@@ -17,8 +17,13 @@
 			return;
 		} else {
 			// Trigger haptic feedback
-			await Haptics.impact({style: ImpactStyle.Light});
-			goto(link);
+			try {
+				await Haptics.impact({style: ImpactStyle.Light});
+			} catch {
+				// Do nothing if we get an error
+			} finally {
+				goto(link);
+			}
 		}
 	}
 
