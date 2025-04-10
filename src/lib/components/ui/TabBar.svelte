@@ -6,8 +6,21 @@
 	import { page } from "$app/stores";
 	import { goto } from "$app/navigation";
 	import { device, Platform } from "$lib/services/layout";
+	import { Haptics, ImpactStyle } from '@capacitor/haptics';
 
 	const ICON_SIZE = 20;
+
+	// Handle switching pages
+	// TODO: Decide if this is a gimmick or a good idea
+	async function handlePageChange(link: string|URL) {
+		if (link === $page.url.pathname) {
+			return;
+		} else {
+			// Trigger haptic feedback
+			await Haptics.impact({style: ImpactStyle.Light});
+			goto(link);
+		}
+	}
 
 </script>
 
@@ -20,7 +33,7 @@
 	<button
 		type="button"
 		class="flex flex-col items-center gap-0.5 text-xs w-full bg-none border-none cursor-pointer tap-highlight-transparent"
-		onclick={() => goto("/")}
+		onclick={() => handlePageChange("/")}
 		style="opacity: {$page.url.pathname !== '/map' &&
 		$page.url.pathname !== '/info' &&
 		$page.url.pathname !== '/menu'
@@ -34,7 +47,7 @@
 	<button
 		type="button"
 		class="flex flex-col items-center gap-0.5 text-xs w-full bg-none border-none cursor-pointer tap-highlight-transparent"
-		onclick={() => goto("/map")}
+		onclick={() => handlePageChange("/map")}
 		style="opacity: {$page.url.pathname === '/map' ? '100%' : '60%'};"
 	>
 		<MapMarker style="font-size: {ICON_SIZE}px;" />
@@ -44,7 +57,7 @@
 	<button
 		type="button"
 		class="flex flex-col items-center gap-0.5 text-xs w-full bg-none border-none cursor-pointer tap-highlight-transparent"
-		onclick={() => goto("/info")}
+		onclick={() => handlePageChange("/info")}
 		style="opacity: {$page.url.pathname === '/info' ? '100%' : '60%'};"
 	>
 		<ChartBox style="font-size: {ICON_SIZE}px;" />
@@ -54,7 +67,7 @@
 	<button
 		type="button"
 		class="flex flex-col items-center gap-0.5 text-xs w-full bg-none border-none cursor-pointer tap-highlight-transparent"
-		onclick={() => goto("/menu")}
+		onclick={() => handlePageChange("/menu")}
 		style="opacity: {$page.url.pathname === '/menu' ? '100%' : '60%'};"
 	>
 		<Menu style="font-size: {ICON_SIZE}px;" />
