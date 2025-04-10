@@ -19,7 +19,5 @@
 		<TimePicker bind:selectedTime={timeM} defaultTime={37} maxValue={60} jump={15} align="left" />
 	</div>
 
-	Time to charge: {timeH}:{timeM}
-
 	<InputField label="Charge Now" labelBold={false} type="toggle" bind:value={chargeNow} />
 </Card>
