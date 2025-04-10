@@ -2,6 +2,7 @@
 	import HomeVariant from "~icons/mdi/home-variant";
 	import Menu from "~icons/mdi/menu";
 	import ChartBox from "~icons/mdi/chart-box";
+	import MapMarker from "~icons/mdi/map-marker";
 	import { page } from "$app/stores";
 	import { goto } from "$app/navigation";
 	import { device, Platform } from "$lib/services/layout";
@@ -17,7 +18,7 @@
 		type="button"
 		class="flex flex-col items-center gap-0.5 text-xs w-full bg-none border-none cursor-pointer tap-highlight-transparent"
 		onclick={() => goto("/")}
-		style="opacity: {$page.url.pathname !== '/prices' && $page.url.pathname !== '/menu' ? '100%' : '60%'};"
+		style="opacity: {$page.url.pathname !== '/map' && $page.url.pathname !== '/info' && $page.url.pathname !== '/menu' ? '100%' : '60%'};"
 	>
 		<HomeVariant style="font-size: 25px;" />
 		Home
@@ -26,11 +27,21 @@
 	<button
 		type="button"
 		class="flex flex-col items-center gap-0.5 text-xs w-full bg-none border-none cursor-pointer tap-highlight-transparent"
-		onclick={() => goto("/prices")}
-		style="opacity: {$page.url.pathname === '/prices' ? '100%' : '60%'};"
+		onclick={() => goto("/map")}
+		style="opacity: {$page.url.pathname === '/map' ? '100%' : '60%'};"
+	>
+		<MapMarker style="font-size: 25px;" />
+		Map
+	</button>
+
+	<button
+		type="button"
+		class="flex flex-col items-center gap-0.5 text-xs w-full bg-none border-none cursor-pointer tap-highlight-transparent"
+		onclick={() => goto("/info")}
+		style="opacity: {$page.url.pathname === '/info' ? '100%' : '60%'};"
 	>
 		<ChartBox style="font-size: 25px;" />
-		Prices
+		Info
 	</button>
 
 	<button
