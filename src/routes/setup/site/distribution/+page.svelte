@@ -12,9 +12,15 @@
 	async function handleSubmit(event: Event) {
 		event.preventDefault();
 		loading = true;
-		await createNewSite($siteFormData);
-		loading = false;
-		goto("/")
+		try {
+			await createNewSite($siteFormData);
+			goto("/");
+		} catch (error) {
+			console.error("Failed to create new site", error);
+			//TODO: Show error in UI
+		} finally {
+			loading = false;
+		}
 	}
 
 	onMount(async () => {
