@@ -10,6 +10,7 @@
 	import BatteryCharging from "~icons/mdi/battery-charging";
 	import BellRing from "~icons/mdi/bell-ring";
 	import Lock from "~icons/mdi/lock";
+	import { goto } from "$app/navigation";
 </script>
 
 <div class="wrapper">
@@ -40,10 +41,10 @@
 		</MenuGroup>
 
 		<MenuGroup title="Support">
-			<MenuItem text="Documentation #TODO-link" onclick={() => {console.log('Documentation clicked')}}>
+			<MenuItem text="Documentation" onclick={() => {window.location.href = "https://wiki.ladeklubben.dk/"}}>
 				<Document />
 			</MenuItem>
-			<MenuItem text="Contact Us #TODO-link" onclick={() => {console.log('Contact Us clicked')}}>
+			<MenuItem text="Contact Us" onclick={() => {window.location.href = "https://ladeklubben.dk/kontakt-os/"}}>
 				<Email />
 			</MenuItem>
 		</MenuGroup>
