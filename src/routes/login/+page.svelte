@@ -56,9 +56,11 @@
 		// Validate email
 		if (!fields.email) {
 			errors.email = "Email is required";
+			errors.password = "";
 			valid = false;
 		} else {
 			errors.email = "";
+			errors.password = "";
 		}
 
 		if (valid) {
@@ -68,6 +70,7 @@
 				goto("/login/reset-password");
 			} catch (error) {
 				errors.email = "Email not found";
+				errors.password = "";
 			}
 		}
 		loading = false;

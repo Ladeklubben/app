@@ -38,7 +38,7 @@
 	}
 </script>
 
-<Subpage title="Reset Password">
+<Subpage title="Reset Password" backURL="/login">
 	<p>Enter the code you received in your email to reset your password.</p>
 
 	<Form {handleSubmit}>

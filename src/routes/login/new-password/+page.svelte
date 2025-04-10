@@ -84,7 +84,7 @@
 	}
 </script>
 
-<Subpage title="Reset Password">
+<Subpage title="Reset Password" backURL="/login/reset-password">
 	<Form {handleSubmit}>
 		<p>Password needs to be at least 6 characters, 1 big letter, 1 small letter and 1 number.</p>
 
