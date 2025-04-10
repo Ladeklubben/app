@@ -4,14 +4,14 @@
 	import ChartBox from "~icons/mdi/chart-box";
 	import { page } from "$app/stores";
 	import { goto } from "$app/navigation";
-	import { device } from "$lib/services/layout";
+	import { device, Platform } from "$lib/services/layout";
 </script>
 
 <div
 	class="flex justify-around items-center pt-2 fixed bottom-0 w-full z-1000 border-t border-lk-blue-800 bg-lk-blue-950 text-lk-blue-50"
-	class:pb-[env(safe-area-inset-bottom,40px)]={$device.isIOS}
-	class:pb-2={$device.isAndroid}
-	class:pb-4={$device.isWeb || (!$device.isAndroid && !$device.isIOS)}
+	class:pb-[env(safe-area-inset-bottom,40px)]={$device === Platform.IOS}
+	class:pb-2={$device === Platform.Android}
+	class:pb-4={$device === Platform.Web}
 >
 	<button
 		type="button"

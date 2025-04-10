@@ -1,19 +1,13 @@
 <script lang="ts">
-	interface Props {
-		id: string;
-		type?: string;
-		label: string;
-		value: string | boolean;
-		error: string;
-	}
-
-	let { id, type = "text", label, value = $bindable(), error }: Props = $props();
-
-	// Type guard to ensure value is boolean for checkboxes
-	let isChecked: boolean | null = $state(null);
-	if (type === "checkbox" && typeof value === "boolean") {
-		isChecked = value;
-	}
+	let {
+		id,
+		type = "text",
+		label,
+		value = $bindable(),
+		error,
+		disabled = false,
+		options = [],
+	} = $props();
 </script>
 
 {#if type === "checkbox"}
@@ -23,23 +17,43 @@
 			type="checkbox"
 			{id}
 			name={id}
-			bind:checked={isChecked}
+			{disabled}
+			bind:checked={value}
 			class="h-6 w-6 appearance-none rounded-md border border-lk-blue-500 bg-transparent checked:before:scale-100 checked:before:bg-lk-blue-400 focus:outline-none focus:ring-2 focus:ring-lk-blue-300
-				before:m-[4px] before:h-4 before:w-4 before:scale-0 before:clip-path-[polygon(14%_44%,0_65%,50%_100%,100%_20%,80%_0,43%_62%)] before:transition-transform before:duration-200 before:ease-in-out
-				{error ? 'border-lk-red-700' : ''}"
+                before:m-[4px] before:h-4 before:w-4 before:scale-0 before:clip-path-[polygon(14%_44%,0_65%,50%_100%,100%_20%,80%_0,43%_62%)] before:transition-transform before:duration-200 before:ease-in-out
+                {error ? 'border-lk-red-600' : ''}"
 		/>
 	</div>
+{:else if type === "dropdown"}
+	<div class="flex flex-col gap-3">
+		<label for={id} class="font-bold">{label}</label>
+		<select
+			{id}
+			name={id}
+			{disabled}
+			bind:value
+			class="rounded-2xl border border-lk-blue-500 bg-transparent p-3 text-lg text-lk-blue-50 focus:border-lk-blue-300 focus:outline-none
+                {error ? 'border-lk-red-600' : ''}"
+		>
+			{#each options as option}
+				<option value={option.value}>{option.label}</option>
+			{/each}
+		</select>
+	</div>
 {:else}
-	<label for={id} class="font-bold">{label}</label>
-	<input
-		{type}
-		{id}
-		name={id}
-		bind:value
-		class="rounded-2xl border border-lk-blue-500 bg-transparent p-3 text-lg text-lk-blue-50 focus:border-lk-blue-300 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none
-			{error ? 'border-lk-red-700' : ''}"
-	/>
+	<div class="flex flex-col gap-3">
+		<label for={id} class="font-bold">{label}</label>
+		<input
+			{type}
+			{id}
+			name={id}
+			{disabled}
+			bind:value
+			class="rounded-2xl border border-lk-blue-500 bg-transparent p-3 text-lg text-lk-blue-50 focus:border-lk-blue-300 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none
+                {error ? 'border-lk-red-600' : ''}"
+		/>
+	</div>
 {/if}
 {#if error}
-	<span class="mt-[-10px] block text-center text-lk-red-700">{error}</span>
+	<span class="mt-[-16px] mb-[-22px] block text-center text-lk-red-600">{error}</span>
 {/if}

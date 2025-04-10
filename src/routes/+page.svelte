@@ -3,10 +3,12 @@
 	import SingleStatCard from "$lib/components/ui/SingleStatCard.svelte";
 	import { onMount } from "svelte";
 	import { fetchpowerImport, meterData, lastFetch } from "$lib/services/meter";
+	import { getPosition } from "$lib/services/map";
 	import { goto } from "$app/navigation";
 
 	onMount(() => {
 		fetchpowerImport();
+		getPosition();
 	});
 
 	const formatter = new Intl.NumberFormat("en-DK");
@@ -20,7 +22,7 @@
 		<h1>Home</h1>
 		<button
 			class="flex flex-col justify-center items-center cursor-pointer bg-lk-blue-300 text-4xl border-0 rounded-4xl w-8 h-8"
-			onclick={() => goto("/setup/installation")}
+			onclick={() => goto("/setup/site")}
 		>
 			<span class="add-icon">+</span>
 		</button>
