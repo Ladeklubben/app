@@ -8,7 +8,7 @@ export async function getPosition() {
     const deviceVal: Platform = get(device);
 
     // For native platforms
-    if (deviceVal !== "web") {
+    if (deviceVal !== Platform.Web) {
         try {
             const status: PermissionStatus = await Geolocation.requestPermissions();
             if (status.location === "granted") {
@@ -19,9 +19,11 @@ export async function getPosition() {
                 return position;
             } else {
                 console.warn("Location permission denied");
+                return null;
             }
         } catch (error) {
-            console.error("Failed to get position:", error);
+            console.error("Failed to get position:", error instanceof Error ? error.message : String(error));
+            return null;
         }
     } else {
         // For web platform
