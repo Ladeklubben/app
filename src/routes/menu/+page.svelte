@@ -28,22 +28,22 @@
 
 	<div class="settings-container">
 		<MenuGroup title="Account">
-			<MenuItem text="Chargers">
+			<MenuItem text="Chargers" onclick={() => {console.log('Chargers clicked')}}>
 				<BatteryCharging />
 			</MenuItem>
-			<MenuItem text="Notifications" hasToggle={true}>
+			<MenuItem text="Notifications" hasToggle={true} onclick={() => {console.log('Notifications clicked')}}>
 				<BellRing />
 			</MenuItem>
-			<MenuItem text="Privacy">
+			<MenuItem text="Privacy" onclick={() => {console.log('Privacy clicked')}}>
 				<Lock />
 			</MenuItem>
 		</MenuGroup>
 
 		<MenuGroup title="Support">
-			<MenuItem text="Documentation #TODO-link">
+			<MenuItem text="Documentation #TODO-link" onclick={() => {console.log('Documentation clicked')}}>
 				<Document />
 			</MenuItem>
-			<MenuItem text="Contact Us #TODO-link">
+			<MenuItem text="Contact Us #TODO-link" onclick={() => {console.log('Contact Us clicked')}}>
 				<Email />
 			</MenuItem>
 		</MenuGroup>
