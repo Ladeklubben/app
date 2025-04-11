@@ -1,16 +1,17 @@
 <script lang="ts">
-	import Map from "$lib/components/features/map/BaseMap.svelte";
 	import ChargerMap from "$lib/components/features/map/ChargerMap.svelte";
-	import InteractiveMap from "$lib/components/features/map/InteractiveMap.svelte";
-	import type { PageData } from "./$types";
+	import { get } from "$lib/services/api";
+	import type { ChargerStation } from "$lib/types/chargers";
 
-	let { data }: { data: PageData } = $props();
+	let chargers: ChargerStation[] = $state([]);
 
-	let chargers = [
-		{ lat: 55.6761, lng: 12.5683, name: "Copenhagen Charger" },
-		{ lat: 56.1629, lng: 10.2039, name: "Aarhus Charger" },
-		// Add more chargers
-	];
+	get("/chargermap")
+		.then((response) => {
+			chargers = response.upd;
+		})
+		.catch((error) => {
+			console.error("Error fetching chargers:", error);
+		});
 
 </script>
 <div class="h-full flex flex-cl">
