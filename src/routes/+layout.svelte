@@ -21,12 +21,12 @@
 
 <ParaglideJS {i18n}>
 	<div
-		class="flex flex-col min-h-full"
+		class="flex flex-col h-screen"
 		class:pt-[env(safe-area-inset-top,40px)]={$device === Platform.IOS}
 		class:pb-[env(safe-area-inset-bottom,40px)]={$device === Platform.IOS}
 	>
 		{#if loginCheckDone}
-			<main style={$showTabBar ? "padding-bottom: 70px" : ""}>
+			<main style={$showTabBar ? "padding-bottom: 70px" : ""} class="flex-1 overflow-auto">
 				{@render children()}
 			</main>
 			{#if $showTabBar}
