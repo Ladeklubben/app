@@ -34,7 +34,7 @@
 </script>
 
 <div class="h-full flex flex-col relative">
-	<div class="absolute top-0 right-0 z-500 p-4">
+	<div class="absolute top-10 right-0 z-500 p-4">
 		<Glass>
 			<div class="flex flex-col">
 				<button class="p-2" onclick={() => (isSatellite = !isSatellite)}>
