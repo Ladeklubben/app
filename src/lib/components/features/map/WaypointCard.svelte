@@ -17,7 +17,7 @@
                     <span class="font-bold">DKK</span>/kWh
                 </span>
             </div>
-            <div class="bg-lk-green-100 text-lk-green-800 rounded-md px-2 py-1 text-sm flex items-center backdrop-blur-sm">
+            <div class="bg-lk-green-400 text-lk-green-900 font-bold rounded-md px-2 py-1 text-sm flex items-center backdrop-blur-sm">
                 <span>10 km</span>
             </div>
         </div>
