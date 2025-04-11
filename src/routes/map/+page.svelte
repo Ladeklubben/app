@@ -6,6 +6,7 @@
 	import type { ChargerStation } from "$lib/types/chargers";
 	import Layer from "~icons/mdi/layers-outline";
 	import CrossHairs from "~icons/mdi/crosshairs-gps";
+	import QRCode from "~icons/mdi/qrcode-scan";
 
 	let chargers: ChargerStation[] = $state([]);
 	let selectedChargerId: string = $state("");
@@ -37,15 +38,16 @@
 	<div class="absolute top-10 right-0 z-500 p-4">
 		<Glass>
 			<div class="flex flex-col">
-				<button class="p-2" onclick={() => (isSatellite = !isSatellite)}>
-					
-					<Layer class="text-xl" />
+				<button class="p-2.5 border-b border-lk-blue-800" onclick={() => (isSatellite = !isSatellite)}>
+					<Layer class="text-lg" />
 				</button>
-				<button class="p-2">
-					<CrossHairs class="text-xl" />
+				<button class="p-2.5 border-b border-lk-blue-800">
+					<CrossHairs class="text-lg" />
+				</button>
+				<button class="p-2.5">
+					<QRCode class="text-lg" />
 				</button>
 			</div>
-			
 		</Glass>
 	</div>
 	<ChargerMap {chargers} {isSatellite} />
