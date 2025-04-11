@@ -32,8 +32,7 @@
 <div
 	class="flex justify-around items-center pt-3 fixed bottom-0 w-full z-1000 border-t border-lk-blue-800 bg-lk-blue-950 text-lk-blue-50"
 	class:pb-[env(safe-area-inset-bottom,40px)]={$device === Platform.IOS}
-	class:pb-3={$device === Platform.Android}
-	class:pb-4={$device === Platform.Web}
+	class:pb-5={$device === Platform.Web || $device === Platform.Android}
 >
 	<button
 		type="button"
