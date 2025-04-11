@@ -38,6 +38,7 @@
 			map = L.map(mapContainer, {
 				zoomControl: false,
 				attributionControl: false,
+				minZoom: 3,
 			}).setView(defaultCenter, defaultZoom);
 
 			L.tileLayer(TILE_SERVERS[isSatellite ? "satellite" : "dark"], {
