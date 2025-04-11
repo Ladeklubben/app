@@ -3,6 +3,9 @@
     import BaseMap from "./BaseMap.svelte";
     import { onDestroy } from "svelte";
     import type { ChargerStation } from "$lib/types/chargers";
+    import "leaflet.markercluster/dist/leaflet.markercluster.js";
+    import "leaflet.markercluster/dist/MarkerCluster.css";
+    import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 
     // Props
     let {
@@ -15,7 +18,7 @@
 
     // Reactive variables
     let map: L.Map | undefined;
-    let chargerMarkers: L.Marker[] = [];
+    let markerClusterGroup: L.MarkerClusterGroup | undefined;
 
     // Charger icon
     const chargerIcon = L.icon({
@@ -27,36 +30,44 @@
     // Initialize map and add charger markers
     function handleMapInit(initializedMap: L.Map) {
         map = initializedMap;
+        
+        // Initialize the marker cluster group
+        markerClusterGroup = L.markerClusterGroup({
+            maxClusterRadius: 50,
+            disableClusteringAtZoom: 12, // Optional: disable clustering at high zoom levels
+            spiderfyOnMaxZoom: true
+        });
+        
+        map.addLayer(markerClusterGroup);
         updateMarkers();
     }
 
     // Function to update markers based on current chargers data
     function updateMarkers() {
-        if (!map) return;
+        if (!map || !markerClusterGroup) return;
         
-        // Remove existing markers
-        chargerMarkers.forEach((marker) => marker.remove());
-        chargerMarkers = [];
+        // Clear existing markers
+        markerClusterGroup.clearLayers();
         
-        // Add new markers
-        chargerMarkers = chargers.map((charger: ChargerStation) => {
+        // Add new markers to the cluster group
+        chargers.forEach((charger: ChargerStation) => {
             const marker = L.marker([charger.location.latitude, charger.location.longitude], { icon: chargerIcon })
-                .addTo(map!)
                 .bindPopup(charger.stationid);
-            return marker;
+            markerClusterGroup!.addLayer(marker);
         });
     }
 
     // Reactive statement to update markers when chargers change
     $effect(() => {
-        if (map && chargers) {
+        if (map && markerClusterGroup && chargers) {
             updateMarkers();
         }
     });
 
     onDestroy(() => {
-        chargerMarkers.forEach((marker) => marker.remove());
-        chargerMarkers = [];
+        if (map && markerClusterGroup) {
+            map.removeLayer(markerClusterGroup);
+        }
     });
 </script>
 
