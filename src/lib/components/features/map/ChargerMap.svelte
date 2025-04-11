@@ -34,7 +34,7 @@
         // Initialize the marker cluster group
         markerClusterGroup = L.markerClusterGroup({
             maxClusterRadius: 50,
-            disableClusteringAtZoom: 12, // Optional: disable clustering at high zoom levels
+            disableClusteringAtZoom: 16, // Optional: disable clustering at high zoom levels
             spiderfyOnMaxZoom: true
         });
         
