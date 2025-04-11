@@ -1,11 +1,15 @@
 <script lang="ts">
 	import ChargerMap from "$lib/components/features/map/ChargerMap.svelte";
 	import ChargerWaypoints from "$lib/components/features/map/ChargerWaypoints.svelte";
+	import Glass from "$lib/components/ui/Glass.svelte";
 	import { get } from "$lib/services/api";
 	import type { ChargerStation } from "$lib/types/chargers";
+	import Layer from "~icons/mdi/layers-outline";
+	import CrossHairs from "~icons/mdi/crosshairs-gps";
 
 	let chargers: ChargerStation[] = $state([]);
 	let selectedChargerId: string = $state("");
+	let isSatellite: boolean = $state(false);
 
 	// Function to handle navigation
 	function navigateToCharger(id: string) {
@@ -30,7 +34,21 @@
 </script>
 
 <div class="h-full flex flex-col relative">
-	<ChargerMap {chargers} isSatellite={false} />
+	<div class="absolute top-0 right-0 z-500 p-4">
+		<Glass>
+			<div class="flex flex-col">
+				<button class="p-2" onclick={() => (isSatellite = !isSatellite)}>
+					
+					<Layer class="text-xl" />
+				</button>
+				<button class="p-2">
+					<CrossHairs class="text-xl" />
+				</button>
+			</div>
+			
+		</Glass>
+	</div>
+	<ChargerMap {chargers} {isSatellite} />
 	<div class="absolute bottom-0 left-0 right-0 z-500">
 		<ChargerWaypoints {chargers} onNavigate={navigateToCharger} />
 	</div>
