@@ -1,8 +1,10 @@
 <script lang="ts">
 	import * as L from "leaflet";
 	import BaseMap from "./BaseMap.svelte";
-	import { onDestroy } from "svelte";
+	import { onDestroy, onMount } from "svelte";
 	import type { ChargerStation } from "$lib/types/chargers";
+	import { pos, getPosition } from "$lib/services/map";
+	import type { Position } from "@capacitor/geolocation";
 	import "leaflet.markercluster/dist/leaflet.markercluster.js";
 	import "leaflet.markercluster/dist/MarkerCluster.css";
 	import "leaflet.markercluster/dist/MarkerCluster.Default.css";
@@ -15,13 +17,34 @@
 
 	// Reactive variables
 	let map: L.Map | undefined;
+	let userMarker: L.Marker | undefined;
 	let markerClusterGroup: L.MarkerClusterGroup | undefined;
+
+	// Constants
+	const DEFAULT_ZOOM = 15;
 
 	// Charger icon
 	const chargerIcon = L.icon({
 		iconUrl: "/LK_waypoint.svg",
 		iconSize: [48, 48],
 		iconAnchor: [24, 48],
+	});
+
+	// Live location icon
+	const liveLocationIcon = L.divIcon({
+		html: `
+			<div style="
+				background-color: #59a6b7;
+				width: 16px;
+				height: 16px;
+				border-radius: 50%;
+				border: 2px solid white;
+				box-shadow: 0 0 8px #59a6b799;
+			"></div>
+		`,
+		className: "",
+		iconSize: [16, 16],
+		iconAnchor: [8, 8],
 	});
 
 	// Initialize map and add charger markers
@@ -64,11 +87,43 @@
 		});
 	}
 
+	// Update user position
+	function updateMapPosition(position: Position | null) {
+		if (!map || !position) return;
+
+		const latLng = [position.coords.latitude, position.coords.longitude] as L.LatLngTuple;
+		map.setView(latLng, DEFAULT_ZOOM, { animate: true });
+
+		if (userMarker) {
+			userMarker.setLatLng(latLng);
+		} else {
+			userMarker = L.marker(latLng, { icon: liveLocationIcon }).addTo(map);
+		}
+	}
+
 	// Reactive statement to update markers when chargers change
 	$effect(() => {
 		if (map && markerClusterGroup && chargers) {
 			updateMarkers();
 		}
+	});
+
+	// Lifecycle hooks
+	onMount(() => {
+		// Subscribe to position changes
+		const unsubscribe = pos.subscribe((newPosition) => {
+			updateMapPosition(newPosition);
+		});
+
+		// Kick off position retrieval
+		getPosition();
+
+		return () => {
+			unsubscribe();
+			if (userMarker) {
+				userMarker.remove();
+			}
+		};
 	});
 
 	onDestroy(() => {
