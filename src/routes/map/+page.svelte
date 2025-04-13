@@ -7,6 +7,7 @@
 	import Layer from "~icons/mdi/layers-outline";
 	import CrossHairs from "~icons/mdi/crosshairs-gps";
 	import QRCode from "~icons/mdi/qrcode-scan";
+	import { pos, getPosition } from "$lib/services/map";
 
 	let chargers: ChargerStation[] = $state([]);
 	let selectedChargerId: string = $state("");
@@ -28,6 +29,27 @@
 	get("/chargermap")
 		.then((response) => {
 			chargers = response.upd;
+
+			// Check if the user has granted location permissions
+			if (!$pos) {
+				return;
+			}
+
+			// Sort chargers by distance to the user's location
+			let time_start = Date.now();
+			chargers.sort((a, b) => {
+				const distanceA = Math.sqrt(
+					Math.pow(a.location.latitude - $pos?.coords.latitude, 2) +
+						Math.pow(a.location.longitude - $pos?.coords.longitude, 2)
+				);
+				const distanceB = Math.sqrt(
+					Math.pow(b.location.latitude - $pos?.coords.latitude, 2) +
+						Math.pow(b.location.longitude - $pos?.coords.longitude, 2)
+				);
+				return distanceA - distanceB;
+			});
+			let time_end = Date.now();
+			console.info("Sorting time:", time_end - time_start, "ms");
 		})
 		.catch((error) => {
 			console.error("Error fetching chargers:", error);
