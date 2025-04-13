@@ -7,7 +7,7 @@
 	import Layer from "~icons/mdi/layers-outline";
 	import CrossHairs from "~icons/mdi/crosshairs-gps";
 	import QRCode from "~icons/mdi/qrcode-scan";
-	import { pos, calculateDistance } from "$lib/services/map";
+	import { pos, calculateDistance, getPosition } from "$lib/services/map";
 
 	let chargers: ChargerStation[] = $state([]);
 	let isSatellite: boolean = $state(false);
@@ -78,7 +78,7 @@
 		</Glass>
 
 		<Glass>
-			<button class="p-3 border-lk-blue-800">
+			<button class="p-3 border-lk-blue-800" onclick={() => getPosition()}>
 				<CrossHairs class="text-lg" />
 			</button>
 		</Glass>
@@ -86,7 +86,7 @@
 	<ChargerMap {chargers} {isSatellite} />
 	{#if isSorted}
 		<div class="absolute bottom-0 left-0 right-0 z-500">
-			<ChargerWaypoints {chargers} onNavigate={navigateToCharger}/>
+			<ChargerWaypoints {chargers} onNavigate={navigateToCharger} />
 		</div>
 	{/if}
 </div>

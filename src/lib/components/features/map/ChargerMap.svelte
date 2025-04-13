@@ -113,28 +113,26 @@
 		}
 	});
 
-	// Lifecycle hooks
-	onMount(() => {
-		// Subscribe to position changes
-		const unsubscribe = pos.subscribe((newPosition) => {
-			updateMapPosition(newPosition);
-		});
-
-		// Kick off position retrieval
-		getPosition();
-
-		return () => {
-			unsubscribe();
-			if (userMarker) {
-				userMarker.remove();
-			}
-		};
+	$effect(() => {
+		if (map && $pos) {
+			updateMapPosition($pos);
+		}
 	});
 
-	onDestroy(() => {
-		if (map && markerClusterGroup) {
-			map.removeLayer(markerClusterGroup);
+	// Reactive statement to update map location when charger is selected
+	$effect(() => {
+		if ($selectedChargerID) {
+			const selectedCharger = chargers.find((charger: ChargerStation) => charger.stationid === $selectedChargerID);
+			if (selectedCharger && map) {
+				const latLng = [selectedCharger.location.latitude, selectedCharger.location.longitude] as L.LatLngTuple;
+				map.setView(latLng, DEFAULT_ZOOM, { animate: true });
+			}
 		}
+	});
+
+	// Lifecycle hooks
+	onMount(() => {
+		getPosition();
 	});
 </script>
 
@@ -155,7 +153,7 @@
 		text-align: center;
 		border-radius: 40px;
 		font-size: 18px;
-        font-weight: 800;
+		font-weight: 800;
 		color: #182b34;
 		display: flex;
 		align-items: center;
