@@ -2,9 +2,11 @@
     import type { ChargerStation } from "$lib/types/chargers";
     import WaypointCard from "./WaypointCard.svelte";
     import { pos, calculateDistance } from "$lib/services/map";
-    
-    export let chargers: ChargerStation[] = [];
-    export let onNavigate: (id: string) => void = () => {};
+
+    let { chargers = [] as ChargerStation[], onNavigate } = $props<{
+        chargers?: ChargerStation[];
+        onNavigate?: (id: string) => void;
+    }>();
     
     function getChargerDistance(charger: ChargerStation): number {
         if (!$pos) return 0;
