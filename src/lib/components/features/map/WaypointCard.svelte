@@ -2,10 +2,11 @@
     import Zap from "~icons/mdi/lightning-bolt-outline";
     import Battery from "~icons/mdi/battery-charging-50";
     import type { ChargerStation } from "$lib/types/chargers";
-	import Glass from "$lib/components/ui/Glass.svelte";
+    import Glass from "$lib/components/ui/Glass.svelte";
 
     export let charger: ChargerStation;
     export let onNavigate: () => void;
+    export let distance: number = 0; // Distance in kilometers, default to 0
 </script>
 
 <Glass>
@@ -18,18 +19,19 @@
                 </span>
             </div>
             <div class="bg-lk-green-400 text-lk-green-900 font-bold rounded-md px-2 py-1 text-sm flex items-center backdrop-blur-sm">
-                <span>10 km</span>
+                <span>{distance.toFixed(1)} km</span>
             </div>
         </div>
 
         <!-- <div class="flex justify-between text-xs text-lk-blue-50 mb-3">
             <div class="flex items-center gap-1">
-                <Battery style="font-size: 14px;" />
-                <span>{charger.online?.[1]}</span>
-            </div>
-            <div class="flex items-center gap-1">
                 <Zap style="font-size: 14px;" />
                 <span>{charger.type.power}kW</span>
+            </div>
+
+            <div class="flex items-center gap-1">
+                <Battery style="font-size: 14px;" />
+                <span>{charger.online?.[1]}</span>
             </div>
         </div> -->
 
