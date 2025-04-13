@@ -3,6 +3,7 @@ import { device, Platform } from "$lib/services/layout";
 import { type Position, type PermissionStatus, Geolocation } from "@capacitor/geolocation";
 
 export const pos: Writable<Position | null> = writable(null);
+export const selectedChargerID: Writable<string> = writable("");
 
 export async function getPosition() {
 	const deviceVal: Platform = get(device);

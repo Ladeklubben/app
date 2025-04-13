@@ -10,13 +10,11 @@
 	import { pos, calculateDistance } from "$lib/services/map";
 
 	let chargers: ChargerStation[] = $state([]);
-	let selectedChargerId: string = $state("");
 	let isSatellite: boolean = $state(false);
 	let isSorted: boolean = $state(false);
 
 	// Function to handle navigation
 	function navigateToCharger(id: string) {
-		selectedChargerId = id;
 		// Here you would implement opening the navigation app
 		// This could be launching a maps URL or using a native app integration
 		const charger = chargers.find((c) => c.stationid === id);
@@ -47,7 +45,6 @@
 	function sortChargersByDistance() {
 		if (!$pos || chargers.length === 0) return;
 
-		let time_start = Date.now();
 		chargers.sort((a, b) => {
 			const distanceA = calculateDistance(
 				$pos.coords.latitude,
@@ -63,7 +60,6 @@
 			);
 			return distanceA - distanceB;
 		});
-		let time_end = Date.now();
 		isSorted = true;
 	}
 </script>
@@ -90,7 +86,7 @@
 	<ChargerMap {chargers} {isSatellite} />
 	{#if isSorted}
 		<div class="absolute bottom-0 left-0 right-0 z-500">
-			<ChargerWaypoints {chargers} onNavigate={navigateToCharger} />
+			<ChargerWaypoints {chargers} onNavigate={navigateToCharger}/>
 		</div>
 	{/if}
 </div>

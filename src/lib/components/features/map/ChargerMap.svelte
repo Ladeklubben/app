@@ -3,7 +3,7 @@
 	import BaseMap from "./BaseMap.svelte";
 	import { onDestroy, onMount } from "svelte";
 	import type { ChargerStation } from "$lib/types/chargers";
-	import { pos, getPosition } from "$lib/services/map";
+	import { pos, getPosition, selectedChargerID } from "$lib/services/map";
 	import type { Position } from "@capacitor/geolocation";
 	import "leaflet.markercluster/dist/leaflet.markercluster.js";
 	import "leaflet.markercluster/dist/MarkerCluster.css";
@@ -82,7 +82,12 @@
 		chargers.forEach((charger: ChargerStation) => {
 			const marker = L.marker([charger.location.latitude, charger.location.longitude], {
 				icon: chargerIcon,
-			}).bindPopup(charger.stationid);
+			});
+			marker.on("click", () => {
+				// Handle marker click event
+				// This could be opening a detailed view or navigating to the charger
+				$selectedChargerID = charger.stationid;
+			});
 			markerClusterGroup!.addLayer(marker);
 		});
 	}
