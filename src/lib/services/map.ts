@@ -31,8 +31,8 @@ export async function getPosition() {
 			setTimeout(() => {
 				const pseudoPosition: Position = {
 					coords: {
-						latitude: 55.763246,
-						longitude: 12.47746,
+						latitude: 54.951718,
+						longitude: 9.896465,
 						accuracy: 0,
 						altitude: 0,
 						altitudeAccuracy: 0,

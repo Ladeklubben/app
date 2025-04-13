@@ -21,7 +21,7 @@
 	let markerClusterGroup: L.MarkerClusterGroup | undefined;
 
 	// Constants
-	const DEFAULT_ZOOM = 15;
+	const DEFAULT_ZOOM = 13;
 
 	// Charger icon
 	const chargerIcon = L.icon({
