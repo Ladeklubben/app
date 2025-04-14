@@ -28,7 +28,6 @@
 	get("/chargermap")
 		.then((response) => {
 			chargers = response.upd;
-			console.log("Chargers fetched:", chargers);
 		})
 		.catch((error) => {
 			console.error("Error fetching chargers:", error);

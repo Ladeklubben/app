@@ -6,19 +6,19 @@
 	import { page } from "$app/stores";
 	import { goto } from "$app/navigation";
 	import { device, Platform } from "$lib/services/layout";
-	import { Haptics, ImpactStyle } from '@capacitor/haptics';
+	import { Haptics, ImpactStyle } from "@capacitor/haptics";
 
 	const ICON_SIZE = 20;
 
 	// Handle switching pages
 	// TODO: Decide if this is a gimmick or a good idea
-	async function handlePageChange(link: string|URL) {
+	async function handlePageChange(link: string | URL) {
 		if (link === $page.url.pathname) {
 			return;
 		} else {
 			// Trigger haptic feedback
 			try {
-				await Haptics.impact({style: ImpactStyle.Light});
+				await Haptics.impact({ style: ImpactStyle.Light });
 			} catch {
 				// Do nothing if we get an error
 			} finally {
@@ -26,7 +26,6 @@
 			}
 		}
 	}
-
 </script>
 
 <div

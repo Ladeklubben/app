@@ -96,9 +96,4 @@
 	});
 </script>
 
-<BaseMap
-	{isSatellite}
-	defaultZoom={6}
-	onMapClick={handleMapClick}
-	onMapInit={handleMapInit}
-/>
+<BaseMap {isSatellite} defaultZoom={6} onMapClick={handleMapClick} onMapInit={handleMapInit} />

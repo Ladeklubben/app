@@ -48,14 +48,11 @@
 
 		{#if isSelected}
 			<div class="flex flex-col items-start gap-1.5 mb-2">
-				<span class="text-xs font-light text-lk-blue-200">
-					Opening Hours:
-				</span>
+				<span class="text-xs font-light text-lk-blue-200">Opening Hours:</span>
 				<div class="p-2 w-full rounded-2xl text-sm font-medium border border-lk-blue-800">
 					{openingHours}
 				</div>
 			</div>
-
 
 			<div class="flex justify-between gap-3">
 				<button

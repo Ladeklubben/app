@@ -164,7 +164,7 @@
 								if (index === 0 || index === values.length - 1) {
 									return "";
 								}
-								return typeof value === 'number' ? value.toFixed(2) : value;
+								return typeof value === "number" ? value.toFixed(2) : value;
 							},
 						},
 						border: {

@@ -52,19 +52,20 @@ export async function getPosition() {
 
 // Utility function for distance calculations
 export function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
-    const R = 6371; // Earth's radius in km
-    const dLat = (lat2 - lat1) * Math.PI / 180;
-    const dLon = (lon2 - lon1) * Math.PI / 180;
-    const a = 
-        Math.sin(dLat/2) * Math.sin(dLat/2) +
-        Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
-        Math.sin(dLon/2) * Math.sin(dLon/2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-    return R * c;
+	const R = 6371; // Earth's radius in km
+	const dLat = ((lat2 - lat1) * Math.PI) / 180;
+	const dLon = ((lon2 - lon1) * Math.PI) / 180;
+	const a =
+		Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+		Math.cos((lat1 * Math.PI) / 180) * Math.cos((lat2 * Math.PI) / 180) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+	const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+	return R * c;
 }
 
 // Function to calculate opening hours
 export function calculateOpeningHours(schedule: OpenHoursPeriod) {
+	// TODO: Handle charger clsosed
+
 	// Check if open 24/7 (10079 minutes = ~7 days)
 	if (schedule.interval >= 10079) {
 		return "Always Open";
@@ -74,7 +75,6 @@ export function calculateOpeningHours(schedule: OpenHoursPeriod) {
 
 // Convert time values (in minutes) to formatted time string
 function convertTimeString(scheduleObj: OpenHoursPeriod): string {
-	console.log("Schedule Object:", scheduleObj);
 	const start = scheduleObj.start;
 	const stop = start + scheduleObj.interval;
 
@@ -86,10 +86,10 @@ function convertTimeString(scheduleObj: OpenHoursPeriod): string {
 
 	if (stopHour > 24) stopHour = stopHour - 24;
 
-	const formattedStartHour = String(startHour).padStart(2, '0');
-	const formattedStartMinute = String(startMinute).padStart(2, '0');
-	const formattedStopHour = String(stopHour).padStart(2, '0');
-	const formattedStopMinute = String(stopMinute).padStart(2, '0');
-	
+	const formattedStartHour = String(startHour).padStart(2, "0");
+	const formattedStartMinute = String(startMinute).padStart(2, "0");
+	const formattedStopHour = String(stopHour).padStart(2, "0");
+	const formattedStopMinute = String(stopMinute).padStart(2, "0");
+
 	return `${formattedStartHour}:${formattedStartMinute} - ${formattedStopHour}:${formattedStopMinute}`;
 }
