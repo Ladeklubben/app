@@ -32,6 +32,7 @@
 	<div class="p-4 flex flex-col gap-3">
 		<div class="flex items-center justify-between">
 			<div class="flex items-end text-lk-blue-50 font-bold">
+				<!-- TODO: Implement correct price based on discounts and other factors -->
 				<span class="text-3xl">{charger.prices.nominal}</span>
 				<span class="text-lg font-light ml-2">
 					<span class="font-bold">DKK</span>
