@@ -64,6 +64,7 @@
 </script>
 
 <div class="h-full flex flex-col relative">
+	<!-- TODO: Handle loading and errors in loading -->
 	<div class="absolute top-10 right-0 z-500 p-4 flex flex-col gap-4">
 		<Glass>
 			<div class="flex flex-col">

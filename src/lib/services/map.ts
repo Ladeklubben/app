@@ -75,6 +75,7 @@ export function calculateOpeningHours(schedule: OpenHoursPeriod) {
 
 // Convert time values (in minutes) to formatted time string
 function convertTimeString(scheduleObj: OpenHoursPeriod): string {
+	// TODO: Handle multi-day intervals
 	const start = scheduleObj.start;
 	const stop = start + scheduleObj.interval;
 

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import * as L from "leaflet";
 	import BaseMap from "./BaseMap.svelte";
-	import { onMount } from "svelte";
+	import { onMount, onDestroy } from "svelte";
 	import type { ChargerStation } from "$lib/types/chargers";
 	import { pos, getPosition, selectedChargerID } from "$lib/services/map";
 	import type { Position } from "@capacitor/geolocation";
@@ -15,7 +15,7 @@
 		chargers?: ChargerStation[];
 	}>();
 
-	// Reactive variables
+	// Variables
 	let map: L.Map | undefined;
 	let userMarker: L.Marker | undefined;
 	let markerClusterGroup: L.MarkerClusterGroup | undefined;
@@ -104,7 +104,9 @@
 			marker.on("click", () => {
 				$selectedChargerID = charger.stationid;
 			});
-			markerClusterGroup!.addLayer(marker);
+			if (markerClusterGroup) {
+				markerClusterGroup.addLayer(marker);
+			}
 		});
 	}
 
