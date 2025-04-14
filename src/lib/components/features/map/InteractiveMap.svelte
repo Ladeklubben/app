@@ -36,7 +36,7 @@
 	});
 
 	const clickLocationIcon = L.icon({
-		iconUrl: "/LK_waypoint.svg",
+		iconUrl: "/LK_waypoint_green.svg",
 		iconSize: [48, 48],
 		iconAnchor: [24, 48],
 	});

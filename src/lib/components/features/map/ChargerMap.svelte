@@ -23,9 +23,20 @@
 	// Constants
 	const DEFAULT_ZOOM = 13;
 
-	// Charger icon
-	const chargerIcon = L.icon({
-		iconUrl: "/LK_waypoint.svg",
+	// Charger icons
+	const chargerIconGreen = L.icon({
+		iconUrl: "/LK_waypoint_green.svg",
+		iconSize: [48, 48],
+		iconAnchor: [24, 48],
+	});
+	const chargerIconRed = L.icon({
+		iconUrl: "/LK_waypoint_red.svg",
+		iconSize: [48, 48],
+		iconAnchor: [24, 48],
+	});
+	// TODO: Implement this for currently selected charger
+	const chargerIconWhite = L.icon({
+		iconUrl: "/LK_waypoint_white.svg",
 		iconSize: [48, 48],
 		iconAnchor: [24, 48],
 	});
@@ -76,8 +87,19 @@
 		markerClusterGroup.clearLayers();
 
 		chargers.forEach((charger: ChargerStation) => {
+			// Select icon based on charger status
+			let icon;
+			switch (charger.connector) {
+				case "Available":
+					icon = chargerIconGreen;
+					break;
+				default:
+					icon = chargerIconRed;
+					break;
+			}
+
 			const marker = L.marker([charger.location.latitude, charger.location.longitude], {
-				icon: chargerIcon,
+				icon: icon,
 			});
 			marker.on("click", () => {
 				$selectedChargerID = charger.stationid;
