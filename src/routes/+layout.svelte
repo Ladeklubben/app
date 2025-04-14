@@ -7,6 +7,7 @@
 	import { onMount } from "svelte";
 	import { showTabBar } from "$lib/services/layout";
 	import { setDevice, device, Platform } from "$lib/services/layout";
+	import { page } from "$app/stores";
 	import "../app.css";
 
 	let { children } = $props();
@@ -26,7 +27,12 @@
 		class:pb-[env(safe-area-inset-bottom,40px)]={$device === Platform.IOS}
 	>
 		{#if loginCheckDone}
-			<main style={$showTabBar ? "padding-bottom: 70px" : ""} class="flex-1 overflow-auto">
+			<main
+				class="flex-1 overflow-auto"
+				class:pb-19={$device === Platform.Android && $showTabBar}
+				class:pb-18={($device === Platform.Web || $device === Platform.IOS) && $showTabBar}
+				class:mt-10={$device !== Platform.Web && $page.url.pathname !== "/map"}
+			>
 				{@render children()}
 			</main>
 			{#if $showTabBar}

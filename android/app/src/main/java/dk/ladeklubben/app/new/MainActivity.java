@@ -3,6 +3,7 @@ package dk.ladeklubben.apps;
 import android.os.Bundle;
 import android.webkit.WebView;
 import android.graphics.Color;
+import android.view.WindowManager;
 
 import com.getcapacitor.BridgeActivity;
 
@@ -16,6 +17,12 @@ public class MainActivity extends BridgeActivity {
             getWindow().setNavigationBarColor(Color.parseColor("#182b34")); 
             getWindow().setStatusBarColor(Color.parseColor("#182b34"));
         }
+
+        // Make the app display edge-to-edge on Android
+        getWindow().setFlags(
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+        );
     }
 
     @Override

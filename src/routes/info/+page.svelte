@@ -29,7 +29,7 @@
 		return { time, price };
 	}
 
-	let currentPrice = $state({ time: "", price: "" });	
+	let currentPrice = $state({ time: "", price: "" });
 
 	const formatter = new Intl.NumberFormat("en-DK");
 	const total_power_import = $derived(
