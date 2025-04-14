@@ -29,6 +29,7 @@
 		.then((response) => {
 			chargers = response.upd;
 			sortChargersByDistance();
+			console.log("Chargers fetched:", chargers);
 		})
 		.catch((error) => {
 			console.error("Error fetching chargers:", error);
