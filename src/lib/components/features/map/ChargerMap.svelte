@@ -1,7 +1,7 @@
 <script lang="ts">
 	import * as L from "leaflet";
 	import BaseMap from "./BaseMap.svelte";
-	import { onDestroy, onMount } from "svelte";
+	import { onMount } from "svelte";
 	import type { ChargerStation } from "$lib/types/chargers";
 	import { pos, getPosition, selectedChargerID } from "$lib/services/map";
 	import type { Position } from "@capacitor/geolocation";
@@ -33,34 +33,32 @@
 	// Live location icon
 	const liveLocationIcon = L.divIcon({
 		html: `
-			<div style="
-				background-color: #59a6b7;
-				width: 16px;
-				height: 16px;
-				border-radius: 50%;
-				border: 2px solid white;
-				box-shadow: 0 0 8px #59a6b799;
-			"></div>
-		`,
+		<div style="
+		  background-color: #59a6b7;
+		  width: 16px;
+		  height: 16px;
+		  border-radius: 50%;
+		  border: 2px solid white;
+		  box-shadow: 0 0 8px #59a6b799;
+		"></div>
+	  `,
 		className: "",
 		iconSize: [16, 16],
 		iconAnchor: [8, 8],
 	});
 
-	// Initialize map and add charger markers
-	function handleMapInit(initializedMap: L.Map) {
+	// Initialize map and marker cluster group
+	function initializeMap(initializedMap: L.Map): void {
 		map = initializedMap;
-
-		// Initialize the marker cluster group
 		markerClusterGroup = L.markerClusterGroup({
 			maxClusterRadius: 50,
-			disableClusteringAtZoom: 19, // Optional: disable clustering at high zoom levels
+			disableClusteringAtZoom: 19,
 			spiderfyOnMaxZoom: false,
 			showCoverageOnHover: false,
-			iconCreateFunction: function (cluster) {
+			iconCreateFunction: (cluster) => {
 				const childCount = cluster.getChildCount();
 				return new L.DivIcon({
-					html: "<div><span>" + childCount + "</span></div>",
+					html: `<div><span>${childCount}</span></div>`,
 					className: "marker-cluster",
 					iconSize: new L.Point(50, 50),
 				});
@@ -68,35 +66,31 @@
 		});
 
 		map.addLayer(markerClusterGroup);
-		updateMarkers();
+		updateChargerMarkers();
 	}
 
-	// Function to update markers based on current chargers data
-	function updateMarkers() {
+	// Update charger markers
+	function updateChargerMarkers(): void {
 		if (!map || !markerClusterGroup) return;
 
-		// Clear existing markers
 		markerClusterGroup.clearLayers();
 
-		// Add new markers to the cluster group
 		chargers.forEach((charger: ChargerStation) => {
 			const marker = L.marker([charger.location.latitude, charger.location.longitude], {
 				icon: chargerIcon,
 			});
 			marker.on("click", () => {
-				// Handle marker click event
-				// This could be opening a detailed view or navigating to the charger
 				$selectedChargerID = charger.stationid;
 			});
 			markerClusterGroup!.addLayer(marker);
 		});
 	}
 
-	// Update user position
-	function updateMapPosition(position: Position | null) {
+	// Update user position on map
+	function updateUserPosition(position: Position | null): void {
 		if (!map || !position) return;
 
-		const latLng = [position.coords.latitude, position.coords.longitude] as L.LatLngTuple;
+		const latLng: L.LatLngTuple = [position.coords.latitude, position.coords.longitude];
 		map.setView(latLng, DEFAULT_ZOOM, { animate: true });
 
 		if (userMarker) {
@@ -106,28 +100,29 @@
 		}
 	}
 
-	// Reactive statement to update markers when chargers change
-	$effect(() => {
-		if (map && markerClusterGroup && chargers) {
-			updateMarkers();
+	// Update map view for selected charger
+	function updateSelectedChargerView(): void {
+		if (!$selectedChargerID || !map) return;
+
+		const selectedCharger = chargers.find((charger: ChargerStation) => charger.stationid === $selectedChargerID);
+		if (selectedCharger) {
+			const latLng: L.LatLngTuple = [selectedCharger.location.latitude, selectedCharger.location.longitude];
+			const currentZoom = map.getZoom();
+			map.setView(latLng, currentZoom, { animate: true });
 		}
+	}
+
+	// Reactive effects
+	$effect(() => {
+		updateChargerMarkers();
 	});
 
 	$effect(() => {
-		if (map && $pos) {
-			updateMapPosition($pos);
-		}
+		updateUserPosition($pos);
 	});
 
-	// Reactive statement to update map location when charger is selected
 	$effect(() => {
-		if ($selectedChargerID) {
-			const selectedCharger = chargers.find((charger: ChargerStation) => charger.stationid === $selectedChargerID);
-			if (selectedCharger && map) {
-				const latLng = [selectedCharger.location.latitude, selectedCharger.location.longitude] as L.LatLngTuple;
-				map.setView(latLng, DEFAULT_ZOOM, { animate: true });
-			}
-		}
+		updateSelectedChargerView();
 	});
 
 	// Lifecycle hooks
@@ -136,10 +131,9 @@
 	});
 </script>
 
-<BaseMap {isSatellite} defaultZoom={6} onMapInit={handleMapInit} />
+<BaseMap {isSatellite} defaultZoom={6} onMapInit={initializeMap} />
 
 <style>
-	/* Custom marker cluster colors */
 	:global(.marker-cluster) {
 		background-color: #5cf62866;
 		border-radius: 40px;
