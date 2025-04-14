@@ -28,7 +28,6 @@
 	get("/chargermap")
 		.then((response) => {
 			chargers = response.upd;
-			sortChargersByDistance();
 			console.log("Chargers fetched:", chargers);
 		})
 		.catch((error) => {

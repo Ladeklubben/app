@@ -1,6 +1,7 @@
 import { get, writable, type Writable } from "svelte/store";
 import { device, Platform } from "$lib/services/layout";
 import { type Position, type PermissionStatus, Geolocation } from "@capacitor/geolocation";
+import type { OpenHoursPeriod } from "$lib/types/chargers";
 
 export const pos: Writable<Position | null> = writable(null);
 export const selectedChargerID: Writable<string> = writable("");
@@ -60,4 +61,35 @@ export function calculateDistance(lat1: number, lon1: number, lat2: number, lon2
         Math.sin(dLon/2) * Math.sin(dLon/2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
     return R * c;
+}
+
+// Function to calculate opening hours
+export function calculateOpeningHours(schedule: OpenHoursPeriod) {
+	// Check if open 24/7 (10079 minutes = ~7 days)
+	if (schedule.interval >= 10079) {
+		return "Always Open";
+	}
+	return convertTimeString(schedule);
+}
+
+// Convert time values (in minutes) to formatted time string
+function convertTimeString(scheduleObj: OpenHoursPeriod): string {
+	console.log("Schedule Object:", scheduleObj);
+	const start = scheduleObj.start;
+	const stop = start + scheduleObj.interval;
+
+	let startHour = Math.floor(start / 60);
+	const startMinute = Math.floor(start - startHour * 60);
+
+	let stopHour = Math.floor(stop / 60);
+	const stopMinute = Math.floor(stop - stopHour * 60);
+
+	if (stopHour > 24) stopHour = stopHour - 24;
+
+	const formattedStartHour = String(startHour).padStart(2, '0');
+	const formattedStartMinute = String(startMinute).padStart(2, '0');
+	const formattedStopHour = String(stopHour).padStart(2, '0');
+	const formattedStopMinute = String(stopMinute).padStart(2, '0');
+	
+	return `${formattedStartHour}:${formattedStartMinute} - ${formattedStopHour}:${formattedStopMinute}`;
 }
