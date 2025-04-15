@@ -131,7 +131,10 @@ platform :ios do
         skip_submission: true,
         distribute_external: false,
         notify_external_testers: false,
-        ipa: "./App.ipa"
+        ipa: "./App.ipa",
+        distribute_only: true,
+        notify_testers: false,
+        groups: ["Andreas"]
       )
     end
   end
