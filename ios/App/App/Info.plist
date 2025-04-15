@@ -49,5 +49,7 @@
     <string>We need your location to provide better services.</string>
     <key>NSLocationWhenInUseUsageDescription</key>
     <string>We need your location to provide better services while the app is in use.</string>
+    <key>ITSAppUsesNonExemptEncryption</key>
+    <false/>
 </dict>
 </plist>
