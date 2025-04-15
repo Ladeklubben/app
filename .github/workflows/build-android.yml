@@ -25,7 +25,10 @@ jobs:
 
       # Build the web assets
       - name: Build web assets
-        run: export MODE=prod && npm run build
+        run: npm run build
+        env:
+          VITE_JAWG_ACCESS_TOKEN: ${{ secrets.VITE_JAWG_ACCESS_TOKEN }}
+          MODE: prod
 
       # Install Capacitor CLI
       - name: Install Capacitor CLI
