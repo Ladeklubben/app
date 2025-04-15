@@ -56,28 +56,32 @@ jobs:
           gem install fastlane
           fastlane --version
 
-      # Setup Apple Certificates and Provisioning Profiles
+      # Setup Apple Certificates
       - name: Install Apple Distribution Certificate
         env:
           IOS_DISTRIBUTION_CERTIFICATE: ${{ secrets.IOS_DISTRIBUTION_CERTIFICATE }}
           IOS_DISTRIBUTION_CERTIFICATE_PASSWORD: ${{ secrets.IOS_DISTRIBUTION_CERTIFICATE_PASSWORD }}
         run: |
-          echo -n "$IOS_DISTRIBUTION_CERTIFICATE" > certificate.b64
-          base64 -D -i certificate.b64 -o certificate.p12
-          security create-keychain -p "" build.keychain
+          echo "$IOS_DISTRIBUTION_CERTIFICATE" | base64 --decode > certificate.p12
+          security create-keychain -p "build" build.keychain
           security default-keychain -s build.keychain
-          security unlock-keychain -p "" build.keychain
+          security unlock-keychain -p "build" build.keychain
           security import certificate.p12 -k build.keychain -P "$IOS_DISTRIBUTION_CERTIFICATE_PASSWORD" -T /usr/bin/codesign
-          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "" build.keychain
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "build" build.keychain
+          rm certificate.p12
 
       # Setup Provisioning Profile
       - name: Install Provisioning Profile
         env:
           IOS_PROVISIONING_PROFILE: ${{ secrets.IOS_PROVISIONING_PROFILE }}
         run: |
+          PROFILE_PATH="$HOME/Library/MobileDevice/Provisioning Profiles"
+          mkdir -p "$PROFILE_PATH"
           echo "$IOS_PROVISIONING_PROFILE" | base64 --decode > profile.mobileprovision
-          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-          cp profile.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
+          UUID=$(/usr/libexec/PlistBuddy -c "Print UUID" /dev/stdin <<< $(security cms -D -i profile.mobileprovision))
+          cp profile.mobileprovision "$PROFILE_PATH/$UUID.mobileprovision"
+          ls -l "$PROFILE_PATH"
+          rm profile.mobileprovision
 
       # Build and Archive iOS
       - name: Build and Archive iOS
