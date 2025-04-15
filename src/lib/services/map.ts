@@ -5,6 +5,9 @@ import type { OpenHoursPeriod } from "$lib/types/chargers";
 
 export const pos: Writable<Position | null> = writable(null);
 export const selectedChargerID: Writable<string> = writable("");
+export const MAP_TOKENS = writable({
+	JAWG: import.meta.env.VITE_JAWG_ACCESS_TOKEN,
+});
 
 export async function getPosition() {
 	const deviceVal: Platform = get(device);

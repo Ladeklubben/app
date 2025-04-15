@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount, onDestroy } from "svelte";
+	import { MAP_TOKENS } from "$lib/services/map";
 	import * as L from "leaflet";
 	import "leaflet/dist/leaflet.css";
 
@@ -28,7 +29,7 @@
 	// Tile servers
 	const TILE_SERVERS = {
 		satellite: "https://tiles.stadiamaps.com/tiles/alidade_satellite/{z}/{x}/{y}{r}.jpg",
-		dark: "https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png",
+		dark: `https://tile.jawg.io/jawg-dark/{z}/{x}/{y}{r}.png?access-token=${$MAP_TOKENS.JAWG}`,
 	};
 
 	// Initialize map
@@ -96,4 +97,4 @@
 	});
 </script>
 
-<div bind:this={mapContainer} class="w-full h-full" style="background-color: #182b34;"></div>
+<div bind:this={mapContainer} class="w-full h-full" style="background-color: #191a1a;"></div>

@@ -68,7 +68,7 @@
 	<div class="absolute top-10 right-0 z-500 p-4 flex flex-col gap-4">
 		<Glass>
 			<div class="flex flex-col">
-				<button class="p-3 border-b border-lk-blue-800" onclick={() => (isSatellite = !isSatellite)}>
+				<button class="p-3 border-b border-lk-blue-800">
 					<Layer class="text-lg" />
 				</button>
 				<button class="p-3">
