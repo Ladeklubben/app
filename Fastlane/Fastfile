@@ -132,7 +132,6 @@ platform :ios do
         distribute_external: false,
         notify_external_testers: false,
         ipa: "./App.ipa",
-        distribute_only: true,
         groups: ["Andreas"]
       )
     end
