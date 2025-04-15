@@ -53,6 +53,11 @@ jobs:
           ruby-version: '3.0'
           bundler-cache: true
 
+      # Install Ruby dependencies
+      - name: Install Ruby dependencies
+        run: bundle install
+        working-directory: .
+
       # Run Fastlane to build and upload to TestFlight
       - name: Build and Upload to TestFlight
         uses: maierj/fastlane-action@v3.1.0
