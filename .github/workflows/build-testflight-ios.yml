@@ -6,6 +6,11 @@ on:
 jobs:
   build_ios:
     runs-on: macos-latest
+
+    # Specify Xcode 16 version explicitly
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_16.2.0.app/Contents/Developer
+
     steps:
       # Checkout the repository
       - name: Checkout code
@@ -17,7 +22,11 @@ jobs:
         with:
           node-version: '22'
           cache: 'npm'
-
+      
+      # Display Xcode version to confirm
+      - name: Check Xcode version
+        run: xcodebuild -version
+      
       # Install dependencies
       - name: Install dependencies
         run: npm ci
