@@ -62,7 +62,9 @@ jobs:
           IOS_DISTRIBUTION_CERTIFICATE: ${{ secrets.IOS_DISTRIBUTION_CERTIFICATE }}
           IOS_DISTRIBUTION_CERTIFICATE_PASSWORD: ${{ secrets.IOS_DISTRIBUTION_CERTIFICATE_PASSWORD }}
         run: |
-          echo -n "$IOS_DISTRIBUTION_CERTIFICATE" | base64 --decode > certificate.p12
+          echo "Password length: ${#IOS_DISTRIBUTION_CERTIFICATE_PASSWORD}"
+          echo -n "$IOS_DISTRIBUTION_CERTIFICATE" > certificate.b64
+          base64 --decode certificate.b64 > certificate.p12
           ls -l certificate.p12  # Check file size
           file certificate.p12   # Verify file type
           security create-keychain -p "" build.keychain
