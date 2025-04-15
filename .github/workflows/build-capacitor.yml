@@ -25,7 +25,7 @@ jobs:
 
       # Build the web assets
       - name: Build web assets
-        run: npm run build
+        run: export MODE=prod && npm run build
 
       # Install Capacitor CLI
       - name: Install Capacitor CLI
