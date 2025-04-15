@@ -1,5 +1,5 @@
 name: Build App for Android & iOS
-description: Build Capacitor app for Android and iOS platforms
+description: Build Capacitor app for Android and iOS platforms, upload iOS to TestFlight
 
 on:
   workflow_dispatch:
@@ -51,6 +51,13 @@ jobs:
         env:
           ANDROID_SDK_ROOT: ${{ env.ANDROID_HOME }}
 
+      # Upload Android artifact
+      - name: Upload Android artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-apk
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+
       # Setup Xcode
       - name: Setup Xcode
         run: |
@@ -63,21 +70,90 @@ jobs:
           gem install cocoapods
           pod --version
 
-      # Sync and build iOS
-      - name: Sync and build iOS
+      # Sync iOS
+      - name: Sync iOS
         run: |
           npx cap sync ios
           cd ios/App
           pod install
-          xcodebuild -workspace App.xcworkspace -scheme App -configuration Debug -sdk iphonesimulator
-        env:
-          IOS_VERSION: '16.0'
 
-      # Store artifacts
-      - name: Upload Android artifact
+      # Install Fastlane
+      - name: Install Fastlane
+        run: |
+          gem install fastlane
+          fastlane --version
+
+      # Setup Apple Certificates and Provisioning Profiles
+      - name: Install Apple Distribution Certificate
+        env:
+          IOS_DISTRIBUTION_CERTIFICATE: ${{ secrets.IOS_DISTRIBUTION_CERTIFICATE }}
+          IOS_DISTRIBUTION_CERTIFICATE_PASSWORD: ${{ secrets.IOS_DISTRIBUTION_CERTIFICATE_PASSWORD }}
+        run: |
+          echo "$IOS_DISTRIBUTION_CERTIFICATE" | base64 --decode > certificate.p12
+          security create-keychain -p "" build.keychain
+          security default-keychain -s build.keychain
+          security unlock-keychain -p "" build.keychain
+          security import certificate.p12 -k build.keychain -P "$IOS_DISTRIBUTION_CERTIFICATE_PASSWORD" -T /usr/bin/codesign
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "" build.keychain
+
+      # Setup Provisioning Profile
+      - name: Install Provisioning Profile
+        env:
+          IOS_PROVISIONING_PROFILE: ${{ secrets.IOS_PROVISIONING_PROFILE }}
+        run: |
+          echo "$IOS_PROVISIONING_PROFILE" | base64 --decode > profile.mobileprovision
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          cp profile.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
+
+      # Build and Archive iOS
+      - name: Build and Archive iOS
+        run: |
+          cd ios/App
+          xcodebuild -workspace App.xcworkspace -scheme App -configuration Release archive -archivePath build/App.xcarchive -allowProvisioningUpdates
+
+      # Export IPA
+      - name: Export IPA
+        run: |
+          cd ios/App
+          xcodebuild -exportArchive -archivePath build/App.xcarchive -exportOptionsPlist exportOptions.plist -exportPath build
+        env:
+          EXPORT_OPTIONS_PLIST: |
+            <?xml version="1.0" encoding="UTF-8"?>
+            <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+            <plist version="1.0">
+            <dict>
+              <key>method</key>
+              <string>app-store</string>
+              <key>teamID</key>
+              <string>${{ secrets.APPLE_TEAM_ID }}</string>
+              <key>uploadBitcode</key>
+              <false/>
+              <key>uploadSymbols</key>
+              <true/>
+            </dict>
+            </plist>
+
+      # Upload to TestFlight
+      - name: Upload to TestFlight
+        run: |
+          cd ios/App
+          fastlane deliver \
+            --ipa build/App.ipa \
+            --username ${{ secrets.APPLE_ID }} \
+            --app_identifier ${{ secrets.APP_BUNDLE_ID }} \
+            --api_key_path api_key.json \
+            --skip_metadata true \
+            --skip_screenshots true \
+            --force true
+        env:
+          APP_STORE_CONNECT_API_KEY_CONTENT: ${{ secrets.APP_STORE_CONNECT_API_KEY_CONTENT }}
+          APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+        continue-on-error: true # Optional: Allows workflow to continue if upload fails
+
+      # Upload iOS artifact
+      - name: Upload iOS artifact
         uses: actions/upload-artifact@v4
         with:
-          name: android-apk
-          path: android/app/build/outputs/apk/debug/app-debug.apk
-
-      # Note: iOS simulator build artifacts are typically not uploaded
+          name: ios-ipa
+          path: ios/App/build/App.ipa
