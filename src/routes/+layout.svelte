@@ -23,7 +23,6 @@
 <ParaglideJS {i18n}>
 	<div
 		class="flex flex-col h-screen"
-		class:pt-[env(safe-area-inset-top,40px)]={$device === Platform.IOS}
 		class:pb-[env(safe-area-inset-bottom,40px)]={$device === Platform.IOS}
 	>
 		{#if loginCheckDone}
