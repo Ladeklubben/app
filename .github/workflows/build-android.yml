@@ -1,12 +1,12 @@
-name: Build App for Android & iOS
-description: Build Capacitor app for Android and iOS platforms, upload iOS to TestFlight
+name: Build App for Android
+description: Build Capacitor app for Android
 
 on:
   workflow_dispatch:
 
 jobs:
   build:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
 
     steps:
       # Checkout the repository
