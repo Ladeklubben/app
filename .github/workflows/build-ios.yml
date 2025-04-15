@@ -87,7 +87,16 @@ jobs:
       - name: Build and Archive iOS
         run: |
           cd ios/App
-          xcodebuild -workspace App.xcworkspace -scheme App -configuration Release archive -archivePath build/App.xcarchive -allowProvisioningUpdates
+          xcodebuild -workspace App.xcworkspace -scheme App -configuration Release \
+            -sdk iphoneos \
+            -archivePath build/App.xcarchive \
+            CODE_SIGN_STYLE=Manual \
+            CODE_SIGN_IDENTITY="iPhone Distribution" \
+            PROVISIONING_PROFILE="$UUID" \
+            DEVELOPMENT_TEAM="${{ secrets.APPLE_TEAM_ID }}" \
+            archive
+        env:
+          UUID: ${{ steps.install-provisioning-profile.outputs.profile-uuid }}
 
       # Export IPA
       - name: Export IPA
