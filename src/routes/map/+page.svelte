@@ -8,6 +8,7 @@
 	import CrossHairs from "~icons/mdi/crosshairs-gps";
 	import QRCode from "~icons/mdi/qrcode-scan";
 	import { pos, calculateDistance, getPosition } from "$lib/services/map";
+	import { device, Platform } from "$lib/services/layout";
 
 	let chargers: ChargerStation[] = $state([]);
 	let isDark: boolean = $state(false);
@@ -65,7 +66,11 @@
 
 <div class="h-full flex flex-col relative">
 	<!-- TODO: Handle loading and errors in loading -->
-	<div class="absolute top-10 right-0 z-500 p-4 flex flex-col gap-4">
+	<div
+		class="absolute right-0 z-500 p-4 flex flex-col gap-4
+		{$device === Platform.IOS ? 'top-16' : ''}
+		{$device === Platform.Android ? 'top-10' : ''}"
+	>
 		<Glass>
 			<div class="flex flex-col">
 				<button class="p-3 border-b border-lk-blue-800" onclick={() => (isDark = !isDark)}>
