@@ -67,9 +67,16 @@
 			spiderfyOnMaxZoom: false,
 			showCoverageOnHover: false,
 			iconCreateFunction: (cluster) => {
-				const childCount = cluster.getChildCount();
+				const childMarkers = cluster.getAllChildMarkers();
+				// Count only available chargers (green icons)
+				const availableCount = childMarkers.filter((marker) => {
+					const chargerID = marker.options.alt;
+					const charger = chargers.find((c: ChargerStation) => c.stationid === chargerID);
+					return charger && charger.connector === "Available";
+				}).length;
+
 				return new L.DivIcon({
-					html: `<div><span>${childCount}</span></div>`,
+					html: `<div><span>${availableCount}</span></div>`,
 					className: "marker-cluster",
 					iconSize: new L.Point(50, 50),
 				});
@@ -103,6 +110,7 @@
 
 			const marker = L.marker([charger.location.latitude, charger.location.longitude], {
 				icon: icon,
+				alt: charger.stationid,
 			});
 			marker.on("click", () => {
 				$selectedChargerID = charger.stationid;
