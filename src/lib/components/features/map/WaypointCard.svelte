@@ -38,7 +38,7 @@
 					<Bolt class="text-lg text-lk-green-400" />
 				</div>
 				<span class="text-lg font-medium text-lk-green-400">
-					{charger.prices.nominal.toFixed(2)} kr.
+					{charger.currentPrice} kr.
 				</span>
 			</div>
 			<div class="flex flex-col items-center gap-1.5">

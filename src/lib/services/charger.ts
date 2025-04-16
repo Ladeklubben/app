@@ -15,6 +15,7 @@ export const selectedChargerID: Writable<string> = writable("");
 export class ChargerStation implements IChargerStation {
 	stationid: string;
 	prices: PriceInfo;
+	calculatedprice?: number;
 	location: LocationInfo;
 	openhours: OpenHoursPeriod[];
 	type: ChargerType;
@@ -22,6 +23,10 @@ export class ChargerStation implements IChargerStation {
 	online?: [number, boolean];
 	qr: string;
 	energyprices?: EnergyPrices;
+
+	// Private properties
+	private lktarif: number = 1.1; // 10% service fee
+	private VAT: number = 1.25; // 25% VAT
 
 	constructor(data: IChargerStation) {
 		this.stationid = data.stationid;
@@ -43,10 +48,31 @@ export class ChargerStation implements IChargerStation {
 		return this.location.city || "";
 	}
 
-	get currentPrice(): number {
-		// Return the applicable price based on business logic
-		// This is a simple implementation - extend as needed
-		return this.prices.nominal;
+	get currentPrice(): string {
+		let price: number = this.prices.nominal;
+
+		// Check if prices are below minimum
+		if (this.prices.nominal < this.prices.minimum) {
+			price = this.prices.minimum;
+		}
+
+		// Handle spot price following
+		if (this.prices.follow_spot === 1) {
+			if (this.energyprices && this.energyprices.Costprice) {
+				price += this.energyprices.Costprice[0] / 100;
+				price *= this.lktarif;
+				price *= this.VAT;
+			} else {
+				price = this.prices.fallback;
+				price *= this.lktarif;
+				price *= this.VAT;
+			}
+		} else {
+			price *= this.lktarif;
+			price *= this.VAT;
+		}
+
+		return price.toFixed(2);
 	}
 
 	distance(userPosition: Position): number {
@@ -84,6 +110,9 @@ export class ChargerStation implements IChargerStation {
 	 */
 	calculateOpeningHours() {
 		// TODO: Handle charger clsosed
+		if (!this.openhours || this.openhours.length === 0) {
+			return "Unknown";
+		}
 		const schedule = this.openhours[0]
 
 		// Check if open 24/7 (10079 minutes = ~7 days)
