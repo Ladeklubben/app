@@ -7,8 +7,9 @@
 	import Layer from "~icons/mdi/layers-outline";
 	import CrossHairs from "~icons/mdi/crosshairs-gps";
 	import QRCode from "~icons/mdi/qrcode-scan";
-	import { pos, calculateDistance, getPosition } from "$lib/services/map";
+	import { pos, calculateDistance, getPosition, selectedChargerID } from "$lib/services/map";
 	import { device, Platform } from "$lib/services/layout";
+	import { onDestroy } from "svelte";
 
 	let chargers: ChargerStation[] = $state([]);
 	let isDark: boolean = $state(false);
@@ -62,6 +63,11 @@
 		});
 		isSorted = true;
 	}
+
+	onDestroy(() => {
+		// Clear selected charger
+		$selectedChargerID = "";
+	});
 </script>
 
 <div class="h-full flex flex-col relative">
