@@ -77,6 +77,9 @@
 		});
 
 		map.addLayer(markerClusterGroup);
+		map.on("click", () => {
+			$selectedChargerID = "";
+		});
 		updateChargerMarkers();
 	}
 
