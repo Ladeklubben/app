@@ -1,8 +1,8 @@
 <script lang="ts">
 	import Directions from "~icons/mdi/directions";
-	import type { ChargerStation } from "$lib/types/chargers";
+	import type { ChargerStation } from "$lib/services/charger";
 	import Glass from "$lib/components/ui/Glass.svelte";
-	import { selectedChargerID, calculateOpeningHours } from "$lib/services/map";
+	import { selectedChargerID } from "$lib/services/charger";
 	import Bolt from "~icons/mdi/lightning-bolt";
 	import MapMarker from "~icons/mdi/map-marker";
 	import Clock from "~icons/mdi/clock-time-four-outline";
@@ -10,26 +10,17 @@
 
 	let {
 		charger,
-		onNavigate,
 		distance = 0,
 	} = $props<{
 		charger: ChargerStation;
-		onNavigate: () => void;
 		distance?: number;
 	}>();
 
 	let isSelected: boolean = $state(false);
-	let openingHours: string = $state("");
 	let available: boolean = $derived(charger.connector === "Available");
 
 	$effect(() => {
 		isSelected = charger.stationid === $selectedChargerID;
-	});
-
-	$effect(() => {
-		if (isSelected) {
-			openingHours = calculateOpeningHours(charger.openhours[0]);
-		}
 	});
 </script>
 
@@ -64,11 +55,11 @@
 			<div class="flex flex-col p-4 gap-2 border-t border-lk-blue-800 bg-lk-blue-950" transition:slide>
 				<div class="flex gap-2 pb-2 text-lg text-lk-blue-100/80 items-center">
 					<Clock />
-					{openingHours}
+					{charger.calculateOpeningHours()}
 				</div>
 				<div class="flex justify-between gap-3">
 					<button
-						onclick={onNavigate}
+						onclick={() => console.log("Reserve clicked")}
 						disabled={!available}
 						class="flex-1 backdrop-blur-sm transition-all p-1.5 rounded-2xl text-lg font-medium shadow-sm
 						{available ? 'bg-lk-blue-200 text-lk-blue-900' : 'bg-lk-red-800 text-gray-300'}"
@@ -80,7 +71,7 @@
 						{/if}
 					</button>
 					<button
-						onclick={onNavigate}
+						onclick={() => charger.navigateToCharger()}
 						class="bg-lk-blue-200 backdrop-blur-sm text-gray-800 transition-all p-2 rounded-2xl font-medium shadow-sm"
 					>
 						<Directions class="text-xl" />

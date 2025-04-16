@@ -3,7 +3,8 @@
 	import BaseMap from "./BaseMap.svelte";
 	import { onMount } from "svelte";
 	import type { ChargerStation } from "$lib/types/chargers";
-	import { pos, getPosition, selectedChargerID } from "$lib/services/map";
+	import { pos, getPosition } from "$lib/services/map";
+	import { selectedChargerID } from "$lib/services/charger";
 	import type { Position } from "@capacitor/geolocation";
 	import "leaflet.markercluster/dist/leaflet.markercluster.js";
 	import "leaflet.markercluster/dist/MarkerCluster.css";

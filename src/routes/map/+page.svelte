@@ -3,11 +3,13 @@
 	import ChargerWaypoints from "$lib/components/features/map/ChargerWaypoints.svelte";
 	import Glass from "$lib/components/ui/Glass.svelte";
 	import { get } from "$lib/services/api";
-	import type { ChargerStation } from "$lib/types/chargers";
+	import { ChargerStation } from "$lib/services/charger";
+	import type { ChargerAPIResponse } from "$lib/types/chargers";
 	import Layer from "~icons/mdi/layers-outline";
 	import CrossHairs from "~icons/mdi/crosshairs-gps";
 	import QRCode from "~icons/mdi/qrcode-scan";
-	import { pos, calculateDistance, getPosition, selectedChargerID } from "$lib/services/map";
+	import { pos, calculateDistance, getPosition } from "$lib/services/map";
+	import { selectedChargerID } from "$lib/services/charger";
 	import { device, Platform } from "$lib/services/layout";
 	import { onDestroy } from "svelte";
 
@@ -15,21 +17,9 @@
 	let isDark: boolean = $state(false);
 	let isSorted: boolean = $state(false);
 
-	// Function to handle navigation
-	function navigateToCharger(id: string) {
-		// Here you would implement opening the navigation app
-		// This could be launching a maps URL or using a native app integration
-		const charger = chargers.find((c) => c.stationid === id);
-		if (charger) {
-			// Example: Open Google Maps
-			const url = `https://www.google.com/maps/dir/?api=1&destination=${charger.location.latitude},${charger.location.longitude}`;
-			window.open(url, "_blank");
-		}
-	}
-
 	get("/chargermap")
-		.then((response) => {
-			chargers = response.upd;
+		.then((response: ChargerAPIResponse) => {
+			chargers = ChargerStation.fromApiResponse(response.upd);
 		})
 		.catch((error) => {
 			console.error("Error fetching chargers:", error);
@@ -97,7 +87,7 @@
 	<ChargerMap {chargers} {isDark} />
 	{#if isSorted}
 		<div class="absolute bottom-0 left-0 right-0 z-500">
-			<ChargerWaypoints {chargers} onNavigate={navigateToCharger} />
+			<ChargerWaypoints {chargers} />
 		</div>
 	{/if}
 </div>
