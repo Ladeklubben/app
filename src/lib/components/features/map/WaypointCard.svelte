@@ -35,9 +35,11 @@
 
 <Glass>
 	<div class="flex flex-col">
-		<div class="border-b border-lk-blue-800 p-2 text-lg">
-			{charger.location.city}
-		</div>
+		{#if charger.location.city}
+			<div class="border-b border-lk-blue-800 p-2 text-lg">
+				{charger.location.city}
+			</div>
+		{/if}
 
 		<div class="flex justify-around p-3">
 			<div class="flex flex-col items-center gap-1.5">
@@ -50,9 +52,9 @@
 			</div>
 			<div class="flex flex-col items-center gap-1.5">
 				<div class="p-1.5 flex items-center bg-lk-blue-800/50 rounded-full">
-					<MapMarker class="text-lg {available ? "text-lk-blue-50":"text-lk-red-600"}" />
+					<MapMarker class="text-lg {available ? 'text-lk-blue-50' : 'text-lk-red-600'}" />
 				</div>
-				<span class="text-lg font-medium {available ? "text-lk-blue-50":"text-lk-red-600"}">
+				<span class="text-lg font-medium {available ? 'text-lk-blue-50' : 'text-lk-red-600'}">
 					{distance.toFixed(2)} km
 				</span>
 			</div>
@@ -61,7 +63,7 @@
 		{#if isSelected}
 			<div class="flex flex-col p-4 gap-2 border-t border-lk-blue-800 bg-lk-blue-950" transition:slide>
 				<div class="flex gap-2 pb-2 text-lg text-lk-blue-100/80 items-center">
-					<Clock  />
+					<Clock />
 					{openingHours}
 				</div>
 				<div class="flex justify-between gap-3">

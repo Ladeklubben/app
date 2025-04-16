@@ -43,7 +43,9 @@
 >
 	{#each chargers as charger, index (charger.stationid)}
 		<button
-			class="snap-center w-3/4 flex-shrink-0 {index === 0 ? 'ml-10' : ''} max-w-lg"
+			class="snap-center w-3/4 flex-shrink-0  max-w-lg
+			{index === 0 ? 'ml-10' : ''}
+			{index === chargers.length - 1 ? 'mr-10' : ''}"
 			bind:this={waypointElements[charger.stationid]}
 			data-charger-id={charger.stationid}
 			onclick={() => ($selectedChargerID = charger.stationid)}
