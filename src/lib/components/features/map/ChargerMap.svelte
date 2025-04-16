@@ -1,7 +1,7 @@
 <script lang="ts">
 	import * as L from "leaflet";
 	import BaseMap from "./BaseMap.svelte";
-	import { onMount, onDestroy } from "svelte";
+	import { onMount } from "svelte";
 	import type { ChargerStation } from "$lib/types/chargers";
 	import { pos, getPosition, selectedChargerID } from "$lib/services/map";
 	import type { Position } from "@capacitor/geolocation";

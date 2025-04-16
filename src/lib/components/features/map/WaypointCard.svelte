@@ -6,7 +6,7 @@
 	import Bolt from "~icons/mdi/lightning-bolt";
 	import MapMarker from "~icons/mdi/map-marker";
 	import Clock from "~icons/mdi/clock-time-four-outline";
-	import { slide, fly } from "svelte/transition";
+	import { slide } from "svelte/transition";
 
 	let {
 		charger,

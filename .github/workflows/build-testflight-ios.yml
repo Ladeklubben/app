@@ -1,96 +1,96 @@
 name: Build and Upload iOS App
 
 on:
-  workflow_dispatch:
+    workflow_dispatch:
 
 jobs:
-  build_ios:
-    runs-on: macos-latest
+    build_ios:
+        runs-on: macos-latest
 
-    # Specify Xcode 16 version explicitly
-    env:
-      DEVELOPER_DIR: /Applications/Xcode_16.2.0.app/Contents/Developer
-
-    steps:
-      # Checkout the repository
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      # Setup Node.js
-      - name: Use Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-          cache: 'npm'
-      
-      # Display Xcode version to confirm
-      - name: Check Xcode version
-        run: xcodebuild -version
-      
-      # Install dependencies
-      - name: Install dependencies
-        run: npm ci
-
-      # Build web assets
-      - name: Build web assets
-        run: npm run build
+        # Specify Xcode 16 version explicitly
         env:
-          VITE_JAWG_ACCESS_TOKEN: ${{ secrets.VITE_JAWG_ACCESS_TOKEN }}
-          MODE: prod
+            DEVELOPER_DIR: /Applications/Xcode_16.2.0.app/Contents/Developer
 
-      # Sync Capacitor
-      - name: Sync Capacitor
-        run: npx cap sync ios
+        steps:
+            # Checkout the repository
+            - name: Checkout code
+              uses: actions/checkout@v4
 
-      # Cache CocoaPods
-      - name: Cache Pods
-        uses: actions/cache@v4
-        with:
-          path: ios/App/Pods
-          key: ${{ runner.os }}-pods-${{ hashFiles('ios/App/Podfile.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-pods-
+            # Setup Node.js
+            - name: Use Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: "22"
+                  cache: "npm"
 
-      # Install CocoaPods
-      - name: Install CocoaPods
-        run: |
-          gem install cocoapods
-          cd ios/App
-          pod install
+            # Display Xcode version to confirm
+            - name: Check Xcode version
+              run: xcodebuild -version
 
-      # Setup Ruby for Fastlane
-      - name: Setup Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '3.1'
-          bundler-cache: true
+            # Install dependencies
+            - name: Install dependencies
+              run: npm ci
 
-      # Install Ruby dependencies
-      - name: Install Ruby dependencies
-        run: bundle install
-        working-directory: .
+            # Build web assets
+            - name: Build web assets
+              run: npm run build
+              env:
+                  VITE_JAWG_ACCESS_TOKEN: ${{ secrets.VITE_JAWG_ACCESS_TOKEN }}
+                  MODE: prod
 
-      # Run Fastlane to build and upload to TestFlight
-      - name: Build and Upload to TestFlight
-        uses: maierj/fastlane-action@v3.1.0
-        env:
-          APP_STORE_CONNECT_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
-          BUNDLE_IDENTIFIER: ${{ secrets.APP_BUNDLE_ID }}
-          BUILD_CERTIFICATE_BASE64: ${{ secrets.IOS_DISTRIBUTION_CERTIFICATE }}
-          BUILD_PROVISION_PROFILE_BASE64: ${{ secrets.IOS_PROVISIONING_PROFILE }}
-          APPLE_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
-          APPLE_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
-          APPLE_KEY_CONTENT: ${{ secrets.APP_STORE_CONNECT_API_KEY_CONTENT }}
-          P12_PASSWORD: ${{ secrets.IOS_DISTRIBUTION_CERTIFICATE_PASSWORD }}
-          APPLE_PROFILE_NAME: "Ladeklubben App Store Profile"
-          VITE_JAWG_ACCESS_TOKEN: ${{ secrets.VITE_JAWG_ACCESS_TOKEN }}
-        with:
-          lane: ios beta
+            # Sync Capacitor
+            - name: Sync Capacitor
+              run: npx cap sync ios
 
-      # Upload IPA artifact
-      - name: Upload iOS artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: ios-release
-          path: ./App.ipa
-          retention-days: 10
+            # Cache CocoaPods
+            - name: Cache Pods
+              uses: actions/cache@v4
+              with:
+                  path: ios/App/Pods
+                  key: ${{ runner.os }}-pods-${{ hashFiles('ios/App/Podfile.lock') }}
+                  restore-keys: |
+                      ${{ runner.os }}-pods-
+
+            # Install CocoaPods
+            - name: Install CocoaPods
+              run: |
+                  gem install cocoapods
+                  cd ios/App
+                  pod install
+
+            # Setup Ruby for Fastlane
+            - name: Setup Ruby
+              uses: ruby/setup-ruby@v1
+              with:
+                  ruby-version: "3.1"
+                  bundler-cache: true
+
+            # Install Ruby dependencies
+            - name: Install Ruby dependencies
+              run: bundle install
+              working-directory: .
+
+            # Run Fastlane to build and upload to TestFlight
+            - name: Build and Upload to TestFlight
+              uses: maierj/fastlane-action@v3.1.0
+              env:
+                  APP_STORE_CONNECT_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+                  BUNDLE_IDENTIFIER: ${{ secrets.APP_BUNDLE_ID }}
+                  BUILD_CERTIFICATE_BASE64: ${{ secrets.IOS_DISTRIBUTION_CERTIFICATE }}
+                  BUILD_PROVISION_PROFILE_BASE64: ${{ secrets.IOS_PROVISIONING_PROFILE }}
+                  APPLE_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+                  APPLE_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+                  APPLE_KEY_CONTENT: ${{ secrets.APP_STORE_CONNECT_API_KEY_CONTENT }}
+                  P12_PASSWORD: ${{ secrets.IOS_DISTRIBUTION_CERTIFICATE_PASSWORD }}
+                  APPLE_PROFILE_NAME: "Ladeklubben App Store Profile"
+                  VITE_JAWG_ACCESS_TOKEN: ${{ secrets.VITE_JAWG_ACCESS_TOKEN }}
+              with:
+                  lane: ios beta
+
+            # Upload IPA artifact
+            - name: Upload iOS artifact
+              uses: actions/upload-artifact@v4
+              with:
+                  name: ios-release
+                  path: ./App.ipa
+                  retention-days: 10
