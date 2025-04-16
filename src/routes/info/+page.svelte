@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from "svelte";
 	import { isLoading, error, fetchPrices, prices } from "$lib/services/prices";
-	import type { PriceData } from "$lib/types/prices";
+	import type { PriceData } from "$lib/types/prices.types";
 	import Card from "$lib/components/ui/Card.svelte";
 	import PriceChart from "$lib/components/features/prices/PriceChart.svelte";
 	import SingleStatCard from "$lib/components/ui/SingleStatCard.svelte";

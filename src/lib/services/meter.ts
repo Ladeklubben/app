@@ -1,6 +1,6 @@
 import { writable } from "svelte/store";
 import { get } from "$lib/services/api";
-import type { MeterData } from "$lib/types/meter";
+import type { MeterData } from "$lib/types/meter.types";
 
 const formatter = new Intl.NumberFormat("en-DK");
 

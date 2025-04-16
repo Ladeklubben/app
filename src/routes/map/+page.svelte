@@ -4,7 +4,7 @@
 	import Glass from "$lib/components/ui/Glass.svelte";
 	import { get } from "$lib/services/api";
 	import { ChargerStation } from "$lib/services/charger";
-	import type { ChargerAPIResponse } from "$lib/types/chargers";
+	import type { ChargerAPIResponse } from "$lib/types/charger.types";
 	import Layer from "~icons/mdi/layers-outline";
 	import CrossHairs from "~icons/mdi/crosshairs-gps";
 	import QRCode from "~icons/mdi/qrcode-scan";

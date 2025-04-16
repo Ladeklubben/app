@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Directions from "~icons/mdi/directions";
-	import type { ChargerStation } from "$lib/services/charger";
+	import { ChargerStation } from "$lib/services/charger";
 	import Glass from "$lib/components/ui/Glass.svelte";
 	import { selectedChargerID } from "$lib/services/charger";
 	import Bolt from "~icons/mdi/lightning-bolt";

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { ChargerStation } from "$lib/types/chargers";
+	import type { ChargerStation } from "$lib/types/charger.types";
 	import WaypointCard from "./WaypointCard.svelte";
 	import { pos } from "$lib/services/map";
 	import { selectedChargerID } from "$lib/services/charger";

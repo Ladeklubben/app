@@ -2,7 +2,7 @@ import { writable } from "svelte/store";
 import { MD5 } from "crypto-js";
 import { goto } from "$app/navigation";
 import { post } from "$lib/services/api";
-import type { AuthData } from "$lib/types/auth";
+import type { AuthData } from "$lib/types/auth.types";
 import { Preferences } from "@capacitor/preferences";
 
 // Auth data storage key

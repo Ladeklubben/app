@@ -6,7 +6,7 @@ import type {
 	ChargerType,
 	ConnectorStatus,
 	EnergyPrices,
-} from "$lib/types/chargers";
+} from "$lib/types/charger.types";
 import { type Position } from "@capacitor/geolocation";
 import { writable, type Writable } from "svelte/store";
 

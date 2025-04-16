@@ -1,7 +1,7 @@
 // src/lib/stores/prices.ts
 import { writable } from "svelte/store";
 import { get } from "$lib/services/api";
-import type { PriceData } from "$lib/types/prices";
+import type { PriceData } from "$lib/types/prices.types";
 
 // Create writable store
 export const prices = writable<PriceData[]>([]);
