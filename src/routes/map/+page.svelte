@@ -10,7 +10,7 @@
 	import { pos, calculateDistance, getPosition } from "$lib/services/map";
 
 	let chargers: ChargerStation[] = $state([]);
-	let isSatellite: boolean = $state(false);
+	let isDark: boolean = $state(false);
 	let isSorted: boolean = $state(false);
 
 	// Function to handle navigation
@@ -68,7 +68,7 @@
 	<div class="absolute top-10 right-0 z-500 p-4 flex flex-col gap-4">
 		<Glass>
 			<div class="flex flex-col">
-				<button class="p-3 border-b border-lk-blue-800">
+				<button class="p-3 border-b border-lk-blue-800" onclick={() => (isDark = !isDark)}>
 					<Layer class="text-lg" />
 				</button>
 				<button class="p-3">
@@ -83,7 +83,7 @@
 			</button>
 		</Glass>
 	</div>
-	<ChargerMap {chargers} {isSatellite} />
+	<ChargerMap {chargers} {isDark} />
 	{#if isSorted}
 		<div class="absolute bottom-0 left-0 right-0 z-500">
 			<ChargerWaypoints {chargers} onNavigate={navigateToCharger} />

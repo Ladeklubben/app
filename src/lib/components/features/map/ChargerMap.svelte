@@ -10,8 +10,8 @@
 	import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 
 	// Props
-	let { isSatellite = false, chargers = [] as ChargerStation[] } = $props<{
-		isSatellite?: boolean;
+	let { isDark = false, chargers = [] as ChargerStation[] } = $props<{
+		isDark?: boolean;
 		chargers?: ChargerStation[];
 	}>();
 
@@ -155,7 +155,7 @@
 	});
 </script>
 
-<BaseMap {isSatellite} defaultZoom={6} onMapInit={initializeMap} />
+<BaseMap {isDark} defaultZoom={6} onMapInit={initializeMap} />
 
 <style>
 	:global(.marker-cluster) {

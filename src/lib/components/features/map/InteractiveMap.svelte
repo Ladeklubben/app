@@ -6,8 +6,8 @@
 	import type { Position } from "@capacitor/geolocation";
 
 	// Props
-	let { isSatellite = false } = $props<{
-		isSatellite?: boolean;
+	let { isDark = false } = $props<{
+		isDark?: boolean;
 	}>();
 
 	// Reactive variables
@@ -96,4 +96,4 @@
 	});
 </script>
 
-<BaseMap {isSatellite} defaultZoom={6} onMapClick={handleMapClick} onMapInit={handleMapInit} />
+<BaseMap {isDark} defaultZoom={6} onMapClick={handleMapClick} onMapInit={handleMapInit} />
