@@ -48,9 +48,9 @@
 		</div>
 
 		{#if isSelected}
-			<div class="flex flex-col items-start gap-1.5 mb-2">
+			<div class="flex flex-col items-start gap-1.5 mb-1">
 				<span class="text-xs font-light text-lk-blue-200">Opening Hours:</span>
-				<div class="p-2 w-full rounded-2xl text-sm font-medium border border-lk-blue-800">
+				<div class="p-2 w-full rounded-2xl text-lg font-medium border border-lk-blue-800">
 					{openingHours}
 				</div>
 			</div>
@@ -59,7 +59,7 @@
 				<button
 					onclick={onNavigate}
 					disabled={charger.connector !== "Available"}
-					class="flex-1 backdrop-blur-sm transition-all p-1.5 rounded-2xl text-sm font-medium shadow-sm
+					class="flex-1 backdrop-blur-sm transition-all p-1.5 rounded-2xl text-lg font-medium shadow-sm
 						{charger.connector === 'Available' ? 'bg-lk-blue-200 text-lk-blue-900' : 'bg-lk-blue-900 text-gray-300'}"
 				>
 					{#if charger.connector === "Available"}
@@ -70,7 +70,7 @@
 				</button>
 				<button
 					onclick={onNavigate}
-					class="bg-lk-blue-200 backdrop-blur-sm text-gray-800 transition-all p-1.5 rounded-2xl font-medium shadow-sm"
+					class="bg-lk-blue-200 backdrop-blur-sm text-gray-800 transition-all p-2 rounded-2xl font-medium shadow-sm"
 				>
 					<Directions class="text-xl" />
 				</button>
