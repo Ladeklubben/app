@@ -159,25 +159,3 @@
 </script>
 
 <BaseMap {isDark} defaultZoom={6} onMapInit={initializeMap} />
-
-<style>
-	:global(.marker-cluster) {
-		background-color: #5cf62866;
-		border-radius: 40px;
-	}
-	:global(.marker-cluster div) {
-		background-color: #5cf628;
-		width: 40px;
-		height: 40px;
-		margin-left: 5px;
-		margin-top: 5px;
-		text-align: center;
-		border-radius: 40px;
-		font-size: 18px;
-		font-weight: 800;
-		color: #182b34;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-	}
-</style>
