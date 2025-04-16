@@ -60,16 +60,16 @@
 
 		{#if isSelected}
 			<div class="flex flex-col p-4 gap-2 border-t border-lk-blue-800 bg-lk-blue-950" transition:slide>
-				<div class="flex gap-2 text-lg text-lk-blue-100/80 mb-2">
+				<div class="flex gap-2 pb-2 text-lg text-lk-blue-100/80 items-center">
 					<Clock  />
 					{openingHours}
 				</div>
 				<div class="flex justify-between gap-3">
 					<button
 						onclick={onNavigate}
-						disabled={charger.connector !== "Available"}
+						disabled={!available}
 						class="flex-1 backdrop-blur-sm transition-all p-1.5 rounded-2xl text-lg font-medium shadow-sm
-						{charger.connector === 'Available' ? 'bg-lk-blue-200 text-lk-blue-900' : 'bg-lk-blue-900 text-gray-300'}"
+						{available ? 'bg-lk-blue-200 text-lk-blue-900' : 'bg-lk-red-800 text-gray-300'}"
 					>
 						{#if available}
 							Reserve
