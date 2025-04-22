@@ -7,6 +7,8 @@ PODS:
   - CapacitorGeolocation (7.1.1):
     - Capacitor
     - IONGeolocationLib (~> 1.0)
+  - CapacitorHaptics (7.0.1):
+    - Capacitor
   - CapacitorPreferences (7.0.0):
     - Capacitor
   - CapacitorTextZoom (7.0.0):
@@ -18,6 +20,7 @@ DEPENDENCIES:
   - "CapacitorApp (from `../../node_modules/@capacitor/app`)"
   - "CapacitorCordova (from `../../node_modules/@capacitor/ios`)"
   - "CapacitorGeolocation (from `../../node_modules/@capacitor/geolocation`)"
+  - "CapacitorHaptics (from `../../node_modules/@capacitor/haptics`)"
   - "CapacitorPreferences (from `../../node_modules/@capacitor/preferences`)"
   - "CapacitorTextZoom (from `../../node_modules/@capacitor/text-zoom`)"
 
@@ -34,6 +37,8 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/ios"
   CapacitorGeolocation:
     :path: "../../node_modules/@capacitor/geolocation"
+  CapacitorHaptics:
+    :path: "../../node_modules/@capacitor/haptics"
   CapacitorPreferences:
     :path: "../../node_modules/@capacitor/preferences"
   CapacitorTextZoom:
@@ -44,10 +49,11 @@ SPEC CHECKSUMS:
   CapacitorApp: 9cb31064a6c6bb2b1438583733a7bf45557fc1da
   CapacitorCordova: 63d476958d5022d76f197031e8b7ea3519988c64
   CapacitorGeolocation: c0755715aaadf5c86dc0053e1127b368444c914b
+  CapacitorHaptics: 1f1e17041f435d8ead9ff2a34edd592c6aa6a8d6
   CapacitorPreferences: 8e4bef1f937fc991a19d7ea99330c36a62edd24b
   CapacitorTextZoom: 254c75dffb54d34d582a4f14cc7ba432fcfb5cad
   IONGeolocationLib: 81f33f88d025846946de2cf63b0c7628e7c6bc9d
 
-PODFILE CHECKSUM: f3c08060e8add2cba3dac19ddbae8488db3eafc7
+PODFILE CHECKSUM: ae7101b340f498c1c06ff0aa8c8014fcf0db7921
 
 COCOAPODS: 1.16.2
