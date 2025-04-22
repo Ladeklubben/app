@@ -21,15 +21,13 @@
 </script>
 
 <ParaglideJS {i18n}>
-	<div class="flex flex-col h-screen" class:pb-[env(safe-area-inset-bottom,40px)]={$device === Platform.IOS}>
+	<div class="flex flex-col h-screen" >
 		{#if loginCheckDone}
 			<main
 				class="flex-1 overflow-auto"
-				class:pb-20={$device === Platform.IOS && $showTabBar}
-				class:pb-19={$device === Platform.Android && $showTabBar}
-				class:pb-18={$device === Platform.Web && $showTabBar}
-				class:mt-14={$device == Platform.IOS && page.url.pathname !== "/map"}
-				class:mt-10={$device == Platform.Android && page.url.pathname !== "/map"}
+				class:pb-[87px]={$showTabBar}
+				class:mt-10={page.url.pathname !== "/map"}
+				class:mt-[env(safe-area-inset-top)]={$device === Platform.IOS && page.url.pathname !== "/map"}
 			>
 				{@render children()}
 			</main>
