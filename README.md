@@ -8,10 +8,11 @@ Free and open-source app to control your EV charger
 
 #### Live Reloading
 
-1. Create a .env file with the IP of your development computer.
+1. Create a .env file with the IP of your development computer. Also add a Jawg Access Token
 
 ```
-echo -e "IP=192.168.XXX.XXX" > .env
+IP=192.168.XXX.XXX
+VITE_JAWG_ACCESS_TOKEN=<INSERT_HERE>
 ```
 
 2. Open port 5173 on your development computer.
