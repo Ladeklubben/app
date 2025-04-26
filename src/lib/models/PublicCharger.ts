@@ -1,5 +1,5 @@
 import type {
-	ChargerStation as IChargerStation,
+	PublicCharger as IPublicCharger,
 	PriceInfo,
 	LocationInfo,
 	OpenHoursPeriod,
@@ -12,7 +12,7 @@ import { writable, type Writable } from "svelte/store";
 
 export const selectedChargerID: Writable<string> = writable("");
 
-export class ChargerStation implements IChargerStation {
+export class PublicCharger implements IPublicCharger {
 	stationid: string;
 	prices: PriceInfo;
 	calculatedprice?: number;
@@ -28,7 +28,7 @@ export class ChargerStation implements IChargerStation {
 	private lktarif: number = 1.1; // 10% service fee
 	private VAT: number = 1.25; // 25% VAT
 
-	constructor(data: IChargerStation) {
+	constructor(data: IPublicCharger) {
 		this.stationid = data.stationid;
 		this.prices = data.prices;
 		this.location = data.location;
@@ -99,10 +99,10 @@ export class ChargerStation implements IChargerStation {
 	}
 
 	/**
-	 * Creates an array of ChargerStation instances from API data
+	 * Creates an array of PublicCharger instances from API data
 	 */
-	static fromApiResponse(data: IChargerStation[]): ChargerStation[] {
-		return data.map((station) => new ChargerStation(station));
+	static fromApiResponse(data: IPublicCharger[]): PublicCharger[] {
+		return data.map((station) => new PublicCharger(station));
 	}
 
 	/**

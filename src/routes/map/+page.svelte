@@ -3,23 +3,22 @@
 	import ChargerWaypoints from "$lib/components/features/map/ChargerWaypoints.svelte";
 	import Glass from "$lib/components/ui/Glass.svelte";
 	import { get } from "$lib/services/api";
-	import { ChargerStation } from "$lib/services/charger";
+	import { PublicCharger, selectedChargerID } from "$lib/models/PublicCharger";
 	import type { ChargerAPIResponse } from "$lib/types/charger.types";
 	import Layer from "~icons/mdi/layers-outline";
 	import CrossHairs from "~icons/mdi/crosshairs-gps";
 	import QRCode from "~icons/mdi/qrcode-scan";
 	import { pos, calculateDistance, getPosition } from "$lib/services/map";
-	import { selectedChargerID } from "$lib/services/charger";
 	import { device, Platform } from "$lib/services/layout";
 	import { onDestroy } from "svelte";
 
-	let chargers: ChargerStation[] = $state([]);
+	let chargers: PublicCharger[] = $state([]);
 	let isDark: boolean = $state(false);
 	let isSorted: boolean = $state(false);
 
 	get("/chargermap")
 		.then((response: ChargerAPIResponse) => {
-			chargers = ChargerStation.fromApiResponse(response.upd);
+			chargers = PublicCharger.fromApiResponse(response.upd);
 		})
 		.catch((error) => {
 			console.error("Error fetching chargers:", error);

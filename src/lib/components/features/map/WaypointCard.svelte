@@ -1,8 +1,7 @@
 <script lang="ts">
 	import Directions from "~icons/mdi/directions";
-	import { ChargerStation } from "$lib/services/charger";
+	import { PublicCharger, selectedChargerID } from "$lib/models/PublicCharger";
 	import Glass from "$lib/components/ui/Glass.svelte";
-	import { selectedChargerID } from "$lib/services/charger";
 	import Bolt from "~icons/mdi/lightning-bolt";
 	import MapMarker from "~icons/mdi/map-marker";
 	import Clock from "~icons/mdi/clock-time-four-outline";
@@ -12,7 +11,7 @@
 		charger,
 		distance = 0,
 	} = $props<{
-		charger: ChargerStation;
+		charger: PublicCharger;
 		distance?: number;
 	}>();
 

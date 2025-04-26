@@ -1,11 +1,11 @@
 <script lang="ts">
-	import type { ChargerStation } from "$lib/types/charger.types";
+	import type { PublicCharger } from "$lib/types/charger.types";
 	import WaypointCard from "./WaypointCard.svelte";
 	import { pos } from "$lib/services/map";
-	import { selectedChargerID } from "$lib/services/charger";
+	import { selectedChargerID } from "$lib/models/PublicCharger";
 
-	let { chargers = [] as ChargerStation[] } = $props<{
-		chargers?: ChargerStation[];
+	let { chargers = [] as PublicCharger[] } = $props<{
+		chargers?: PublicCharger[];
 	}>();
 
 	let scrollContainer: HTMLElement;

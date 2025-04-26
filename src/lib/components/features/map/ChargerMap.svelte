@@ -2,18 +2,18 @@
 	import * as L from "leaflet";
 	import BaseMap from "./BaseMap.svelte";
 	import { onMount } from "svelte";
-	import type { ChargerStation } from "$lib/types/charger.types";
+	import type { PublicCharger } from "$lib/types/charger.types";
 	import { pos, getPosition } from "$lib/services/map";
-	import { selectedChargerID } from "$lib/services/charger";
+	import { selectedChargerID } from "$lib/models/PublicCharger";
 	import type { Position } from "@capacitor/geolocation";
 	import "leaflet.markercluster/dist/leaflet.markercluster.js";
 	import "leaflet.markercluster/dist/MarkerCluster.css";
 	import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 
 	// Props
-	let { isDark = false, chargers = [] as ChargerStation[] } = $props<{
+	let { isDark = false, chargers = [] as PublicCharger[] } = $props<{
 		isDark?: boolean;
-		chargers?: ChargerStation[];
+		chargers?: PublicCharger[];
 	}>();
 
 	// Variables
@@ -72,7 +72,7 @@
 				// Count only available chargers (green icons)
 				const availableCount = childMarkers.filter((marker) => {
 					const chargerID = marker.options.alt;
-					const charger = chargers.find((c: ChargerStation) => c.stationid === chargerID);
+					const charger = chargers.find((c: PublicCharger) => c.stationid === chargerID);
 					return charger && charger.connector === "Available";
 				}).length;
 
@@ -97,7 +97,7 @@
 
 		markerClusterGroup.clearLayers();
 
-		chargers.forEach((charger: ChargerStation) => {
+		chargers.forEach((charger: PublicCharger) => {
 			// Select icon based on charger status
 			let icon;
 			switch (charger.connector) {
@@ -140,7 +140,7 @@
 	function updateSelectedChargerView(): void {
 		if (!$selectedChargerID || !map) return;
 
-		const selectedCharger = chargers.find((charger: ChargerStation) => charger.stationid === $selectedChargerID);
+		const selectedCharger = chargers.find((charger: PublicCharger) => charger.stationid === $selectedChargerID);
 		if (selectedCharger) {
 			const latLng: L.LatLngTuple = [selectedCharger.location.latitude, selectedCharger.location.longitude];
 			const currentZoom = map.getZoom();
