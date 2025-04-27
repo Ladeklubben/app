@@ -32,7 +32,7 @@
 			<MenuItem
 				text="Chargers"
 				onclick={() => {
-					console.log("Chargers clicked");
+					goto("/menu/chargers");
 				}}
 			>
 				<BatteryCharging />
