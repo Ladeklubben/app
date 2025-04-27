@@ -61,24 +61,13 @@
 					</div>
 
 					<div class="flex-grow">
-						<div class="flex justify-between items-start">
-							<h3 class="text-lg font-bold text-lk-blue-50 mb-1">
+						<div class="flex justify-between items-start ">
+							<h3 class="text-lg font-bold text-lk-blue-50 mb-2">
 								{charger.locationInfo?.brief || "Charger"}
 							</h3>
 							<div
 								class={`h-3 w-3 rounded-full ${charger.chargeState?.online?.[1] ? "bg-lk-green-500" : "bg-lk-red-600"}`}
 							></div>
-						</div>
-
-						<div class="text-lk-blue-200 text-sm mb-3">
-							{#if charger.locationInfo?.address}
-								<div class="flex items-center">
-									<MapMarker class="w-3 h-3 mr-1" />
-									<span>{charger.locationInfo.address}</span>
-								</div>
-							{:else}
-								<span class="italic text-lk-blue-50">No location set</span>
-							{/if}
 						</div>
 
 						<div class="grid grid-cols-2 gap-2 text-sm">
@@ -113,10 +102,17 @@
 					</div>
 				</div>
 
-				<div class="bg-lk-blue-900 bg-opacity-30 px-4 py-2 flex justify-between items-center">
-					<div class="text-lk-blue-300 text-xs">{charger.id}</div>
-					<div class="text-xs text-lk-blue-300 hover:text-lk-blue-100 flex items-center">
-						View Details <ChevronRight class="w-3 h-3 ml-1" />
+				<div class="bg-lk-blue-900 bg-opacity-30 px-4 py-2 flex justify-between items-center text-xs text-lk-blue-300">
+					{#if charger.locationInfo?.address}
+						<div class="flex items-center">
+							<MapMarker class="w-3 h-3 mr-1" />
+							<span>{charger.locationInfo.address}</span>
+						</div>
+					{:else}
+						<span class="italic text-lk-blue-50">No location set</span>
+					{/if}
+					<div class=" hover:text-lk-blue-100 flex items-center">
+						View Settings <ChevronRight class="w-3 h-3 ml-1 mt-0.5" />
 					</div>
 				</div>
 			</button>
@@ -126,9 +122,7 @@
 			<Bolt class="w-12 h-12 text-lk-blue-400 mx-auto mb-4" />
 			<p class="text-lk-blue-50 text-lg font-medium mb-2">No Chargers Found</p>
 			<p class="text-lk-blue-300 text-sm mb-4">You don't have any EV chargers registered yet.</p>
-			<Button type="button">
-				Add New Charger
-			</Button>
+			<Button type="button">Add New Charger</Button>
 		</div>
 	{/if}
 </Subpage>
