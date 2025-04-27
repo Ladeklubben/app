@@ -81,7 +81,7 @@ export class ManagedChargers {
 				}),
 			);
 
-			await Promise.all(promises);
+			await Promise.allSettled(promises);
 		} catch (error) {
 			console.error("Error loading all chargers data:", error);
 			throw error;
@@ -136,7 +136,7 @@ export class ManagedCharger {
 	 */
 	async getAllData(): Promise<void> {
 		try {
-			await Promise.all([
+			await Promise.allSettled([
 				this.getInfo(),
 				this.getStats(),
 				this.getValidity(),
