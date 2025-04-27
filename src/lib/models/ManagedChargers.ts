@@ -1,5 +1,6 @@
 import { get, post, put, del } from "$lib/services/api";
 import type { LocationInfo } from "$lib/types/charger.types";
+import { writable } from "svelte/store";
 
 /**
  * Class for managing a collection of Ladeklubben chargers
@@ -351,6 +352,8 @@ export class ManagedCharger {
 		}
 	}
 }
+
+export const ManagedChargersStore = writable<ManagedChargers>(new ManagedChargers());
 
 /**
  * Interface representing the current state of a charger
