@@ -352,6 +352,7 @@ export class ManagedCharger {
 }
 
 export const ManagedChargersStore = writable<ManagedChargers>(new ManagedChargers());
+export const selectedChargerStore = writable<ManagedCharger | null>(null);
 
 /**
  * Interface representing the current state of a charger

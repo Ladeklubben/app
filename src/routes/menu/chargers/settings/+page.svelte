@@ -2,7 +2,7 @@
 	import { page } from "$app/state";
 	import Subpage from "$lib/components/ui/Subpage.svelte";
 	import { onMount } from "svelte";
-	import { ManagedCharger, ManagedChargersStore } from "$lib/models/ManagedChargers";
+	import { ManagedCharger, ManagedChargersStore, selectedChargerStore } from "$lib/models/ManagedChargers";
 	import MenuItem from "$lib/components/ui/MenuItem.svelte";
 	import MenuGroup from "$lib/components/ui/MenuGroup.svelte";
 	import { goto } from "$app/navigation";
@@ -18,12 +18,11 @@
 	import Star from "~icons/mdi/star";
 	import Chart from "~icons/mdi/chart-box-outline";
 
-	const chargerId = page.params.id;
-	let charger: ManagedCharger | undefined = $state();
-	const title = $derived(charger?.locationInfo?.brief || "Unnamed");
-
-	onMount(async () => {
-		charger = $ManagedChargersStore.getCharger(chargerId);
+	onMount(() => {
+		if ($selectedChargerStore === null) {
+			// TODO: Show error message
+			goto("/menu/chargers");
+		}
 	});
 </script>
 

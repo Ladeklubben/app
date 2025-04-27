@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { ManagedCharger } from "$lib/models/ManagedChargers";
+	import { ManagedCharger, selectedChargerStore } from "$lib/models/ManagedChargers";
 	import { onMount } from "svelte";
 	import { ManagedChargersStore } from "$lib/models/ManagedChargers";
 	import Subpage from "$lib/components/ui/Subpage.svelte";
@@ -31,7 +31,8 @@
 
 	function handleChargerClick(charger: ManagedCharger) {
 		// Navigate to charger details page
-		goto(`/menu/chargers/${charger.id}`);
+		$selectedChargerStore = charger;
+		goto(`/menu/chargers/settings`);
 	}
 </script>
 
