@@ -31,8 +31,7 @@
 
 	function handleChargerClick(charger: ManagedCharger) {
 		// Navigate to charger details page
-		// window.location.href = `/chargers/${charger.id}`;
-		goto("/menu");
+		goto(`/menu/chargers/${charger.id}`);
 	}
 </script>
 
