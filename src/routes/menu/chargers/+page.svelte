@@ -62,7 +62,7 @@
 					<div class="flex-grow">
 						<div class="flex justify-between items-start ">
 							<h3 class="text-lg font-bold text-lk-blue-50 mb-2">
-								{charger.locationInfo?.brief || "Charger"}
+								{charger.locationInfo?.brief || "Unnamed"}
 							</h3>
 							<div
 								class={`h-3 w-3 rounded-full ${charger.chargeState?.online?.[1] ? "bg-lk-green-500" : "bg-lk-red-600"}`}
