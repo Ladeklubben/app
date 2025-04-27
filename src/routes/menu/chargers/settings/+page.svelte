@@ -102,7 +102,7 @@
 		<MenuItem
 			text="Activity"
 			onclick={() => {
-				window.location.href = "https://ladeklubben.dk/kontakt-os/";
+				goto("/menu/chargers/settings/activity");
 			}}
 		>
 			<Chart />
