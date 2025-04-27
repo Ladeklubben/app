@@ -101,7 +101,7 @@
 					</div>
 				</div>
 
-				<div class="bg-lk-blue-900 bg-opacity-30 px-4 py-2 flex justify-between items-center text-xs text-lk-blue-300">
+				<div class="bg-lk-blue-900 px-4 py-2 flex justify-between items-center text-xs text-lk-blue-300">
 					{#if charger.locationInfo?.address}
 						<div class="flex items-center">
 							<MapMarker class="w-3 h-3 mr-1" />
