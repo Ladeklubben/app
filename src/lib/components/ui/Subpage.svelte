@@ -52,8 +52,8 @@
 </script>
 
 <header
-	class="flex items-center py-0 px-2.5 border-b border-b-lk-blue-800 bg-lk-blue-950 fixed top-10 left-0 right-0 z-10"
-	class:top-[env(safe-area-inset-top)]={$device === Platform.IOS}
+	class="flex items-center py-0 px-2.5 border-b border-b-lk-blue-800 bg-lk-blue-950 fixed pt-10 top-0 left-0 right-0 z-10"
+	class:pt-[env(safe-area-inset-top)]={$device === Platform.IOS}
 >
 	<button
 		class="bg-none border-0 cursor-pointer px-2 py-3 text-lk-blue-50 text-2xl"
