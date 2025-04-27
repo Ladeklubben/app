@@ -94,7 +94,7 @@
 							<div>
 								<span class="text-lk-blue-400">Current:</span>
 								<span class="ml-1 text-lk-blue-50">
-									{charger.numbers?.phase_l1_i.toFixed(1) || 0} A
+									{charger.numbers?.phase_l1_i?.toFixed(1) || 0} A
 								</span>
 							</div>
 						</div>
