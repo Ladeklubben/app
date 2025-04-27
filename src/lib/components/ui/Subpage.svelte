@@ -4,6 +4,7 @@
 	import { bottomButtonFixed } from "$lib/services/layout";
 	import { goto } from "$app/navigation";
 	import ChevronLeft from "~icons/mdi/chevron-left";
+	import { device, Platform } from "$lib/services/layout";
 
 	let { title = "", backURL = "", children } = $props();
 
@@ -50,7 +51,10 @@
 	}
 </script>
 
-<header class="flex items-center py-0 px-2.5 border-b border-b-lk-blue-800 relative">
+<header
+	class="flex items-center py-0 px-2.5 border-b border-b-lk-blue-800 bg-lk-blue-950 fixed top-10 left-0 right-0 z-10"
+	class:top-[env(safe-area-inset-top)]={$device === Platform.IOS}
+>
 	<button
 		class="bg-none border-0 cursor-pointer px-2 py-3 text-lk-blue-50 text-2xl"
 		onclick={goBack}
@@ -60,6 +64,6 @@
 	</button>
 	<h1 class="m-0 text-xl absolute left-1/2 -translate-x-1/2">{title}</h1>
 </header>
-<div class="wrapper">
+<div class="wrapper mt-[53px]">
 	{@render children?.()}
 </div>
