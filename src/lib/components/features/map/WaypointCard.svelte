@@ -7,10 +7,7 @@
 	import Clock from "~icons/mdi/clock-time-four-outline";
 	import { slide } from "svelte/transition";
 
-	let {
-		charger,
-		distance = 0,
-	} = $props<{
+	let { charger, distance = 0 } = $props<{
 		charger: PublicCharger;
 		distance?: number;
 	}>();

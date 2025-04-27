@@ -14,9 +14,9 @@
 	import Bolt from "~icons/mdi/lightning-bolt";
 	import Clock from "~icons/mdi/clock-time-four-outline";
 	import QRCode from "~icons/mdi/qrcode-scan";
-    import Cash from "~icons/mdi/cash-multiple";
-    import Star from "~icons/mdi/star";
-    import Chart from "~icons/mdi/chart-box-outline";
+	import Cash from "~icons/mdi/cash-multiple";
+	import Star from "~icons/mdi/star";
+	import Chart from "~icons/mdi/chart-box-outline";
 
 	const chargerId = page.params.id;
 	let charger: ManagedCharger | undefined = $state();

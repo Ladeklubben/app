@@ -60,7 +60,7 @@
 					</div>
 
 					<div class="flex-grow">
-						<div class="flex justify-between items-start ">
+						<div class="flex justify-between items-start">
 							<h3 class="text-lg font-bold text-lk-blue-50 mb-2">
 								{charger.locationInfo?.brief || "Unnamed"}
 							</h3>

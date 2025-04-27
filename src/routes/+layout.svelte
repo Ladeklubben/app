@@ -21,7 +21,7 @@
 </script>
 
 <ParaglideJS {i18n}>
-	<div class="flex flex-col h-screen" >
+	<div class="flex flex-col h-screen">
 		{#if loginCheckDone}
 			<main
 				class="flex-1 overflow-auto"

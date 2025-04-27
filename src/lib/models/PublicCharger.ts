@@ -113,7 +113,7 @@ export class PublicCharger implements IPublicCharger {
 		if (!this.openhours || this.openhours.length === 0) {
 			return "Unknown";
 		}
-		const schedule = this.openhours[0]
+		const schedule = this.openhours[0];
 
 		// Check if open 24/7 (10079 minutes = ~7 days)
 		if (schedule.interval >= 10079) {

@@ -39,10 +39,7 @@
 			data-charger-id={charger.stationid}
 			onclick={() => ($selectedChargerID = charger.stationid)}
 		>
-			<WaypointCard
-				{charger}
-				distance={charger.distance($pos)}
-			/>
+			<WaypointCard {charger} distance={charger.distance($pos)} />
 		</button>
 	{/each}
 </div>
