@@ -8,8 +8,6 @@ import { writable } from "svelte/store";
 export class ManagedChargers {
 	private chargers: Map<string, ManagedCharger> = new Map();
 
-	constructor() {}
-
 	/**
 	 * Fetches the list of charger IDs from the server
 	 * @returns Promise<string[]> Array of charger IDs
