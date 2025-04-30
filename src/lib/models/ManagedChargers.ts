@@ -105,6 +105,8 @@ export class ManagedCharger {
 	numbers?: ChargerNumbers;
 	/** Notification settings for the charger */
 	notificationSetup?: NotificationSetup;
+	/** Formatted notification settings for the charger */
+	notificationSetupFormatted?: NotificationSetupFormatted;
 	/** Smart charging schedule configuration */
 	smartChargeSchedule?: SmartChargeSchedule;
 	/** Electricity pricing constants */
@@ -238,6 +240,7 @@ export class ManagedCharger {
 		try {
 			const response = await get(`/cp/${this.id}/notification_setup`);
 			this.notificationSetup = response;
+			this.notificationSetupFormatted = this.getFormattedNotificationSetup();
 			return this.notificationSetup;
 		} catch (error) {
 			console.error("Error getting notification setup:", error);
@@ -349,6 +352,61 @@ export class ManagedCharger {
 			throw error;
 		}
 	}
+
+	/**
+	 * Converts the raw notification setup to a more user-friendly format
+	 * @returns Formatted notification settings
+	 */
+	getFormattedNotificationSetup(): NotificationSetupFormatted {
+		if (!this.notificationSetup) {
+			return [];
+		}
+
+		// Get unique email addresses from both notification types
+		const emails = new Set<string>();
+
+		if (Array.isArray(this.notificationSetup.onBegin)) {
+			this.notificationSetup.onBegin.forEach(([email]) => emails.add(email));
+		}
+
+		if (Array.isArray(this.notificationSetup.onEnd)) {
+			this.notificationSetup.onEnd.forEach(([email]) => emails.add(email));
+		}
+
+		// Create formatted notification setup
+		return Array.from(emails).map((email) => {
+			// Find if this email has onBegin notifications enabled
+			const onBeginSetting = this.notificationSetup?.onBegin?.find(([e]) => e === email);
+			const onBeginEnabled = onBeginSetting ? onBeginSetting[1] === 1 : false;
+
+			// Find if this email has onEnd notifications enabled
+			const onEndSetting = this.notificationSetup?.onEnd?.find(([e]) => e === email);
+			const onEndEnabled = onEndSetting ? onEndSetting[1] === 1 : false;
+
+			return {
+				email,
+				onBeginEnabled,
+				onEndEnabled,
+			};
+		});
+	}
+
+	async deleteNotification(email: string): Promise<void> {
+		try {
+			const response = await del(`/cp/${this.id}/notification_setup`, {
+				email,
+				eventType: "onBegin",
+				enabled: 0,
+			});
+			console.log("Notification setup deleted:", response);
+			// Get the updated notification setup
+			this.getNotificationSetup();
+		}
+		catch (error) {
+			console.error("Error deleting notification setup:", error);
+			throw error;
+		}
+	}
 }
 
 export const ManagedChargersStore = writable<ManagedChargers>(new ManagedChargers());
@@ -456,11 +514,23 @@ interface ChargerNumbers {
  * Interface for notification settings
  */
 interface NotificationSetup {
-	/** Notification settings for charging begin: [notification type, enabled status] */
-	onBegin: [string, number];
-	/** Notification settings for charging end: [notification type, enabled status] */
-	onEnd: [string, number];
+	/** Notification settings for charging begin: array of [email, enabled status] pairs */
+	onBegin: Array<[string, number]>;
+	/** Notification settings for charging end: array of [email, enabled status] pairs */
+	onEnd: Array<[string, number]>;
 }
+
+/**
+ * Interface for notification settings formatted for app
+ */
+type NotificationSetupFormatted = Array<{
+	/** Email address for notifications */
+	email: string;
+	/** Whether notifications are enabled for charging begin */
+	onBeginEnabled: boolean;
+	/** Whether notifications are enabled for charging end */
+	onEndEnabled: boolean;
+}>;
 
 /**
  * Interface for smart charging schedule configuration

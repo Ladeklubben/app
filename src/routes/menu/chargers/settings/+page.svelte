@@ -23,6 +23,7 @@
 			// TODO: Show error message
 			goto("/menu/chargers");
 		}
+		console.log($selectedChargerStore)
 	});
 </script>
 
@@ -39,7 +40,7 @@
 		<MenuItem
 			text="Notifications"
 			onclick={() => {
-				console.log("Clicked");
+				goto("/menu/chargers/settings/notifications");
 			}}
 		>
 			<BellRing />
