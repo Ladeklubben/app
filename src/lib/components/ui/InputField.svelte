@@ -20,9 +20,7 @@
 			name={id}
 			{disabled}
 			bind:checked={value}
-			class="h-6 w-6 appearance-none rounded-md border border-lk-blue-500 bg-transparent checked:before:scale-100 checked:before:bg-lk-blue-400 focus:outline-none focus:ring-2 focus:ring-lk-blue-300
-                before:m-[4px] before:h-4 before:w-4 before:scale-0 before:clip-path-[polygon(14%_44%,0_65%,50%_100%,100%_20%,80%_0,43%_62%)] before:transition-transform before:duration-200 before:ease-in-out
-                {error ? 'border-lk-red-600' : ''}"
+			class="h-6 w-6 appearance-none rounded-md border border-lk-blue-500 bg-transparent focus:ring-lk-blue-300 {error ? 'border-lk-red-600' : ''}"
 		/>
 	</div>
 {:else if type === "toggle"}
