@@ -31,7 +31,7 @@
 		<MenuItem
 			text="Location"
 			onclick={() => {
-				goto("/menu/chargers");
+				console.log("Clicked");
 			}}
 		>
 			<MapMarker />
@@ -39,7 +39,7 @@
 		<MenuItem
 			text="Notifications"
 			onclick={() => {
-				console.log("Privacy clicked");
+				console.log("Clicked");
 			}}
 		>
 			<BellRing />
@@ -48,7 +48,7 @@
 			text="Smart Charging"
 			hasToggle={true}
 			onclick={() => {
-				console.log("Notifications clicked");
+				console.log("Clicked");
 			}}
 		>
 			<BatteryCharging />
@@ -56,7 +56,7 @@
 		<MenuItem
 			text="Always On"
 			onclick={() => {
-				console.log("Privacy clicked");
+				console.log("Clicked");
 			}}
 		>
 			<Clock />
@@ -67,7 +67,7 @@
 		<MenuItem
 			text="Rental"
 			onclick={() => {
-				window.location.href = "https://wiki.ladeklubben.dk/";
+				console.log("Clicked");
 			}}
 		>
 			<Star />
@@ -75,7 +75,7 @@
 		<MenuItem
 			text="Pricing"
 			onclick={() => {
-				window.location.href = "https://ladeklubben.dk/kontakt-os/";
+				console.log("Clicked");
 			}}
 		>
 			<Cash />
@@ -83,7 +83,7 @@
 		<MenuItem
 			text="QR Code"
 			onclick={() => {
-				window.location.href = "https://ladeklubben.dk/kontakt-os/";
+				console.log("Clicked");
 			}}
 		>
 			<QRCode />
@@ -94,7 +94,7 @@
 		<MenuItem
 			text="Electricity"
 			onclick={() => {
-				window.location.href = "https://wiki.ladeklubben.dk/";
+				console.log("Clicked");
 			}}
 		>
 			<Bolt />
