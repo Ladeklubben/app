@@ -58,6 +58,6 @@ export async function put(endpoint: string, data: any, auth: boolean = true) {
 	return request("PUT", endpoint, data, auth);
 }
 
-export async function del(endpoint: string, auth: boolean = true) {
-	return request("DELETE", endpoint, undefined, auth);
+export async function del(endpoint: string, data: any, auth: boolean = true) {
+	return request("DELETE", endpoint, data, auth);
 }
