@@ -21,6 +21,15 @@
 		}
 	}
 
+	export function scrollToBeginning() {
+		if (scrollContainer) {
+			scrollContainer.scrollTo({
+				left: 0,
+				behavior: "smooth",
+			});
+		}
+	}
+
 	$effect(() => {
 		scrollToSelectedCharger();
 	});

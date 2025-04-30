@@ -15,6 +15,7 @@
 	let chargers: PublicCharger[] = $state([]);
 	let isDark: boolean = $state(false);
 	let isSorted: boolean = $state(false);
+	let chargerWaypointsComponent: any = $state(null);
 
 	get("/chargermap")
 		.then((response: ChargerAPIResponse) => {
@@ -53,6 +54,16 @@
 		isSorted = true;
 	}
 
+	// Handle clicking on the GPS button
+	function handleGPSClick() {
+		// Scroll to the beginning of the waypoints
+		if (chargerWaypointsComponent) {
+			chargerWaypointsComponent.scrollToBeginning();
+		}
+		// Get the current position
+		getPosition();
+	}
+
 	onDestroy(() => {
 		// Clear selected charger
 		$selectedChargerID = "";
@@ -78,7 +89,7 @@
 		</Glass>
 
 		<Glass>
-			<button class="p-3 border-lk-blue-800" onclick={() => getPosition()}>
+			<button class="p-3 border-lk-blue-800" onclick={() => handleGPSClick()}>
 				<CrossHairs class="text-lg" />
 			</button>
 		</Glass>
@@ -86,7 +97,7 @@
 	<ChargerMap {chargers} {isDark} />
 	{#if isSorted}
 		<div class="absolute bottom-0 left-0 right-0 z-500">
-			<ChargerWaypoints {chargers} />
+			<ChargerWaypoints bind:this={chargerWaypointsComponent}  {chargers} />
 		</div>
 	{/if}
 </div>
