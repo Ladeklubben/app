@@ -19,14 +19,14 @@
 <Subpage title="Notifications" backURL="/menu/chargers/settings">
 	{#if notifcations}
 		{#each notifcations as card}
-			<div class="flex flex-col gap-5 border border-lk-blue-800 rounded-2xl p-5">
-				<div class="flex gap-5 items-center font-bold">
+			<div class="flex flex-col border border-lk-blue-800 rounded-2xl">
+				<div class="flex gap-5 items-center font-bold p-5  bg-lk-blue-900 rounded-t-2xl">
 					<Email />
 					{card.email}
 					<Trashcan class="ml-auto" onclick={() => handleDelete(card.email)}/>
 				</div>
 
-                <div class="flex flex-col gap-4 w-full">
+                <div class="flex flex-col gap-4 w-full p-5">
                     <label class="flex items-center justify-between gap-2 w-full">
                         <span>Charging Start</span>
                         <input
