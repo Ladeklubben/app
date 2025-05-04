@@ -1,12 +1,14 @@
 import { get, post, put, del } from "$lib/services/api";
 import type { LocationInfo } from "$lib/types/charger.types";
-import { writable } from "svelte/store";
 
 /**
  * Class for managing a collection of Ladeklubben chargers
  */
 export class ManagedChargers {
-	private chargers: Map<string, ManagedCharger> = new Map();
+	// Reactive map of chargers
+	chargers = $state<Map<string, ManagedCharger>>(new Map());
+	// Reactive selected charger
+	selectedCharger = $state<ManagedCharger | null>(null);
 
 	/**
 	 * Fetches the list of charger IDs from the server
@@ -29,7 +31,8 @@ export class ManagedChargers {
 	async initializeChargers(): Promise<ManagedCharger[]> {
 		try {
 			const chargerIds = await this.fetchChargerIds();
-			this.chargers.clear();
+			this.chargers = new Map(); // Reset the reactive map
+			this.selectedCharger = null; // Clear selection on initialization
 
 			chargerIds.forEach((id) => {
 				this.chargers.set(id, new ManagedCharger(id));
@@ -85,6 +88,27 @@ export class ManagedChargers {
 			throw error;
 		}
 	}
+
+	/**
+	 * Selects a charger by ID
+	 * @param id Charger ID
+	 * @returns boolean indicating if selection was successful
+	 */
+	selectCharger(id: string): boolean {
+		const charger = this.chargers.get(id);
+		if (charger) {
+			this.selectedCharger = charger;
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Clears the selected charger
+	 */
+	clearSelectedCharger(): void {
+		this.selectedCharger = null;
+	}
 }
 
 /**
@@ -92,35 +116,35 @@ export class ManagedChargers {
  */
 export class ManagedCharger {
 	/** Unique identifier for the charger */
-	id: string = $state("")
+	id = $state("");
 	/** Location information for the charger */
-	locationInfo?: LocationInfo = $state();
+	locationInfo = $state<LocationInfo | undefined>();
 	/** Statistics for the charger */
-	chargerStats?: ChargerStats = $state();
+	chargerStats = $state<ChargerStats | undefined>();
 	/** Indicates if the charger is valid and operational */
-	valid?: boolean = $state();
+	valid = $state<boolean | undefined>();
 	/** Current state of the charger */
-	chargeState?: ChargerState = $state();
+	chargeState = $state<ChargerState | undefined>();
 	/** Real-time measurement values for the charger */
-	numbers?: ChargerNumbers = $state();
+	numbers = $state<ChargerNumbers | undefined>();
 	/** Notification settings for the charger */
-	notificationSetup?: NotificationSetup = $state();
+	notificationSetup = $state<NotificationSetup | undefined>();
 	/** Formatted notification settings for the charger */
-	notificationSetupFormatted?: NotificationSetupFormatted = $state();
+	notificationSetupFormatted = $state<NotificationSetupFormatted | undefined>();
 	/** Smart charging schedule configuration */
-	smartChargeSchedule?: SmartChargeSchedule = $state();
+	smartChargeSchedule = $state<SmartChargeSchedule | undefined>();
 	/** Electricity pricing constants */
-	electricityPriceConstants?: ElectricityPriceConstants = $state();
+	electricityPriceConstants = $state<ElectricityPriceConstants | undefined>();
 	/** Electricity settlement information */
-	electricitySettlement?: ElectricitySettlement = $state();
+	electricitySettlement = $state<ElectricitySettlement | undefined>();
 	/** Tax reduction settlement information */
-	taxReductionSettlement?: TaxReductionSettlement = $state();
+	taxReductionSettlement = $state<TaxReductionSettlement | undefined>();
 	/** List of charging transactions */
-	transactionsList?: TransactionList = $state();
+	transactionsList = $state<TransactionList | undefined>();
 	/** Information about charger transactions */
-	transactionsInfo?: ChargerTransactionInfo = $state();
+	transactionsInfo = $state<ChargerTransactionInfo | undefined>();
 	/** Plot data for charger transactions */
-	transactionsPlot?: ChargerTransactionPlot = $state();
+	transactionsPlot = $state<ChargerTransactionPlot | undefined>();
 
 	/**
 	 * Creates a new ManagedCharger instance
@@ -392,13 +416,19 @@ export class ManagedCharger {
 		});
 	}
 
+	/**
+	 * Deletes notification settings for a specific email
+	 * @param email Email address to delete notifications for
+	 * @returns Promise<void>
+	 */
 	async deleteNotification(email: string): Promise<void> {
 		// Store original data for rollback if needed
-		const originalData = this.notificationSetup;
-	
+		const originalSetup = this.notificationSetup;
+		const originalFormatted = this.notificationSetupFormatted;
+
 		// Optimistically update UI immediately
 		this.notificationSetupFormatted = this.notificationSetupFormatted?.filter((item) => item.email !== email);
-	
+
 		try {
 			// Perform actual delete operations
 			await Promise.all([
@@ -415,16 +445,16 @@ export class ManagedCharger {
 			]);
 		} catch (error) {
 			// Restore original data on any error
-			this.notificationSetup = originalData;
-			this.notificationSetupFormatted = this.getFormattedNotificationSetup();
+			this.notificationSetup = originalSetup;
+			this.notificationSetupFormatted = originalFormatted;
 			console.error("Error deleting notification setup:", error);
 			throw error;
 		}
 	}
 }
 
-export const ManagedChargersStore = writable<ManagedChargers>(new ManagedChargers());
-export const selectedChargerStore = writable<ManagedCharger | null>(null);
+// Reactive state for the ManagedChargers instance
+export const managedChargers = $state(new ManagedChargers());
 
 /**
  * Interface representing the current state of a charger

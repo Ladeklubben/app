@@ -1,19 +1,25 @@
 <script lang="ts">
 	import Subpage from "$lib/components/ui/Subpage.svelte";
-	import { selectedChargerStore } from "$lib/models/ManagedChargers.svelte";
+	import { managedChargers } from "$lib/models/ManagedChargers.svelte";
+	import { onMount } from "svelte";
 	import Email from "~icons/mdi/email";
 	import Trashcan from "~icons/mdi/trash-can-outline";
 
-    let notifcations = $derived($selectedChargerStore?.notificationSetupFormatted);
+    let charger = managedChargers.selectedCharger;
+    let notifcations = $derived(charger?.notificationSetupFormatted);
 
     async function handleDelete(email: string) {
         try {
             console.log("Deleting notification for email:", email);
-            await $selectedChargerStore?.deleteNotification(email);
+            await charger?.deleteNotification(email);
         } catch (error) {
             console.error("Error deleting notification:", error);
         }
     }
+
+    onMount(async() => {
+        charger?.getNotificationSetup();
+    })
 </script>
 
 <Subpage title="Notifications" backURL="/menu/chargers/settings">

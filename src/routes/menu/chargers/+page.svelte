@@ -1,7 +1,6 @@
 <script lang="ts">
-	import { ManagedCharger, selectedChargerStore } from "$lib/models/ManagedChargers.svelte";
+	import { managedChargers, ManagedCharger } from "$lib/models/ManagedChargers.svelte";
 	import { onMount } from "svelte";
-	import { ManagedChargersStore } from "$lib/models/ManagedChargers.svelte";
 	import Subpage from "$lib/components/ui/Subpage.svelte";
 	import Bolt from "~icons/mdi/lightning-bolt";
 	import MapMarker from "~icons/mdi/map-marker";
@@ -13,9 +12,9 @@
 	let chargers: ManagedCharger[] = $state([]);
 
 	onMount(async () => {
-		await $ManagedChargersStore.initializeChargers();
-		await $ManagedChargersStore.loadAllChargersData();
-		chargers = $ManagedChargersStore.getAllChargers();
+		await managedChargers.initializeChargers();
+		await managedChargers.loadAllChargersData();
+		chargers = managedChargers.getAllChargers();
 		isLoading = false;
 	});
 
@@ -31,7 +30,7 @@
 
 	function handleChargerClick(charger: ManagedCharger) {
 		// Navigate to charger details page
-		$selectedChargerStore = charger;
+		managedChargers.selectCharger(charger.id);
 		goto(`/menu/chargers/settings`);
 	}
 </script>
