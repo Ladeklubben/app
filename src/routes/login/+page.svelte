@@ -7,6 +7,7 @@
 	import Form from "$lib/components/ui/Form.svelte";
 	import Button from "$lib/components/ui/Button.svelte";
 	import { put } from "$lib/services/api";
+	import { validateEmail } from "$lib/services/forms";
 
 	let fields: { [key: string]: string } = $state({ email: "", password: "" });
 	let errors = $state({ email: "", password: "" });
@@ -54,11 +55,16 @@
 		loading = true;
 
 		// Validate email
-		if (!fields.email) {
+		if (!fields.email || fields.email === "") {
 			errors.email = "Email is required";
 			errors.password = "";
 			valid = false;
-		} else {
+		} else if (!validateEmail(fields.email)) {
+			errors.email = "Invalid email";
+			errors.password = "";
+			valid = false;
+		}
+		else {
 			errors.email = "";
 			errors.password = "";
 		}

@@ -5,6 +5,7 @@
 	import { siteFormData } from "$lib/services/site";
 	import BottomButton from "$lib/components/ui/BottomButton.svelte";
 	import { goto } from "$app/navigation";
+	import { validateZip } from "$lib/services/forms";
 
 	let errors = {
 		address: "",
@@ -34,8 +35,7 @@
 		}
 
 		// Cost code validation (basic 4-digit DK postCode code check)
-		const zipRegex = /^\d{4}$/;
-		if (!$siteFormData.location.zip || !zipRegex.test($siteFormData.location.zip)) {
+		if (!$siteFormData.location.zip || !validateZip($siteFormData.location.zip)) {
 			newErrors.zip = "Please enter a valid 4-digit postcode";
 			isValid = false;
 		}
