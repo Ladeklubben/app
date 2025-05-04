@@ -4,6 +4,7 @@
 		type = "text",
 		label,
 		labelBold = true,
+		description = "",
 		value = $bindable(),
 		error = "",
 		disabled = false,
@@ -55,6 +56,9 @@
 {:else}
 	<div class="flex flex-col gap-3">
 		<label for={id} class="font-bold">{label}</label>
+		{#if description}
+			<p class="mb-2">{description}</p>
+		{/if}
 		<input
 			{type}
 			{id}
