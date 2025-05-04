@@ -15,8 +15,13 @@
 	import { goto } from "$app/navigation";
 
 	onMount(async () => {
-		await managedChargers.initializeChargers();
-		await managedChargers.loadAllChargersCardData();
+		try {
+			await managedChargers.initializeChargers();
+			await managedChargers.loadAllChargersCardData();
+		} catch (error) {
+			console.error("Failed to initialize charger data:", error);
+			// TODO: Show error message to the user
+		}
 	});
 </script>
 
