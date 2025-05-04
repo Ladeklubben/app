@@ -1,7 +1,6 @@
 <script lang="ts">
-	import { ManagedCharger, selectedChargerStore } from "$lib/models/ManagedChargers";
+	import { managedChargers, ManagedCharger } from "$lib/models/ManagedChargers.svelte";
 	import { onMount } from "svelte";
-	import { ManagedChargersStore } from "$lib/models/ManagedChargers";
 	import Subpage from "$lib/components/ui/Subpage.svelte";
 	import Bolt from "~icons/mdi/lightning-bolt";
 	import MapMarker from "~icons/mdi/map-marker";
@@ -9,14 +8,10 @@
 	import { goto } from "$app/navigation";
 	import Button from "$lib/components/ui/Button.svelte";
 
-	let isLoading = $state(true);
-	let chargers: ManagedCharger[] = $state([]);
+	const chargers = $derived(Array.from(managedChargers.chargers.values()));
 
 	onMount(async () => {
-		await $ManagedChargersStore.initializeChargers();
-		await $ManagedChargersStore.loadAllChargersData();
-		chargers = $ManagedChargersStore.getAllChargers();
-		isLoading = false;
+		await managedChargers.loadAllChargersCardData();
 	});
 
 	// Helper functions for the card
@@ -31,17 +26,13 @@
 
 	function handleChargerClick(charger: ManagedCharger) {
 		// Navigate to charger details page
-		$selectedChargerStore = charger;
+		managedChargers.selectCharger(charger.id);
 		goto(`/menu/chargers/settings`);
 	}
 </script>
 
 <Subpage title="Chargers" backURL="/menu">
-	{#if isLoading}
-		<div class="rounded-2xl p-8 text-center">
-			<p class="text-lk-blue-50">Loading chargers...</p>
-		</div>
-	{:else if chargers.length > 0}
+	{#if chargers.length > 0}
 		{#each chargers as charger}
 			<button
 				type="button"

@@ -8,6 +8,7 @@
 	import { forgotPasswordEmail, login } from "$lib/services/auth";
 	import { MD5 } from "crypto-js";
 	import { goto } from "$app/navigation";
+	import { validatePassword } from "$lib/services/forms";
 
 	let fields: { [key: string]: string } = $state({
 		newPassword: "",
@@ -17,22 +18,6 @@
 	let valid = false;
 	let loading = $state(false);
 	let status = $state({ success: true, message: "" });
-
-	function validatePassword(password: string): string {
-		if (password.length < 6) {
-			return "Password must be at least 6 characters";
-		}
-		if (!/[A-Z]/.test(password)) {
-			return "Password must contain at least one uppercase letter";
-		}
-		if (!/[a-z]/.test(password)) {
-			return "Password must contain at least one lowercase letter";
-		}
-		if (!/[0-9]/.test(password)) {
-			return "Password must contain at least one number";
-		}
-		return "";
-	}
 
 	async function handleSubmit(event: Event) {
 		event.preventDefault();

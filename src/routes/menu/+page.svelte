@@ -3,6 +3,8 @@
 	import { currentUser } from "$lib/services/auth";
 	import MenuItem from "$lib/components/ui/MenuItem.svelte";
 	import MenuGroup from "$lib/components/ui/MenuGroup.svelte";
+	import { onMount } from "svelte";
+	import { managedChargers } from "$lib/models/ManagedChargers.svelte";
 
 	// Icons
 	import Email from "~icons/mdi/email";
@@ -11,6 +13,16 @@
 	import BellRing from "~icons/mdi/bell-ring";
 	import Lock from "~icons/mdi/lock";
 	import { goto } from "$app/navigation";
+
+	onMount(async () => {
+		try {
+			await managedChargers.initializeChargers();
+			await managedChargers.loadAllChargersCardData();
+		} catch (error) {
+			console.error("Failed to initialize charger data:", error);
+			// TODO: Show error message to the user
+		}
+	});
 </script>
 
 <div class="wrapper">

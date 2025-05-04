@@ -1,12 +1,14 @@
 import { get, post, put, del } from "$lib/services/api";
 import type { LocationInfo } from "$lib/types/charger.types";
-import { writable } from "svelte/store";
 
 /**
  * Class for managing a collection of Ladeklubben chargers
  */
 export class ManagedChargers {
-	private chargers: Map<string, ManagedCharger> = new Map();
+	// Reactive map of chargers
+	chargers = $state<Map<string, ManagedCharger>>(new Map());
+	// Reactive selected charger
+	selectedCharger = $state<ManagedCharger | null>(null);
 
 	/**
 	 * Fetches the list of charger IDs from the server
@@ -29,7 +31,8 @@ export class ManagedChargers {
 	async initializeChargers(): Promise<ManagedCharger[]> {
 		try {
 			const chargerIds = await this.fetchChargerIds();
-			this.chargers.clear();
+			this.chargers = new Map(); // Reset the reactive map
+			this.selectedCharger = null; // Clear selection on initialization
 
 			chargerIds.forEach((id) => {
 				this.chargers.set(id, new ManagedCharger(id));
@@ -68,6 +71,24 @@ export class ManagedChargers {
 	}
 
 	/**
+	 * Loads basic data for all chargers
+	 * @returns Promise<void>
+	 */
+	async loadAllChargersCardData(): Promise<void> {
+		try {
+			const promises = this.getAllChargers().map((charger) =>
+				charger.getCardData().catch((error) => {
+					console.error(`Error loading card data for charger ${charger.id}:`, error);
+				}),
+			);
+			await Promise.allSettled(promises);
+		} catch (error) {
+			console.error("Error loading all chargers card data:", error);
+			throw error;
+		}
+	}
+
+	/**
 	 * Loads complete data for all chargers
 	 * @returns Promise<void>
 	 */
@@ -85,6 +106,27 @@ export class ManagedChargers {
 			throw error;
 		}
 	}
+
+	/**
+	 * Selects a charger by ID
+	 * @param id Charger ID
+	 * @returns boolean indicating if selection was successful
+	 */
+	selectCharger(id: string): boolean {
+		const charger = this.chargers.get(id);
+		if (charger) {
+			this.selectedCharger = charger;
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Clears the selected charger
+	 */
+	clearSelectedCharger(): void {
+		this.selectedCharger = null;
+	}
 }
 
 /**
@@ -92,33 +134,35 @@ export class ManagedChargers {
  */
 export class ManagedCharger {
 	/** Unique identifier for the charger */
-	id: string;
+	id = $state("");
 	/** Location information for the charger */
-	locationInfo?: LocationInfo;
+	locationInfo = $state<LocationInfo | undefined>();
 	/** Statistics for the charger */
-	chargerStats?: ChargerStats;
+	chargerStats = $state<ChargerStats | undefined>();
 	/** Indicates if the charger is valid and operational */
-	valid?: boolean;
+	valid = $state<boolean | undefined>();
 	/** Current state of the charger */
-	chargeState?: ChargerState;
+	chargeState = $state<ChargerState | undefined>();
 	/** Real-time measurement values for the charger */
-	numbers?: ChargerNumbers;
+	numbers = $state<ChargerNumbers | undefined>();
 	/** Notification settings for the charger */
-	notificationSetup?: NotificationSetup;
+	notificationSetup = $state<NotificationSetup | undefined>();
+	/** Formatted notification settings for the charger */
+	notificationSetupFormatted = $state<NotificationSetupFormatted | undefined>();
 	/** Smart charging schedule configuration */
-	smartChargeSchedule?: SmartChargeSchedule;
+	smartChargeSchedule = $state<SmartChargeSchedule | undefined>();
 	/** Electricity pricing constants */
-	electricityPriceConstants?: ElectricityPriceConstants;
+	electricityPriceConstants = $state<ElectricityPriceConstants | undefined>();
 	/** Electricity settlement information */
-	electricitySettlement?: ElectricitySettlement;
+	electricitySettlement = $state<ElectricitySettlement | undefined>();
 	/** Tax reduction settlement information */
-	taxReductionSettlement?: TaxReductionSettlement;
+	taxReductionSettlement = $state<TaxReductionSettlement | undefined>();
 	/** List of charging transactions */
-	transactionsList?: TransactionList;
+	transactionsList = $state<TransactionList | undefined>();
 	/** Information about charger transactions */
-	transactionsInfo?: ChargerTransactionInfo;
+	transactionsInfo = $state<ChargerTransactionInfo | undefined>();
 	/** Plot data for charger transactions */
-	transactionsPlot?: ChargerTransactionPlot;
+	transactionsPlot = $state<ChargerTransactionPlot | undefined>();
 
 	/**
 	 * Creates a new ManagedCharger instance
@@ -126,6 +170,19 @@ export class ManagedCharger {
 	 */
 	constructor(id: string) {
 		this.id = id;
+	}
+
+	/**
+	 * Fetches basic data for this charger
+	 * @returns Promise<void>
+	 */
+	async getCardData(): Promise<void> {
+		try {
+			await Promise.allSettled([this.getChargeState(), this.getInfo(), this.getNumbers()]);
+		} catch (error) {
+			console.error("Error getting card data:", error);
+			throw error;
+		}
 	}
 
 	/**
@@ -238,6 +295,7 @@ export class ManagedCharger {
 		try {
 			const response = await get(`/cp/${this.id}/notification_setup`);
 			this.notificationSetup = response;
+			this.notificationSetupFormatted = this.getFormattedNotificationSetup();
 			return this.notificationSetup;
 		} catch (error) {
 			console.error("Error getting notification setup:", error);
@@ -349,10 +407,133 @@ export class ManagedCharger {
 			throw error;
 		}
 	}
+
+	/**
+	 * Converts the raw notification setup to a more user-friendly format
+	 * @returns Formatted notification settings
+	 */
+	getFormattedNotificationSetup(): NotificationSetupFormatted {
+		if (!this.notificationSetup) {
+			return [];
+		}
+
+		// Get unique email addresses from both notification types
+		const emails = new Set<string>();
+
+		if (Array.isArray(this.notificationSetup.onBegin)) {
+			this.notificationSetup.onBegin.forEach(([email]) => emails.add(email));
+		}
+
+		if (Array.isArray(this.notificationSetup.onEnd)) {
+			this.notificationSetup.onEnd.forEach(([email]) => emails.add(email));
+		}
+
+		// Create formatted notification setup
+		return Array.from(emails).map((email) => {
+			// Find if this email has onBegin notifications enabled
+			const onBeginSetting = this.notificationSetup?.onBegin?.find(([e]) => e === email);
+			const onBeginEnabled = onBeginSetting ? onBeginSetting[1] === 1 : false;
+
+			// Find if this email has onEnd notifications enabled
+			const onEndSetting = this.notificationSetup?.onEnd?.find(([e]) => e === email);
+			const onEndEnabled = onEndSetting ? onEndSetting[1] === 1 : false;
+
+			return {
+				email,
+				onBeginEnabled,
+				onEndEnabled,
+			};
+		});
+	}
+
+	/**
+	 * Add or update notification settings for a specific email
+	 * @param email Email address to add or update
+	 * @param onBeginEnabled Whether to enable notifications for charging begin
+	 * @param onEndEnabled Whether to enable notifications for charging end
+	 * @returns Promise<void>
+	 */
+	async addOrUpdateNotification(email: string, onBeginEnabled: boolean, onEndEnabled: boolean): Promise<void> {
+		// Store original data for rollback if needed
+		const originalSetup = this.notificationSetup;
+		const originalFormatted = this.notificationSetupFormatted;
+		// Optimistically update UI immediately
+		this.notificationSetupFormatted = this.notificationSetupFormatted?.map((item) => {
+			if (item.email === email) {
+				return {
+					...item,
+					onBeginEnabled,
+					onEndEnabled,
+				};
+			}
+			return item;
+		});
+		this.notificationSetupFormatted = [
+			...(this.notificationSetupFormatted?.filter((i) => i.email !== email) ?? []),
+			{ email, onBeginEnabled, onEndEnabled },
+		];
+		try {
+			// Perform actual update operations
+			await Promise.all([
+				put(`/cp/${this.id}/notification_setup`, {
+					email,
+					eventType: "onBegin",
+					enabled: onBeginEnabled ? true : false,
+				}),
+				put(`/cp/${this.id}/notification_setup`, {
+					email,
+					eventType: "onEnd",
+					enabled: onEndEnabled ? true : false,
+				}),
+			]);
+		} catch (error) {
+			// Restore original data on any error
+			this.notificationSetup = originalSetup;
+			this.notificationSetupFormatted = originalFormatted;
+			console.error("Error updating notification setup:", error);
+			throw error;
+		}
+	}
+
+	/**
+	 * Deletes notification settings for a specific email
+	 * @param email Email address to delete notifications for
+	 * @returns Promise<void>
+	 */
+	async deleteNotification(email: string): Promise<void> {
+		// Store original data for rollback if needed
+		const originalSetup = this.notificationSetup;
+		const originalFormatted = this.notificationSetupFormatted;
+
+		// Optimistically update UI immediately
+		this.notificationSetupFormatted = this.notificationSetupFormatted?.filter((item) => item.email !== email);
+
+		try {
+			// Perform actual delete operations
+			await Promise.all([
+				del(`/cp/${this.id}/notification_setup`, {
+					email,
+					eventType: "onBegin",
+					enabled: 0,
+				}),
+				del(`/cp/${this.id}/notification_setup`, {
+					email,
+					eventType: "onEnd",
+					enabled: 0,
+				}),
+			]);
+		} catch (error) {
+			// Restore original data on any error
+			this.notificationSetup = originalSetup;
+			this.notificationSetupFormatted = originalFormatted;
+			console.error("Error deleting notification setup:", error);
+			throw error;
+		}
+	}
 }
 
-export const ManagedChargersStore = writable<ManagedChargers>(new ManagedChargers());
-export const selectedChargerStore = writable<ManagedCharger | null>(null);
+// Reactive state for the ManagedChargers instance
+export const managedChargers = $state(new ManagedChargers());
 
 /**
  * Interface representing the current state of a charger
@@ -456,11 +637,23 @@ interface ChargerNumbers {
  * Interface for notification settings
  */
 interface NotificationSetup {
-	/** Notification settings for charging begin: [notification type, enabled status] */
-	onBegin: [string, number];
-	/** Notification settings for charging end: [notification type, enabled status] */
-	onEnd: [string, number];
+	/** Notification settings for charging begin: array of [email, enabled status] pairs */
+	onBegin: Array<[string, number]>;
+	/** Notification settings for charging end: array of [email, enabled status] pairs */
+	onEnd: Array<[string, number]>;
 }
+
+/**
+ * Interface for notification settings formatted for app
+ */
+type NotificationSetupFormatted = Array<{
+	/** Email address for notifications */
+	email: string;
+	/** Whether notifications are enabled for charging begin */
+	onBeginEnabled: boolean;
+	/** Whether notifications are enabled for charging end */
+	onEndEnabled: boolean;
+}>;
 
 /**
  * Interface for smart charging schedule configuration
