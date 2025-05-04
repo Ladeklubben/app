@@ -7,6 +7,9 @@
 	import { device, Platform } from "$lib/services/layout";
 
 	let { title = "", backURL = "", children } = $props();
+	let touchStartX = 0;
+	let touchEndX = 0;
+	const SWIPE_THRESHOLD = 100; // Minimum distance required for a swipe
 
 	function goBack() {
 		// Navigate back to the previous page
@@ -14,6 +17,23 @@
 			goto(backURL);
 		} else {
 			history.back();
+		}
+	}
+
+	function handleTouchStart(e: TouchEvent) {
+		touchStartX = e.touches[0].clientX;
+	}
+
+	function handleTouchEnd(e: TouchEvent) {
+		touchEndX = e.changedTouches[0].clientX;
+		handleSwipe();
+	}
+
+	function handleSwipe() {
+		const swipeDistance = touchEndX - touchStartX;
+		// If swiped right far enough and user is on iOS, trigger back navigation
+		if (swipeDistance > SWIPE_THRESHOLD && $device === Platform.IOS) {
+			goBack();
 		}
 	}
 
@@ -25,6 +45,12 @@
 			checkHeight();
 			window.addEventListener("resize", checkHeight);
 			window.addEventListener("popstate", goBack);
+
+			// Add swipe detection for iOS
+			if ($device === Platform.IOS) {
+				document.addEventListener("touchstart", handleTouchStart, false);
+				document.addEventListener("touchend", handleTouchEnd, false);
+			}
 		}
 	});
 
@@ -35,6 +61,12 @@
 		if (typeof window !== "undefined") {
 			window.removeEventListener("resize", checkHeight);
 			window.removeEventListener("popstate", goBack);
+
+			// Clean up touch event listeners
+			if ($device === Platform.IOS) {
+				document.removeEventListener("touchstart", handleTouchStart);
+				document.removeEventListener("touchend", handleTouchEnd);
+			}
 		}
 	});
 
