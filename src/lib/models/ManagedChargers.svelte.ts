@@ -92,35 +92,35 @@ export class ManagedChargers {
  */
 export class ManagedCharger {
 	/** Unique identifier for the charger */
-	id: string;
+	id: string = $state("")
 	/** Location information for the charger */
-	locationInfo?: LocationInfo;
+	locationInfo?: LocationInfo = $state();
 	/** Statistics for the charger */
-	chargerStats?: ChargerStats;
+	chargerStats?: ChargerStats = $state();
 	/** Indicates if the charger is valid and operational */
-	valid?: boolean;
+	valid?: boolean = $state();
 	/** Current state of the charger */
-	chargeState?: ChargerState;
+	chargeState?: ChargerState = $state();
 	/** Real-time measurement values for the charger */
-	numbers?: ChargerNumbers;
+	numbers?: ChargerNumbers = $state();
 	/** Notification settings for the charger */
-	notificationSetup?: NotificationSetup;
+	notificationSetup?: NotificationSetup = $state();
 	/** Formatted notification settings for the charger */
-	notificationSetupFormatted?: NotificationSetupFormatted;
+	notificationSetupFormatted?: NotificationSetupFormatted = $state();
 	/** Smart charging schedule configuration */
-	smartChargeSchedule?: SmartChargeSchedule;
+	smartChargeSchedule?: SmartChargeSchedule = $state();
 	/** Electricity pricing constants */
-	electricityPriceConstants?: ElectricityPriceConstants;
+	electricityPriceConstants?: ElectricityPriceConstants = $state();
 	/** Electricity settlement information */
-	electricitySettlement?: ElectricitySettlement;
+	electricitySettlement?: ElectricitySettlement = $state();
 	/** Tax reduction settlement information */
-	taxReductionSettlement?: TaxReductionSettlement;
+	taxReductionSettlement?: TaxReductionSettlement = $state();
 	/** List of charging transactions */
-	transactionsList?: TransactionList;
+	transactionsList?: TransactionList = $state();
 	/** Information about charger transactions */
-	transactionsInfo?: ChargerTransactionInfo;
+	transactionsInfo?: ChargerTransactionInfo = $state();
 	/** Plot data for charger transactions */
-	transactionsPlot?: ChargerTransactionPlot;
+	transactionsPlot?: ChargerTransactionPlot = $state();
 
 	/**
 	 * Creates a new ManagedCharger instance
@@ -241,6 +241,7 @@ export class ManagedCharger {
 			const response = await get(`/cp/${this.id}/notification_setup`);
 			this.notificationSetup = response;
 			this.notificationSetupFormatted = this.getFormattedNotificationSetup();
+			console.log("Notification setup:", response);
 			return this.notificationSetup;
 		} catch (error) {
 			console.error("Error getting notification setup:", error);
@@ -392,17 +393,30 @@ export class ManagedCharger {
 	}
 
 	async deleteNotification(email: string): Promise<void> {
+		// Store original data for rollback if needed
+		const originalData = this.notificationSetup;
+	
+		// Optimistically update UI immediately
+		this.notificationSetupFormatted = this.notificationSetupFormatted?.filter((item) => item.email !== email);
+	
 		try {
-			const response = await del(`/cp/${this.id}/notification_setup`, {
-				email,
-				eventType: "onBegin",
-				enabled: 0,
-			});
-			console.log("Notification setup deleted:", response);
-			// Get the updated notification setup
-			this.getNotificationSetup();
-		}
-		catch (error) {
+			// Perform actual delete operations
+			await Promise.all([
+				del(`/cp/${this.id}/notification_setup`, {
+					email,
+					eventType: "onBegin",
+					enabled: 0,
+				}),
+				del(`/cp/${this.id}/notification_setup`, {
+					email,
+					eventType: "onEnd",
+					enabled: 0,
+				}),
+			]);
+		} catch (error) {
+			// Restore original data on any error
+			this.notificationSetup = originalData;
+			this.notificationSetupFormatted = this.getFormattedNotificationSetup();
 			console.error("Error deleting notification setup:", error);
 			throw error;
 		}

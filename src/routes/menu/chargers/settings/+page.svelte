@@ -2,7 +2,7 @@
 	import { page } from "$app/state";
 	import Subpage from "$lib/components/ui/Subpage.svelte";
 	import { onMount } from "svelte";
-	import { ManagedCharger, ManagedChargersStore, selectedChargerStore } from "$lib/models/ManagedChargers";
+	import { ManagedCharger, ManagedChargersStore, selectedChargerStore } from "$lib/models/ManagedChargers.svelte";
 	import MenuItem from "$lib/components/ui/MenuItem.svelte";
 	import MenuGroup from "$lib/components/ui/MenuGroup.svelte";
 	import { goto } from "$app/navigation";

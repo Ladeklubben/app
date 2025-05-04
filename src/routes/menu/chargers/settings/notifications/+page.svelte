@@ -1,10 +1,10 @@
 <script lang="ts">
 	import Subpage from "$lib/components/ui/Subpage.svelte";
-	import { selectedChargerStore } from "$lib/models/ManagedChargers";
+	import { selectedChargerStore } from "$lib/models/ManagedChargers.svelte";
 	import Email from "~icons/mdi/email";
 	import Trashcan from "~icons/mdi/trash-can-outline";
 
-	const notifcations = $derived($selectedChargerStore?.getFormattedNotificationSetup());
+    let notifcations = $derived($selectedChargerStore?.notificationSetupFormatted);
 
     async function handleDelete(email: string) {
         try {

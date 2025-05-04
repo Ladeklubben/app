@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { ManagedCharger, selectedChargerStore } from "$lib/models/ManagedChargers";
+	import { ManagedCharger, selectedChargerStore } from "$lib/models/ManagedChargers.svelte";
 	import { onMount } from "svelte";
-	import { ManagedChargersStore } from "$lib/models/ManagedChargers";
+	import { ManagedChargersStore } from "$lib/models/ManagedChargers.svelte";
 	import Subpage from "$lib/components/ui/Subpage.svelte";
 	import Bolt from "~icons/mdi/lightning-bolt";
 	import MapMarker from "~icons/mdi/map-marker";
