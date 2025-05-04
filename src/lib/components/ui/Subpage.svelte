@@ -26,7 +26,11 @@
 
 	function handleTouchEnd(e: TouchEvent) {
 		touchEndX = e.changedTouches[0].clientX;
-		handleSwipe();
+
+		// Check if swipe started on the left side of the screen
+		if (touchStartX < window.innerWidth / 8) {
+			handleSwipe();
+		}
 	}
 
 	function handleSwipe() {
