@@ -49,7 +49,7 @@
 			text="Smart Charging"
 			hasToggle={true}
 			onclick={() => {
-				console.log("Clicked");
+				goto("/menu/chargers/settings/smart-charging");
 			}}
 		>
 			<BatteryCharging />
