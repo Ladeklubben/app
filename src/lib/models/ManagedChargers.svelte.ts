@@ -417,6 +417,58 @@ export class ManagedCharger {
 	}
 
 	/**
+	 * Add or update notification settings for a specific email
+	 * @param email Email address to add or update
+	 * @param onBeginEnabled Whether to enable notifications for charging begin
+	 * @param onEndEnabled Whether to enable notifications for charging end
+	 * @returns Promise<void>
+	 */
+	async addOrUpdateNotification(email: string, onBeginEnabled: boolean, onEndEnabled: boolean): Promise<void> {
+		// Store original data for rollback if needed
+		const originalSetup = this.notificationSetup;
+		const originalFormatted = this.notificationSetupFormatted;
+		// Optimistically update UI immediately
+		this.notificationSetupFormatted = this.notificationSetupFormatted?.map((item) => {
+			if (item.email === email) {
+				return {
+					...item,
+					onBeginEnabled,
+					onEndEnabled,
+				};
+			}
+			return item;
+		});
+		if (!this.notificationSetupFormatted?.some((item) => item.email === email)) {
+			this.notificationSetupFormatted?.push({
+				email,
+				onBeginEnabled,
+				onEndEnabled,
+			});
+		}
+		try {
+			// Perform actual update operations
+			await Promise.all([
+				put(`/cp/${this.id}/notification_setup`, {
+					email,
+					eventType: "onBegin",
+					enabled: onBeginEnabled ? true : false,
+				}),
+				put(`/cp/${this.id}/notification_setup`, {
+					email,
+					eventType: "onEnd",
+					enabled: onEndEnabled ? true : false,
+				}),
+			]);
+		} catch (error) {
+			// Restore original data on any error
+			this.notificationSetup = originalSetup;
+			this.notificationSetupFormatted = originalFormatted;
+			console.error("Error updating notification setup:", error);
+			throw error;
+		}
+	}
+
+	/**
 	 * Deletes notification settings for a specific email
 	 * @param email Email address to delete notifications for
 	 * @returns Promise<void>
