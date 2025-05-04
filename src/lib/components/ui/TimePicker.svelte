@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { onMount } from "svelte";
 
-	let { align = "center", maxValue = 24, jump = 1, defaultTime = 12, selectedTime = $bindable() } = $props();
+	let { align = "center", maxValue = 24, jump = 1, defaultTime = 12, selectedTime = $bindable(), small=false } = $props();
 
 	let container: HTMLDivElement;
-	const h = 48; // Height per time unit in pixels
+	const h = small ? 32 : 48; // Height per time unit in pixels
 	const cycles = 100; // Number of cycles
 	const totalTimeUnits = cycles * maxValue;
 	let timeUnits: string[] = [];
@@ -59,7 +59,7 @@
 
 <div
 	bind:this={container}
-	class="h-36 overflow-y-scroll snap-y no-scrollbar w-full"
+	class="{small ? "h-24" : "h-36"} overflow-y-scroll snap-y no-scrollbar w-full"
 	style="mask-image: linear-gradient(
 		to bottom,
 		transparent 0%,
@@ -76,7 +76,7 @@
 >
 	{#each timeUnits as timeUnit, i}
 		<div
-			class="flex items-center text-4xl font-medium tabular-nums"
+			class="flex items-center {small ? "text-2xl" : "text-4xl"} font-medium tabular-nums"
 			class:justify-end={align === "right"}
 			class:justify-center={align === "center"}
 			style="height: {h}px; scroll-snap-align: start;"
