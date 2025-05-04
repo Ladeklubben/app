@@ -37,7 +37,6 @@
         }
         try {
             await charger?.addOrUpdateNotification(inputEmail, false, false);
-            console.log("Notification added for email:", inputEmail);
             inputEmail = "";
         } catch (e: any) {
             console.error(e);
@@ -75,6 +74,10 @@
                             type="checkbox"
                             checked={card.onBeginEnabled}
                             class="h-6 w-6 appearance-none rounded-md border border-lk-blue-500 bg-transparent focus:ring-lk-blue-300"
+                            onclick={() => {
+                                card.onBeginEnabled = !card.onBeginEnabled;
+                                charger?.addOrUpdateNotification(card.email, card.onBeginEnabled, card.onEndEnabled);
+                            }}
                         />
                     </label>
 
@@ -84,12 +87,16 @@
                             type="checkbox"
                             checked={card.onEndEnabled}
                             class="h-6 w-6 appearance-none rounded-md border border-lk-blue-500 bg-transparent focus:ring-lk-blue-300"
+                            onclick={() => {
+                                card.onEndEnabled = !card.onEndEnabled;
+                                charger?.addOrUpdateNotification(card.email, card.onBeginEnabled, card.onEndEnabled);
+                            }}
                         />
                     </label>
 				</div>
 			</div>
 		{/each}
 	{:else}
-		<div class="w-full text-center mt-5">Notifcations disabled. Enter email above to enable.</div>
+		<div class="w-full text-center mt-5">No notifications set up. Add an email above to receive updates when charger starts and/or ends.</div>
 	{/if}
 </Subpage>

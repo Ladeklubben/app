@@ -300,7 +300,6 @@ export class ManagedCharger {
 			const response = await get(`/cp/${this.id}/notification_setup`);
 			this.notificationSetup = response;
 			this.notificationSetupFormatted = this.getFormattedNotificationSetup();
-			console.log("Notification setup:", response);
 			return this.notificationSetup;
 		} catch (error) {
 			console.error("Error getting notification setup:", error);
