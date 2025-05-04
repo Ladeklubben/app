@@ -71,6 +71,24 @@ export class ManagedChargers {
 	}
 
 	/**
+	 * Loads basic data for all chargers
+	 * @returns Promise<void>
+	 */
+	async loadAllChargersCardData(): Promise<void> {
+		try {
+			const promises = this.getAllChargers().map((charger) =>
+				charger.getCardData().catch((error) => {
+					console.error(`Error loading card data for charger ${charger.id}:`, error);
+				}),
+			);
+			await Promise.allSettled(promises);
+		} catch (error) {
+			console.error("Error loading all chargers card data:", error);
+			throw error;
+		}
+	}
+
+	/**
 	 * Loads complete data for all chargers
 	 * @returns Promise<void>
 	 */
@@ -152,6 +170,23 @@ export class ManagedCharger {
 	 */
 	constructor(id: string) {
 		this.id = id;
+	}
+
+	/**
+	 * Fetches basic data for this charger
+	 * @returns Promise<void>
+	 */
+	async getCardData(): Promise<void> {
+		try {
+			await Promise.allSettled([
+				this.getChargeState(),
+				this.getInfo(),
+				this.getNumbers(),
+			]);
+		} catch (error) {
+			console.error("Error getting card data:", error);
+			throw error;
+		}
 	}
 
 	/**

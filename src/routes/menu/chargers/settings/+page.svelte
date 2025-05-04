@@ -18,7 +18,8 @@
 	import Star from "~icons/mdi/star";
 	import Chart from "~icons/mdi/chart-box-outline";
 
-	onMount(() => {
+	onMount(async () => {
+		await managedChargers.loadAllChargersData();
 		if (managedChargers.selectedCharger === null) {
 			// TODO: Show error message
 			goto("/menu/chargers");

@@ -8,14 +8,10 @@
 	import { goto } from "$app/navigation";
 	import Button from "$lib/components/ui/Button.svelte";
 
-	let isLoading = $state(true);
-	let chargers: ManagedCharger[] = $state([]);
+	const chargers = $derived(Array.from(managedChargers.chargers.values()));
 
 	onMount(async () => {
-		await managedChargers.initializeChargers();
-		await managedChargers.loadAllChargersData();
-		chargers = managedChargers.getAllChargers();
-		isLoading = false;
+		await managedChargers.loadAllChargersCardData();
 	});
 
 	// Helper functions for the card
@@ -36,11 +32,7 @@
 </script>
 
 <Subpage title="Chargers" backURL="/menu">
-	{#if isLoading}
-		<div class="rounded-2xl p-8 text-center">
-			<p class="text-lk-blue-50">Loading chargers...</p>
-		</div>
-	{:else if chargers.length > 0}
+	{#if chargers.length > 0}
 		{#each chargers as charger}
 			<button
 				type="button"
