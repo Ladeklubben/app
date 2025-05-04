@@ -1,4 +1,5 @@
 <script lang="ts">
+	import InputField from "$lib/components/ui/InputField.svelte";
 	import Subpage from "$lib/components/ui/Subpage.svelte";
 	import TimePicker from "$lib/components/ui/TimePicker.svelte";
 
@@ -7,6 +8,9 @@
 </script>
 
 <Subpage title="Smart Charging" backURL="/menu/chargers">
+	<InputField label="Enable Smart Charging" type="toggle" bind:value={timeH} />
+	<InputField label="Power Requirement - kWh" type="number" bind:value={timeH} description="The amount of power your car needs. This is typically set to your daily average."/>
+
 	<div class="flex flex-col gap-8">
 		<div class="flex flex-col gap-3">
 			<span class="font-bold">Earliest Start</span>
