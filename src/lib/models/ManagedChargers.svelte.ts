@@ -178,11 +178,7 @@ export class ManagedCharger {
 	 */
 	async getCardData(): Promise<void> {
 		try {
-			await Promise.allSettled([
-				this.getChargeState(),
-				this.getInfo(),
-				this.getNumbers(),
-			]);
+			await Promise.allSettled([this.getChargeState(), this.getInfo(), this.getNumbers()]);
 		} catch (error) {
 			console.error("Error getting card data:", error);
 			throw error;
@@ -472,13 +468,10 @@ export class ManagedCharger {
 			}
 			return item;
 		});
-		if (!this.notificationSetupFormatted?.some((item) => item.email === email)) {
-			this.notificationSetupFormatted?.push({
-				email,
-				onBeginEnabled,
-				onEndEnabled,
-			});
-		}
+		this.notificationSetupFormatted = [
+			...(this.notificationSetupFormatted?.filter((i) => i.email !== email) ?? []),
+			{ email, onBeginEnabled, onEndEnabled },
+		];
 		try {
 			// Perform actual update operations
 			await Promise.all([
