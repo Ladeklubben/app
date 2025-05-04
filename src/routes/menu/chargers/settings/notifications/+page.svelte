@@ -1,9 +1,13 @@
 <script lang="ts">
+	import Form from "$lib/components/ui/Form.svelte";
+    import InputField from "$lib/components/ui/InputField.svelte";
+    import Button from "$lib/components/ui/Button.svelte";
 	import Subpage from "$lib/components/ui/Subpage.svelte";
 	import { managedChargers } from "$lib/models/ManagedChargers.svelte";
 	import { onMount } from "svelte";
 	import Email from "~icons/mdi/email";
 	import Trashcan from "~icons/mdi/trash-can-outline";
+	import { validateEmail } from "$lib/services/forms";
 
     let charger = managedChargers.selectedCharger;
     let notifcations = $derived(charger?.notificationSetupFormatted);
@@ -17,15 +21,47 @@
         }
     }
 
+    // Add new notification email
+    let inputEmail = $state("");
+	let error = $state("");
+    let loading = $state(false);
+
+    async function handleSubmit(event: Event) {
+        event.preventDefault();
+        loading = true;
+        error = "";
+        if (!validateEmail(inputEmail)) {
+            error = "Invalid email";
+            loading = false;
+            return;
+        }
+        try {
+            await charger?.addOrUpdateNotification(inputEmail, false, false);
+            console.log("Notification added for email:", inputEmail);
+            inputEmail = "";
+        } catch (e: any) {
+            console.error(e);
+            error = "Invalid email";
+        } finally {
+            loading = false;
+        }
+    }
+
+    const gap = $derived(error ? 5 : 0);
+
     onMount(async() => {
         charger?.getNotificationSetup();
     })
 </script>
 
 <Subpage title="Notifications" backURL="/menu/chargers/settings">
-	{#if notifcations}
+    <Form {handleSubmit} gap={gap}>
+        <InputField id="email" type="text" label="New notification email" bind:value={inputEmail} {error} />
+		<Button type="submit" {loading}>Add Email</Button>
+    </Form>
+	{#if notifcations && notifcations.length > 0}
 		{#each notifcations as card}
-			<div class="flex flex-col border border-lk-blue-800 rounded-2xl">
+			<div class="flex flex-col border border-lk-blue-800 rounded-2xl mt-5">
 				<div class="flex gap-5 items-center font-bold p-5  bg-lk-blue-900 rounded-t-2xl">
 					<Email />
 					{card.email}
@@ -54,6 +90,6 @@
 			</div>
 		{/each}
 	{:else}
-		<div>No notifications available</div>
+		<div class="w-full text-center mt-5">Notifcations disabled. Enter email above to enable.</div>
 	{/if}
 </Subpage>
