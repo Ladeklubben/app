@@ -7,19 +7,19 @@
 
 	let loading = $state(true);
 
-	let enabled = $state();
-	let needed_energy = $state();
+	let enabled = $state(false);
+	let needed_energy = $state(0);
 
-	let begin_H = $state("");
-	let begin_M = $state("");
+	let begin_H = $state("18");
+	let begin_M = $state("00");
 	const begin = $derived(`${begin_H}:${begin_M}:00`);
 
-	let end_H = $state("");
-	let end_M = $state("");
+	let end_H = $state("06");
+	let end_M = $state("00");
 	const end = $derived(`${end_H}:${end_M}:00`);
 
-	let preheat_H = $state("");
-	let preheat_M = $state("");
+	let preheat_H = $state("00");
+	let preheat_M = $state("00");
 	const preheat = $derived(parseInt(preheat_H) * 60 + parseInt(preheat_M));
 
 	onMount(() => {
