@@ -1,13 +1,22 @@
 <script lang="ts">
 	import { onMount } from "svelte";
 
-	let { align = "center", maxValue = 24, jump = 1, defaultTime = 12, selectedTime = $bindable(), small=false } = $props();
+	let {
+		align = "center",
+		maxValue = 24,
+		jump = 1,
+		selectedTime = $bindable(),
+		small = false,
+	} = $props();
 
 	let container: HTMLDivElement;
 	const h = small ? 32 : 48; // Height per time unit in pixels
 	const cycles = 100; // Number of cycles
 	const totalTimeUnits = cycles * maxValue;
 	let timeUnits: string[] = [];
+
+	// Store the initial selectedTime value
+	const initialSelectedTime = selectedTime ? parseInt(selectedTime, 10) : 12;
 
 	// Generate timeUnits for multiple cycles
 	for (let i = 0; i < totalTimeUnits; i += jump) {
@@ -25,7 +34,8 @@
 	// Scroll handling
 	onMount(() => {
 		const middleCycleStart = (Math.floor(cycles / 2) * maxValue * h) / jump - h;
-		container.scrollTop = middleCycleStart + h * Math.round(defaultTime / jump);
+		// Use the initialSelectedTime instead of defaultTime
+		container.scrollTop = middleCycleStart + h * Math.round(initialSelectedTime / jump);
 		updateSelectedTime();
 
 		let scrollTimeout: ReturnType<typeof setTimeout> | undefined;
@@ -59,24 +69,24 @@
 
 <div
 	bind:this={container}
-	class="{small ? "h-24" : "h-36"} overflow-y-scroll snap-y no-scrollbar w-full"
+	class="{small ? 'h-24' : 'h-36'} overflow-y-scroll snap-y no-scrollbar w-full"
 	style="mask-image: linear-gradient(
-		to bottom,
-		transparent 0%,
-		black 40%,
-		black 60%,
-		transparent 100%
-	); -webkit-mask-image: linear-gradient(
-		to bottom,
-		transparent 0%,
-		black 50%,
-		black 50%,
-		transparent 100%
-	);"
+        to bottom,
+        transparent 0%,
+        black 40%,
+        black 60%,
+        transparent 100%
+    ); -webkit-mask-image: linear-gradient(
+        to bottom,
+        transparent 0%,
+        black 50%,
+        black 50%,
+        transparent 100%
+    );"
 >
 	{#each timeUnits as timeUnit, i}
 		<div
-			class="flex items-center {small ? "text-2xl" : "text-4xl"} font-medium tabular-nums"
+			class="flex items-center {small ? 'text-2xl' : 'text-4xl'} font-medium tabular-nums"
 			class:justify-end={align === "right"}
 			class:justify-center={align === "center"}
 			style="height: {h}px; scroll-snap-align: start;"
