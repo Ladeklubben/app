@@ -1,7 +1,9 @@
 <script lang="ts">
+	import Button from "$lib/components/ui/Button.svelte";
 	import InputField from "$lib/components/ui/InputField.svelte";
 	import Subpage from "$lib/components/ui/Subpage.svelte";
 	import TimePicker from "$lib/components/ui/TimePicker.svelte";
+	import { DatetimePicker } from "@capawesome-team/capacitor-datetime-picker";
 	import { managedChargers } from "$lib/models/ManagedChargers.svelte";
 	import { onMount } from "svelte";
 
@@ -39,7 +41,6 @@
 		console.log($state.snapshot(begin_H));
 		loading = false;
 	});
-
 </script>
 
 <Subpage title="Smart Charging" backURL="/menu/chargers">
@@ -57,76 +58,49 @@
 				description="The amount of power your car needs. This is typically set to your daily average."
 			/>
 			<div class="flex flex-col gap-3">
-				<span class="font-bold">Earliest Start</span>
-				<p class="mb-2">This is the earliest possible time you want to start charging your car.</p>
-				<div
-					class="flex flex-row justify-center gap-4 rounded-2xl border border-lk-blue-800"
-					style="background: linear-gradient(to right, #59a6b7, #2e4d59);"
+				<span>
+					<span class="font-bold">Earliest Start</span>
+					- {begin_H}:{begin_M}
+				</span>
+
+				<p>This is the earliest possible time you want to start charging your car.</p>
+				<button
+					class="p-3 font-bold bg-lk-blue-500 border border-lk-blue-500 rounded-xl text-lk-blue-50
+							cursor-pointer disabled:cursor-not-allowed w-full"
+					onclick={async () => DatetimePicker.present()}
 				>
-					<TimePicker
-						bind:selectedTime={begin_H}
-						maxValue={24}
-						align="right"
-						small={true}
-					/>
-					<TimePicker
-						bind:selectedTime={begin_M}
-						maxValue={60}
-						jump={15}
-						align="left"
-						small={true}
-					/>
-				</div>
+					Set Time
+				</button>
 			</div>
 
 			<div class="flex flex-col gap-3">
-				<span class="font-bold">Ready Time</span>
-				<p class="mb-2">
-					This is the usually when you need to use your car. It will be fully charged by this time.
-				</p>
-				<div
-					class="flex flex-row justify-center gap-4 rounded-2xl border border-lk-blue-800"
-					style="background: linear-gradient(to right, #59a6b7, #2e4d59);"
+				<span>
+					<span class="font-bold">Ready Time</span>
+					- {end_H}:{end_M}
+				</span>
+				<p>This is the usually when you need to use your car. It will be fully charged by this time.</p>
+				<button
+					class="p-3 font-bold bg-lk-blue-500 border border-lk-blue-500 rounded-xl text-lk-blue-50
+							cursor-pointer disabled:cursor-not-allowed w-full"
+					onclick={async () => DatetimePicker.present()}
 				>
-					<TimePicker
-						bind:selectedTime={end_H}
-						maxValue={24}
-						align="right"
-						small={true}
-					/>
-					<TimePicker
-						bind:selectedTime={end_M}
-						maxValue={60}
-						jump={15}
-						align="left"
-						small={true}
-					/>
-				</div>
+					Set Time
+				</button>
 			</div>
 
 			<div class="flex flex-col gap-3">
-				<span class="font-bold">Preheat</span>
-				<p class="mb-2">
-					This is the usually when you need to use your car. It will be fully charged by this time.
-				</p>
-				<div
-					class="flex flex-row justify-center gap-4 rounded-2xl border border-lk-blue-800"
-					style="background: linear-gradient(to right, #59a6b7, #2e4d59);"
+				<span>
+					<span class="font-bold">Preheat</span>
+					- {preheat_H}:{preheat_M}
+				</span>
+				<p>This is the usually when you need to use your car. It will be fully charged by this time.</p>
+				<button
+					class="p-3 font-bold bg-lk-blue-500 border border-lk-blue-500 rounded-xl text-lk-blue-50
+							cursor-pointer disabled:cursor-not-allowed w-full"
+					onclick={async () => DatetimePicker.present()}
 				>
-					<TimePicker
-						bind:selectedTime={preheat_H}
-						maxValue={24}
-						align="right"
-						small={true}
-					/>
-					<TimePicker
-						bind:selectedTime={preheat_M}
-						maxValue={60}
-						jump={15}
-						align="left"
-						small={true}
-					/>
-				</div>
+					Set Time
+				</button>
 			</div>
 		</div>
 	{/if}
