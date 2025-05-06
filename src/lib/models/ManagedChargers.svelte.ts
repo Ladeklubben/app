@@ -667,6 +667,8 @@ interface SmartChargeSchedule {
 	needed_energy: number;
 	/** Preheat setting for the vehicle */
 	preheat: number;
+	/** Shows if smart charge is enabled */
+	enabled: boolean;
 }
 
 /**
