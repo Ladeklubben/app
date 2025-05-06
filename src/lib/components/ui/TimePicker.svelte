@@ -9,6 +9,8 @@
 		small = false,
 	} = $props();
 
+	// TODO: Research if we should use native time picker instead: https://capawesome.io/plugins/datetime-picker/
+
 	let container: HTMLDivElement;
 	const h = small ? 32 : 48; // Height per time unit in pixels
 	const cycles = 100; // Number of cycles
