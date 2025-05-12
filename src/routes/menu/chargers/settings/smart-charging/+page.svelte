@@ -16,7 +16,7 @@
 	let end_M = $state("00");
 	let preheat = $state(0);
 
-	async function selectTime(timeType: "begin" | "end" | "preheat") {
+	async function selectTime(timeType: "begin" | "end") {
 		if ($device === Platform.Web) {
 			console.warn("TimePicker is not supported on web.");
 			return;
@@ -27,6 +27,7 @@
 			theme: "dark",
 			locale: "en-DK",
 			format: "HH:mm",
+			value: timeType === "begin" ? `${begin_H}:${begin_M}` : `${end_H}:${end_M}`,
 		});
 
 		if (value) {
