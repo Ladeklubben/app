@@ -1,10 +1,9 @@
 <script lang="ts">
-	import Button from "$lib/components/ui/Button.svelte";
 	import InputField from "$lib/components/ui/InputField.svelte";
 	import Subpage from "$lib/components/ui/Subpage.svelte";
-	import TimePicker from "$lib/components/ui/TimePicker.svelte";
 	import { DatetimePicker } from "@capawesome-team/capacitor-datetime-picker";
 	import { managedChargers } from "$lib/models/ManagedChargers.svelte";
+	import { device, Platform } from "$lib/services/layout";
 	import { onMount } from "svelte";
 
 	let loading = $state(true);
@@ -14,15 +13,43 @@
 
 	let begin_H = $state("18");
 	let begin_M = $state("00");
-	const begin = $derived(`${begin_H}:${begin_M}:00`);
 
 	let end_H = $state("06");
 	let end_M = $state("00");
-	const end = $derived(`${end_H}:${end_M}:00`);
 
-	let preheat_H = $state("00");
-	let preheat_M = $state("00");
-	const preheat = $derived(parseInt(preheat_H) * 60 + parseInt(preheat_M));
+	let preheat = $state(0);
+
+	async function selectTime(timeType: 'begin' | 'end' | 'preheat') {
+		if ($device === Platform.Web) {
+			console.warn("TimePicker is not supported on web.");
+			return;
+		}
+	
+		const { value } = await DatetimePicker.present({
+			mode: "time",
+			theme: "dark",
+			locale: "en-DK",
+			format: "HH:mm",
+			androidTimePickerMode: "spinner",
+		});
+	
+		if (value) {
+			const [hour, minute] = value.split(":");
+			
+			switch (timeType) {
+				case 'begin':
+					begin_H = hour;
+					begin_M = minute;
+					break;
+				case 'end':
+					end_H = hour;
+					end_M = minute;
+					break;
+				default:
+					console.warn(`Unsupported timeType: ${timeType}`);
+			}
+		}
+	}
 
 	onMount(() => {
 		loading = true;
@@ -34,11 +61,9 @@
 			begin_M = schedule.charging_begin_earliest.split(":")[1];
 			end_H = schedule.charging_end_latest.split(":")[0];
 			end_M = schedule.charging_end_latest.split(":")[1];
-			preheat_H = Math.floor(schedule.preheat / 60).toString();
-			preheat_M = (schedule.preheat % 60).toString();
+			preheat = schedule.preheat;
 		}
-		console.log($state.snapshot(managedChargers.selectedCharger?.smartChargeSchedule));
-		console.log($state.snapshot(begin_H));
+		console.log(schedule);
 		loading = false;
 	});
 </script>
@@ -52,10 +77,10 @@
 		<div class="flex flex-col gap-10">
 			<InputField label="Enable Smart Charging" type="toggle" bind:value={enabled} />
 			<InputField
-				label="Power Requirement - kWh"
+				label="Power Requirement"
 				type="number"
 				bind:value={needed_energy}
-				description="The amount of power your car needs. This is typically set to your daily average."
+				description="The amount of kWh your car needs. This is typically set to your daily average."
 			/>
 			<div class="flex flex-col gap-3">
 				<span>
@@ -67,7 +92,7 @@
 				<button
 					class="p-3 font-bold bg-lk-blue-500 border border-lk-blue-500 rounded-xl text-lk-blue-50
 							cursor-pointer disabled:cursor-not-allowed w-full"
-					onclick={async () => DatetimePicker.present()}
+					onclick={async () => selectTime("begin")}
 				>
 					Set Time
 				</button>
@@ -82,26 +107,18 @@
 				<button
 					class="p-3 font-bold bg-lk-blue-500 border border-lk-blue-500 rounded-xl text-lk-blue-50
 							cursor-pointer disabled:cursor-not-allowed w-full"
-					onclick={async () => DatetimePicker.present()}
+					onclick={async () => selectTime("end")}
 				>
 					Set Time
 				</button>
 			</div>
 
-			<div class="flex flex-col gap-3">
-				<span>
-					<span class="font-bold">Preheat</span>
-					- {preheat_H}:{preheat_M}
-				</span>
-				<p>This is the usually when you need to use your car. It will be fully charged by this time.</p>
-				<button
-					class="p-3 font-bold bg-lk-blue-500 border border-lk-blue-500 rounded-xl text-lk-blue-50
-							cursor-pointer disabled:cursor-not-allowed w-full"
-					onclick={async () => DatetimePicker.present()}
-				>
-					Set Time
-				</button>
-			</div>
+			<InputField
+				label="Preheat"
+				type="number"
+				bind:value={preheat}
+				description="Set the amount of minutes that your car will need power to heat the cabin"
+			/>
 		</div>
 	{/if}
 </Subpage>
