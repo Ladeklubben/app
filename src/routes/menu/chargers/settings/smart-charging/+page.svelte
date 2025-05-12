@@ -83,7 +83,7 @@
 	});
 </script>
 
-<Subpage title="Smart Charging" backURL="/menu/chargers">
+<Subpage title="Smart Charging" backURL="/menu/chargers/settings">
 	<div class="flex flex-col gap-10">
 		<InputField label="Enable Smart Charging" type="toggle" bind:value={enabled} />
 		<InputField
