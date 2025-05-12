@@ -68,6 +68,7 @@
 
 	$effect(() => {
 		if (initialized && managedChargers.selectedCharger) {
+			// TODO: Implement a debounce function to avoid rapid updates
 			managedChargers.selectedCharger.putSmartChargeSchedule({
 				enabled,
 				needed_energy,
