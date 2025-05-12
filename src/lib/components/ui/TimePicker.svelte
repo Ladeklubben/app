@@ -18,7 +18,8 @@
 	let timeUnits: string[] = [];
 
 	// Store the initial selectedTime value
-	const initialSelectedTime = selectedTime ? parseInt(selectedTime, 10) : 12;
+	let parsed = Number.parseInt(selectedTime as string, 10);
+	const initialSelectedTime = Number.isFinite(parsed) ? parsed : 12;
 
 	// Generate timeUnits for multiple cycles
 	for (let i = 0; i < totalTimeUnits; i += jump) {
