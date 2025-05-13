@@ -163,6 +163,8 @@ export class ManagedCharger {
 	transactionsInfo = $state<ChargerTransactionInfo | undefined>();
 	/** Plot data for charger transactions */
 	transactionsPlot = $state<ChargerTransactionPlot | undefined>();
+	/** List price information for the charger */
+	listPrice = $state<ListPrice | undefined>();
 
 	/**
 	 * Creates a new ManagedCharger instance
@@ -205,6 +207,7 @@ export class ManagedCharger {
 				this.getTransactionsList(),
 				this.getTransactionsInfo(),
 				this.getTransactionsPlot(),
+				this.getListPrice(),
 			]);
 		} catch (error) {
 			console.error("Error getting all data:", error);
@@ -547,6 +550,22 @@ export class ManagedCharger {
 			throw error;
 		}
 	}
+
+	/**
+	 * Fetches the list price for the charger
+	 * @returns Promise with the charger's list price
+	 */
+	async getListPrice(): Promise<ListPrice | void> {
+		try {
+			const response = await get(`/listprice/${this.id}`);
+			this.listPrice = response;
+			return this.listPrice;
+		} catch (error) {
+			console.error("Error getting list price:", error);
+			throw error;
+		}
+	}
+
 }
 
 // Reactive state for the ManagedChargers instance
@@ -867,4 +886,20 @@ interface ChargerTransactionPlot {
 	values: number[];
 	/** Array of timestamps corresponding to the values */
 	timestamps: number[];
+}
+
+/**
+ * Interface for managed charger pricing information
+ */
+export interface ListPrice {
+	/** Price per kWh. Depending on follow_spot this is either a fixed price or a positive offset */
+	nominal: number;
+	/** Minimal price even with discounts */
+	minimum: number;
+	/** Default price if public spot prices are unavailable */
+	fallback: number;
+	/** Currency */
+	valuta: string;
+	/** Whether the charger follows spot prices */
+	follow_spot: boolean;
 }
