@@ -3,7 +3,6 @@
 	import Subpage from "$lib/components/ui/Subpage.svelte";
 	import { managedChargers } from "$lib/models/ManagedChargers.svelte";
 	import type { ListPrice } from "$lib/models/ManagedChargers.svelte";
-	import { get } from "$lib/services/api";
 	import { onMount } from "svelte";
 
 	let initialized = false;
@@ -17,44 +16,73 @@
 	};
 
 	let listPriceVAT: ListPrice = $state(DEFAULT_LIST_PRICE);
-	let listPrice: ListPrice = $state(DEFAULT_LIST_PRICE);
+	let inputErrors = $state({
+		nominal: "",
+		minimum: "",
+		fallback: "",
+	});
 
-	function convertListPrice(listPrice: ListPrice, addVAT: boolean): ListPrice {
-		const convertedListPrice: ListPrice = {
-			...listPrice,
-			nominal: listPrice.nominal * (addVAT ? 1.25 : 0.8),
-			minimum: listPrice.minimum * (addVAT ? 1.25 : 0.8),
-			fallback: listPrice.fallback * (addVAT ? 1.25 : 0.8),
-		};
+	function validateInputs(): boolean {
+		// Reset errors
+		inputErrors.nominal = "";
+		inputErrors.minimum = "";
+		inputErrors.fallback = "";
 
-		return convertedListPrice;
+		// Validate nominal price
+		if (isNaN(parseFloat(String(listPriceVAT.nominal)))) {
+			inputErrors.nominal = "Please enter a valid number";
+			return false;
+		}
+
+		// Validate minimum price
+		if (isNaN(parseFloat(String(listPriceVAT.minimum)))) {
+			inputErrors.minimum = "Please enter a valid number";
+			return false;
+		}
+
+		// Validate fallback price if following spot prices
+		if (listPriceVAT.follow_spot && isNaN(parseFloat(String(listPriceVAT.fallback)))) {
+			inputErrors.fallback = "Please enter a valid number";
+			return false;
+		}
+
+		return true;
 	}
 
 	onMount(() => {
+		initialized = false;
 		if (managedChargers.selectedCharger) {
 			const initialPrices = managedChargers.selectedCharger.listPrice;
 			if (initialPrices) {
-				listPriceVAT = convertListPrice(listPrice, true);
+				listPriceVAT = managedChargers.selectedCharger.convertListPrice(initialPrices, true);
 			}
 		}
+
+		// Workaround to ensure that the effect is not triggered immediately
+		setTimeout(() => {
+			initialized = true;
+		}, 0);
 	});
 
-	// $effect(() => {
-	// 	if (initialized && managedChargers.selectedCharger) {
-	// 		// TODO: Implement a debounce function to avoid rapid updates
-	// 		managedChargers.selectedCharger.putSmartChargeSchedule({
-	// 			enabled,
-	// 			needed_energy,
-	// 			charging_begin_earliest: `${begin_H}:${begin_M}`,
-	// 			charging_end_latest: `${end_H}:${end_M}`,
-	// 			preheat,
-	// 		});
-	// 	} else {
-	// 		// Ensures the variables are dependencies of the effect
-	// 		// and will be tracked by Svelte 5
-	// 		console.log("Data loaded: ", {enabled, needed_energy, begin_H, begin_M, end_H, end_M, preheat});
-	// 	}
-	// });
+	$effect(() => {
+		if (initialized && managedChargers.selectedCharger) {
+			// TODO: Implement a debounce function to avoid rapid updates
+			if (!validateInputs()) {
+				return;
+			}
+			const priceForServer = managedChargers.selectedCharger.convertListPrice(listPriceVAT, false);
+			console.log("Sending data to server: ", priceForServer);
+		} else {
+			// Ensures the variables are dependencies of the effect
+			// and will be tracked by Svelte 5
+			console.log("Data loaded: ", {
+				nominal: listPriceVAT.nominal,
+				minimum: listPriceVAT.minimum,
+				fallback: listPriceVAT.fallback,
+				follow_spot: listPriceVAT.follow_spot,
+			});
+		}
+	});
 </script>
 
 <Subpage title="Pricing" backURL="/menu/chargers/settings">
@@ -66,6 +94,7 @@
 			suffix="DKK/kWh"
 			center={true}
 			bind:value={listPriceVAT.nominal}
+			error={inputErrors.nominal}
 			description="Price added to the live energy price"
 		/>
 		<InputField
@@ -74,6 +103,7 @@
 			suffix="DKK/kWh"
 			center={true}
 			bind:value={listPriceVAT.fallback}
+			error={inputErrors.fallback}
 			description="Default price if public spot prices are unavailable"
 		/>
 	{:else}
@@ -83,6 +113,7 @@
 			suffix="DKK/kWh"
 			center={true}
 			bind:value={listPriceVAT.nominal}
+			error={inputErrors.nominal}
 			description="Price per kWh"
 		/>
 	{/if}
@@ -92,6 +123,7 @@
 		suffix="DKK/kWh"
 		center={true}
 		bind:value={listPriceVAT.minimum}
+		error={inputErrors.minimum}
 		description="Minimal price regardless of live energy prices or discounts"
 	/>
 </Subpage>
