@@ -90,6 +90,8 @@
 		<InputField
 			label="Power Requirement"
 			type="number"
+			suffix="kWh"
+			center={true}
 			bind:value={needed_energy}
 			description="The amount of kWh your car needs. This is typically set to your daily average."
 		/>
@@ -124,6 +126,8 @@
 		<InputField
 			label="Preheat"
 			type="number"
+			suffix="min"
+			center={true}
 			bind:value={preheat}
 			description="Set the amount of minutes that your car will need power to heat the cabin"
 		/>
