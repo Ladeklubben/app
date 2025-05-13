@@ -566,6 +566,23 @@ export class ManagedCharger {
 		}
 	}
 
+	/**
+	 * Converts the list price based on VAT inclusion
+	 * @param listPrice The original list price object
+	 * @param addVAT Whether to add VAT or remove it
+	 * @returns Converted list price object
+	 */
+	convertListPrice(listPrice: ListPrice, addVAT: boolean): ListPrice {
+		const convertedListPrice: ListPrice = {
+			...listPrice,
+			nominal: listPrice.nominal * (addVAT ? 1.25 : 0.8),
+			minimum: listPrice.minimum * (addVAT ? 1.25 : 0.8),
+			fallback: listPrice.fallback * (addVAT ? 1.25 : 0.8),
+		};
+
+		return convertedListPrice;
+	}
+
 }
 
 // Reactive state for the ManagedChargers instance
