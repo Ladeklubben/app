@@ -71,7 +71,8 @@
 				return;
 			}
 			const priceForServer = managedChargers.selectedCharger.convertListPrice(listPriceVAT, false);
-			console.log("Sending data to server: ", priceForServer);
+			managedChargers.selectedCharger.putListPrice(priceForServer);
+			console.log("Sent data to server: ", priceForServer);
 		} else {
 			// Ensures the variables are dependencies of the effect
 			// and will be tracked by Svelte 5
