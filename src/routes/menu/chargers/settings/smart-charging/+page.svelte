@@ -79,7 +79,13 @@
 		} else {
 			// Ensures the variables are dependencies of the effect
 			// and will be tracked by Svelte 5
-			console.log("Data loaded: ", { enabled, needed_energy, begin_H, begin_M, end_H, end_M, preheat });
+			void enabled;
+			void needed_energy;
+			void begin_H;
+			void begin_M;
+			void end_H;
+			void end_M;
+			void preheat;
 		}
 	});
 </script>

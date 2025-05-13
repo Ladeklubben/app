@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { goto } from "$app/navigation";
 	import InputField from "$lib/components/ui/InputField.svelte";
 	import Subpage from "$lib/components/ui/Subpage.svelte";
 	import { managedChargers } from "$lib/models/ManagedChargers.svelte";
@@ -56,6 +57,8 @@
 			if (initialPrices) {
 				listPriceVAT = managedChargers.selectedCharger.convertListPrice(initialPrices, true);
 			}
+		} else {
+			// TODO: Impelement error handling here
 		}
 
 		// Workaround to ensure that the effect is not triggered immediately
@@ -72,16 +75,14 @@
 			}
 			const priceForServer = managedChargers.selectedCharger.convertListPrice(listPriceVAT, false);
 			managedChargers.selectedCharger.putListPrice(priceForServer);
-			console.log("Sent data to server: ", priceForServer);
+			console.log("Updating price list: ", priceForServer);
 		} else {
 			// Ensures the variables are dependencies of the effect
 			// and will be tracked by Svelte 5
-			console.log("Data loaded: ", {
-				nominal: listPriceVAT.nominal,
-				minimum: listPriceVAT.minimum,
-				fallback: listPriceVAT.fallback,
-				follow_spot: listPriceVAT.follow_spot,
-			});
+			void listPriceVAT.nominal;
+			void listPriceVAT.minimum;
+			void listPriceVAT.fallback;
+			void listPriceVAT.follow_spot;
 		}
 	});
 </script>
