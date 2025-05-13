@@ -567,6 +567,21 @@ export class ManagedCharger {
 	}
 
 	/**
+	 * Updates the list price for the charger
+	 * @param data ListPrice object with new settings
+	 * @returns Promise<void>
+	 */
+	async putListPrice(data: ListPrice): Promise<void> {
+		try {
+			await put(`/listprice/${this.id}`, data);
+			this.listPrice = data;
+		} catch (error) {
+			console.error("Error updating list price:", error);
+			throw error;
+		}
+	}
+
+	/**
 	 * Converts the list price based on VAT inclusion
 	 * @param listPrice The original list price object
 	 * @param addVAT Whether to add VAT or remove it
