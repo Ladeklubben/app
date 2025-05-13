@@ -100,6 +100,6 @@
 	</button>
 	<h1 class="m-0 text-xl absolute left-1/2 -translate-x-1/2">{title}</h1>
 </header>
-<div class="wrapper mt-[53px]">
+<div class="wrapper mt-[53px] pb-10">
 	{@render children?.()}
 </div>

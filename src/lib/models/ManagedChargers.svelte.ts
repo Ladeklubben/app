@@ -319,6 +319,23 @@ export class ManagedCharger {
 	}
 
 	/**
+	 * Updates the smart charging schedule for the charger
+	 * @param data SmartChargeSchedule object with new settings
+	 * @returns Promise<void>
+	 */
+	async putSmartChargeSchedule(data: SmartChargeSchedule): Promise<void> {
+		try {
+			console.log("Updating smart charge schedule:", data);
+			const querystring = data.enabled ? '?enable=1' : '';
+			await put(`/cp/${this.id}/smart${querystring}`, data);
+			this.smartChargeSchedule = data;
+		} catch (error) {
+			console.error("Error updating smart charge schedule:", error);
+			throw error;
+		}
+	}
+
+	/**
 	 * Fetches electricity price constants for the charger
 	 * @returns Promise with the charger's electricity price constants
 	 */
@@ -667,6 +684,8 @@ interface SmartChargeSchedule {
 	needed_energy: number;
 	/** Preheat setting for the vehicle */
 	preheat: number;
+	/** Shows if smart charge is enabled */
+	enabled: boolean;
 }
 
 /**
