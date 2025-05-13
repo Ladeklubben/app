@@ -163,6 +163,8 @@ export class ManagedCharger {
 	transactionsInfo = $state<ChargerTransactionInfo | undefined>();
 	/** Plot data for charger transactions */
 	transactionsPlot = $state<ChargerTransactionPlot | undefined>();
+	/** List price information for the charger */
+	listPrice = $state<ListPrice | undefined>();
 
 	/**
 	 * Creates a new ManagedCharger instance
@@ -205,6 +207,7 @@ export class ManagedCharger {
 				this.getTransactionsList(),
 				this.getTransactionsInfo(),
 				this.getTransactionsPlot(),
+				this.getListPrice(),
 			]);
 		} catch (error) {
 			console.error("Error getting all data:", error);
@@ -547,6 +550,54 @@ export class ManagedCharger {
 			throw error;
 		}
 	}
+
+	/**
+	 * Fetches the list price for the charger
+	 * @returns Promise with the charger's list price
+	 */
+	async getListPrice(): Promise<ListPrice | undefined> {
+		try {
+			const response = await get(`/listprice/${this.id}`);
+			this.listPrice = response;
+			return this.listPrice;
+		} catch (error) {
+			console.error("Error getting list price:", error);
+			throw error;
+		}
+	}
+
+	/**
+	 * Updates the list price for the charger
+	 * @param data ListPrice object with new settings
+	 * @returns Promise<void>
+	 */
+	async putListPrice(data: ListPrice): Promise<void> {
+		try {
+			await put(`/listprice/${this.id}`, data);
+			this.listPrice = data;
+		} catch (error) {
+			console.error("Error updating list price:", error);
+			throw error;
+		}
+	}
+
+	/**
+	 * Converts the list price based on VAT inclusion
+	 * @param listPrice The original list price object
+	 * @param addVAT Whether to add VAT or remove it
+	 * @returns Converted list price object
+	 */
+	convertListPrice(listPrice: ListPrice, addVAT: boolean): ListPrice {
+		const convertedListPrice: ListPrice = {
+			...listPrice,
+			nominal: listPrice.nominal * (addVAT ? 1.25 : 0.8),
+			minimum: listPrice.minimum * (addVAT ? 1.25 : 0.8),
+			fallback: listPrice.fallback * (addVAT ? 1.25 : 0.8),
+		};
+
+		return convertedListPrice;
+	}
+
 }
 
 // Reactive state for the ManagedChargers instance
@@ -867,4 +918,20 @@ interface ChargerTransactionPlot {
 	values: number[];
 	/** Array of timestamps corresponding to the values */
 	timestamps: number[];
+}
+
+/**
+ * Interface for managed charger pricing information
+ */
+export interface ListPrice {
+	/** Price per kWh. Depending on follow_spot this is either a fixed price or a positive offset */
+	nominal: number;
+	/** Minimal price even with discounts */
+	minimum: number;
+	/** Default price if public spot prices are unavailable */
+	fallback: number;
+	/** Currency */
+	valuta: string;
+	/** Whether the charger follows spot prices */
+	follow_spot: boolean;
 }

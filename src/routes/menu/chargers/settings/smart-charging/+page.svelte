@@ -79,57 +79,61 @@
 		} else {
 			// Ensures the variables are dependencies of the effect
 			// and will be tracked by Svelte 5
-			console.log("Data loaded: ", {enabled, needed_energy, begin_H, begin_M, end_H, end_M, preheat});
+			void enabled;
+			void needed_energy;
+			void begin_H;
+			void begin_M;
+			void end_H;
+			void end_M;
+			void preheat;
 		}
 	});
 </script>
 
 <Subpage title="Smart Charging" backURL="/menu/chargers/settings">
-	<div class="flex flex-col gap-10">
-		<InputField label="Enable Smart Charging" type="toggle" bind:value={enabled} />
-		<InputField
-			label="Power Requirement"
-			type="number"
-			suffix="kWh"
-			center={true}
-			bind:value={needed_energy}
-			description="The amount of kWh your car needs. This is typically set to your daily average."
-		/>
-		<div class="flex flex-col gap-3">
-			<span>
-				<span class="font-bold">Earliest Start</span>
-				- {begin_H}:{begin_M}
-			</span>
-			<p>This is the earliest possible time you want to start charging your car.</p>
-			<button
-				class="p-3 font-bold bg-lk-blue-500 border border-lk-blue-500 rounded-xl text-lk-blue-50
+	<InputField label="Enable Smart Charging" type="toggle" bind:value={enabled} />
+	<InputField
+		label="Power Requirement"
+		type="number"
+		suffix="kWh"
+		center={true}
+		bind:value={needed_energy}
+		description="The amount of kWh your car needs. This is typically set to your daily average."
+	/>
+	<div class="flex flex-col gap-1.5">
+		<span>
+			<span class="font-bold">Earliest Start</span>
+			- {begin_H}:{begin_M}
+		</span>
+		<p>This is the earliest possible time you want to start charging your car.</p>
+		<button
+			class="p-3 mt-2 font-bold bg-lk-blue-500 border border-lk-blue-500 rounded-xl text-lk-blue-50
 							cursor-pointer disabled:cursor-not-allowed w-full"
-				onclick={async () => selectTime("begin")}
-			>
-				Set Time
-			</button>
-		</div>
-		<div class="flex flex-col gap-3">
-			<span>
-				<span class="font-bold">Ready Time</span>
-				- {end_H}:{end_M}
-			</span>
-			<p>This is usually when you need to use your car. It will be fully charged by this time.</p>
-			<button
-				class="p-3 font-bold bg-lk-blue-500 border border-lk-blue-500 rounded-xl text-lk-blue-50
-							cursor-pointer disabled:cursor-not-allowed w-full"
-				onclick={async () => selectTime("end")}
-			>
-				Set Time
-			</button>
-		</div>
-		<InputField
-			label="Preheat"
-			type="number"
-			suffix="min"
-			center={true}
-			bind:value={preheat}
-			description="Set the amount of minutes that your car will need power to heat the cabin"
-		/>
+			onclick={async () => selectTime("begin")}
+		>
+			Set Time
+		</button>
 	</div>
+	<div class="flex flex-col gap-1.5">
+		<span>
+			<span class="font-bold">Ready Time</span>
+			- {end_H}:{end_M}
+		</span>
+		<p>This is usually when you need to use your car. It will be fully charged by this time.</p>
+		<button
+			class="p-3 mt-2 font-bold bg-lk-blue-500 border border-lk-blue-500 rounded-xl text-lk-blue-50
+							cursor-pointer disabled:cursor-not-allowed w-full"
+			onclick={async () => selectTime("end")}
+		>
+			Set Time
+		</button>
+	</div>
+	<InputField
+		label="Preheat"
+		type="number"
+		suffix="min"
+		center={true}
+		bind:value={preheat}
+		description="Set the amount of minutes that your car will need power to heat the cabin"
+	/>
 </Subpage>

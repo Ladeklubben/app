@@ -1,6 +1,6 @@
 <script lang="ts">
 	let {
-		id = "",
+		id = crypto.randomUUID(), // Generate a unique ID if none is provided. Fixes getElementById error
 		type = "text",
 		label,
 		labelBold = true,
@@ -58,7 +58,7 @@
 		</select>
 	</div>
 {:else}
-	<div class="flex flex-col gap-3">
+	<div class="flex flex-col gap-1">
 		<label for={id} class="font-bold">{label}</label>
 		{#if description}
 			<p class="mb-2">{description}</p>

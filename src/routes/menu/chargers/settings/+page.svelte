@@ -76,7 +76,7 @@
 		<MenuItem
 			text="Pricing"
 			onclick={() => {
-				console.log("Clicked");
+				goto("/menu/chargers/settings/pricing");
 			}}
 		>
 			<Cash />
