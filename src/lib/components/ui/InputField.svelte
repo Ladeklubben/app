@@ -9,6 +9,8 @@
 		error = "",
 		disabled = false,
 		options = [],
+		suffix = "",
+		center = false,
 	} = $props();
 </script>
 
@@ -21,7 +23,9 @@
 			name={id}
 			{disabled}
 			bind:checked={value}
-			class="h-6 w-6 appearance-none rounded-md border border-lk-blue-500 bg-transparent focus:ring-lk-blue-300 {error ? 'border-lk-red-600' : ''}"
+			class="h-6 w-6 appearance-none rounded-md border border-lk-blue-500 bg-transparent focus:ring-lk-blue-300 {error
+				? 'border-lk-red-600'
+				: ''}"
 		/>
 	</div>
 {:else if type === "toggle"}
@@ -59,15 +63,23 @@
 		{#if description}
 			<p class="mb-2">{description}</p>
 		{/if}
-		<input
-			{type}
-			{id}
-			name={id}
-			{disabled}
-			bind:value
-			class="rounded-2xl border border-lk-blue-500 bg-transparent p-3 text-lg text-lk-blue-50 focus:border-lk-blue-300 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none
-                {error ? 'border-lk-red-600' : ''}"
-		/>
+		<div class="relative">
+			<input
+				{type}
+				{id}
+				name={id}
+				{disabled}
+				bind:value
+				class="w-full rounded-2xl border border-lk-blue-500 bg-transparent p-3 text-lg text-lk-blue-50 focus:border-lk-blue-300 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none
+				{center ? 'text-center' : ''}
+				{error ? 'border-lk-red-600' : ''}"
+			/>
+			{#if suffix}
+				<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-lk-blue-50/50">
+					{suffix}
+				</div>
+			{/if}
+		</div>
 	</div>
 {/if}
 {#if error}
