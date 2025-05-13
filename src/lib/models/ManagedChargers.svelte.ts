@@ -555,7 +555,7 @@ export class ManagedCharger {
 	 * Fetches the list price for the charger
 	 * @returns Promise with the charger's list price
 	 */
-	async getListPrice(): Promise<ListPrice | void> {
+	async getListPrice(): Promise<ListPrice | undefined> {
 		try {
 			const response = await get(`/listprice/${this.id}`);
 			this.listPrice = response;
