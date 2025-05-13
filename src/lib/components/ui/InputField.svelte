@@ -1,6 +1,6 @@
 <script lang="ts">
 	let {
-		id = "",
+		id = crypto.randomUUID(), // Generate a unique ID if none is provided. Fixes getElementById error
 		type = "text",
 		label,
 		labelBold = true,
