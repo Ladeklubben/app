@@ -165,6 +165,8 @@ export class ManagedCharger {
 	transactionsPlot = $state<ChargerTransactionPlot | undefined>();
 	/** List price information for the charger */
 	listPrice = $state<ListPrice | undefined>();
+	/** Always on schedule for free charging */
+	alwaysOnSchedule = $state<AlwaysOnSchedule | undefined>();
 
 	/**
 	 * Creates a new ManagedCharger instance
@@ -208,6 +210,7 @@ export class ManagedCharger {
 				this.getTransactionsInfo(),
 				this.getTransactionsPlot(),
 				this.getListPrice(),
+				this.getAlwaysOnSchedule(),
 			]);
 		} catch (error) {
 			console.error("Error getting all data:", error);
@@ -329,7 +332,7 @@ export class ManagedCharger {
 	async putSmartChargeSchedule(data: SmartChargeSchedule): Promise<void> {
 		try {
 			console.log("Updating smart charge schedule:", data);
-			const querystring = data.enabled ? '?enable=1' : '';
+			const querystring = data.enabled ? "?enable=1" : "";
 			await put(`/cp/${this.id}/smart${querystring}`, data);
 			this.smartChargeSchedule = data;
 		} catch (error) {
@@ -598,6 +601,20 @@ export class ManagedCharger {
 		return convertedListPrice;
 	}
 
+	/**
+	 * Fetches the always on schedule for the charger
+	 * @returns Promise with the charger's always on schedule
+	 */
+	async getAlwaysOnSchedule(): Promise<AlwaysOnSchedule | undefined> {
+		try {
+			const response = await get(`/schedule/${this.id}/alwayson`);
+			this.alwaysOnSchedule = response;
+			return this.alwaysOnSchedule;
+		} catch (error) {
+			console.error("Error getting always on schedule:", error);
+			throw error;
+		}
+	}
 }
 
 // Reactive state for the ManagedChargers instance
@@ -934,4 +951,25 @@ export interface ListPrice {
 	valuta: string;
 	/** Whether the charger follows spot prices */
 	follow_spot: boolean;
+}
+
+/**
+ * Interface for free charging schedule
+ * Represents an array of schedule entries
+ */
+interface AlwaysOnSchedule extends Array<AlwaysOnInterval> {
+	/** Number of schedule entries */
+	length: number;
+}
+
+/**
+ * Interface for a free charging interval configuration
+ */
+interface AlwaysOnInterval {
+	/** Array of weekdays where this interval applies (0 = Sunday, 1 = Monday, etc.) */
+	days: number[];
+	/** Starting time in minutes from midnight */
+	start: number;
+	/** Duration of the interval in minutes */
+	interval: number;
 }
