@@ -19,10 +19,11 @@
 	import Chart from "~icons/mdi/chart-box-outline";
 
 	onMount(async () => {
-		await managedChargers.loadAllChargersData();
 		if (managedChargers.selectedCharger === null) {
 			// TODO: Show error message
 			goto("/menu/chargers");
+		} else {
+			await managedChargers.selectedCharger.getAllData();
 		}
 	});
 </script>
@@ -57,7 +58,7 @@
 		<MenuItem
 			text="Always On"
 			onclick={() => {
-				console.log("Clicked");
+				goto("/menu/chargers/settings/always-on");
 			}}
 		>
 			<Clock />
