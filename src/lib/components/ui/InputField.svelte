@@ -72,6 +72,7 @@
 			{id}
 			name={id}
 			{disabled}
+			step="900"
 			bind:value
 			class="w-full text-center rounded-2xl border border-lk-blue-500 bg-transparent p-3 text-sm text-lk-blue-50 focus:border-lk-blue-300 focus:outline-none
 				{error ? 'border-lk-red-600' : ''}"
