@@ -59,6 +59,24 @@
 			{/each}
 		</select>
 	</div>
+{:else if type === "time"}
+	<div class="flex flex-col gap-1 flex-1">
+		{#if label}
+			<label for={id} class="font-bold">{label}</label>
+		{/if}
+		{#if description}
+			<p class="mb-2">{description}</p>
+		{/if}
+		<input
+			type="time"
+			{id}
+			name={id}
+			{disabled}
+			bind:value
+			class="w-full text-center rounded-2xl border border-lk-blue-500 bg-transparent p-3 text-sm text-lk-blue-50 focus:border-lk-blue-300 focus:outline-none
+				{error ? 'border-lk-red-600' : ''}"
+		/>
+	</div>
 {:else}
 	<div class="flex flex-col gap-1">
 		<label for={id} class="font-bold">{label}</label>
