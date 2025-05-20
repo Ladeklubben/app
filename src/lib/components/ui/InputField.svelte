@@ -1,6 +1,8 @@
 <script lang="ts">
+	import CryptoJS from "crypto-js";
+
 	let {
-		id = crypto.randomUUID(), // Generate a unique ID if none is provided. Fixes getElementById error
+		id = `input-${CryptoJS.lib.WordArray.random(16).toString()}`, // Generate a random ID using CryptoJS
 		type = "text",
 		label,
 		labelBold = true,
