@@ -79,8 +79,8 @@
 
 <Subpage title="Always On" backURL="/menu/chargers/settings">
 	{#each scheduleData as dayData, dayIndex}
-		<div class="w-full flex flex-col border border-lk-blue-800 rounded-2xl" >
-			<div class="flex flex-row justify-between items-center bg-lk-blue-900 rounded-t-2xl px-4 py-3">
+		<div class="w-full flex flex-col border border-lk-blue-800 rounded-2xl overflow-hidden">
+			<div class="flex flex-row justify-between items-center bg-lk-blue-900 px-4 py-3">
 				<span class="font-bold">{dayData.day}</span>
 				<button
 					class="bg-lk-blue-700 text-white rounded-full p-2 transition-colors"
