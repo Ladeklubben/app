@@ -3,8 +3,11 @@
 	import { managedChargers } from "$lib/models/ManagedChargers.svelte";
 	import Trashcan from "~icons/mdi/trash-can-outline";
 	import PlusClock from "~icons/mdi/clock-plus-outline";
+	import ChevronDown from "~icons/mdi/chevron-down";
+	import ChevronUp from "~icons/mdi/chevron-up";
 	import CryptoJS from "crypto-js";
 	import InputField from "$lib/components/ui/InputField.svelte";
+	import { slide } from "svelte/transition";
 
 	interface TimeSlot {
 		id: string;
@@ -49,6 +52,13 @@
 		},
 	]);
 
+	// Track which day is currently expanded (default to Monday - index 0)
+	let expandedDayIndex = $state(0);
+
+	function toggleDay(index: number) {
+		expandedDayIndex = expandedDayIndex === index ? -1 : index;
+	}
+
 	function addTimeSlot(dayIndex: number) {
 		const newTimeSlot: TimeSlot = {
 			id: CryptoJS.lib.WordArray.random(16).toString(),
@@ -78,34 +88,53 @@
 </script>
 
 <Subpage title="Always On" backURL="/menu/chargers/settings">
-	{#each scheduleData as dayData, dayIndex}
-		<div class="w-full flex flex-col border border-lk-blue-800 rounded-2xl overflow-hidden">
-			<div class="flex flex-row justify-between items-center bg-lk-blue-900 px-4 py-2">
-				<span class="font-bold">{dayData.day}</span>
-				<div class="w-2 h-2 rounded-full  {dayData.timeSlots.length > 0 ? "bg-lk-green-500" : "bg-lk-red-500"}"></div>
-			</div>
-			<div class="flex flex-col p-4 gap-4">
-				{#each dayData.timeSlots as timeSlot}
-					<div class="w-full flex flex-row gap-3 items-center">
-						<InputField type="time" label="" bind:value={timeSlot.startTime} />
-						<InputField type="time" label="" bind:value={timeSlot.endTime} />
+	<div class="flex flex-col gap-3 w-full">
+		{#each scheduleData as dayData, dayIndex}
+			<div class="w-full flex flex-col border border-lk-blue-800 rounded-2xl overflow-hidden">
+				<button
+					class="flex flex-row justify-between items-center {expandedDayIndex === dayIndex ? "bg-lk-blue-900" : ""} p-4 w-full"
+					onclick={() => toggleDay(dayIndex)}
+				>
+					<h3 class="font-bold text-lk-blue-50">{dayData.day}</h3>
+					<div class="flex items-center gap-2">
+						<div
+							class="w-2 h-2 rounded-full {dayData.timeSlots.length > 0
+								? 'bg-lk-green-500'
+								: 'bg-lk-red-500'}"
+						></div>
+						{#if expandedDayIndex === dayIndex}
+							<ChevronUp class="text-lk-blue-100" />
+						{:else}
+							<ChevronDown class="text-lk-blue-100" />
+						{/if}
+					</div>
+				</button>
+
+				{#if expandedDayIndex === dayIndex}
+					<div class="flex flex-col p-4 gap-4" transition:slide>
+						{#each dayData.timeSlots as timeSlot}
+							<div class="w-full flex flex-row gap-3 items-center">
+								<InputField type="time" label="" bind:value={timeSlot.startTime} />
+								<InputField type="time" label="" bind:value={timeSlot.endTime} />
+								<button
+									class="text-lk-blue-100/70 p-1"
+									onclick={() => removeTimeSlot(dayIndex, timeSlot.id)}
+									title="Remove time slot"
+								>
+									<Trashcan />
+								</button>
+							</div>
+						{/each}
 						<button
-							class="text-lk-blue-100/70 p-1"
-							onclick={() => removeTimeSlot(dayIndex, timeSlot.id)}
-							title="Remove time slot"
+							class="flex p-2 border border-dashed border-lk-blue-100/70 rounded-2xl justify-center gap-3 items-center text-lk-blue-100/70"
+							onclick={() => addTimeSlot(dayIndex)}
+							title="Add time slot"
 						>
-							<Trashcan />
+							<PlusClock />Add time slot
 						</button>
 					</div>
-				{/each}
-				<button
-					class="flex p-2 border border-dashed border-lk-blue-100/70 rounded-2xl justify-center gap-3 items-center text-lk-blue-100/70"
-					onclick={() => addTimeSlot(dayIndex)}
-					title="Add time slot"
-				>
-					<PlusClock />Add time slot
-				</button>
+				{/if}
 			</div>
-		</div>
-	{/each}
+		{/each}
+	</div>
 </Subpage>
