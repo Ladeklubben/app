@@ -957,7 +957,7 @@ export interface ListPrice {
  * Interface for free charging schedule
  * Represents an array of schedule entries
  */
-interface AlwaysOnSchedule extends Array<AlwaysOnInterval> {
+export interface AlwaysOnSchedule extends Array<AlwaysOnInterval> {
 	/** Number of schedule entries */
 	length: number;
 }
@@ -966,7 +966,7 @@ interface AlwaysOnSchedule extends Array<AlwaysOnInterval> {
  * Interface for a free charging interval configuration
  */
 interface AlwaysOnInterval {
-	/** Array of weekdays where this interval applies (0 = Sunday, 1 = Monday, etc.) */
+	/** Array of weekdays where this interval applies (0 = Monday, 1 = Tuesday, etc.) */
 	days: number[];
 	/** Starting time in minutes from midnight */
 	start: number;
