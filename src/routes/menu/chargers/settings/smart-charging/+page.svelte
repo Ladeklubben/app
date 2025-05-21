@@ -17,6 +17,7 @@
 	async function selectTime(timeType: "begin" | "end") {
 		if ($device === Platform.Web) {
 			console.warn("TimePicker is not supported on web.");
+			// TODO: Implement a web version of the time picker
 			return;
 		}
 

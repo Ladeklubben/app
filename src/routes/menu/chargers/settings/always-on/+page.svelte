@@ -80,15 +80,9 @@
 <Subpage title="Always On" backURL="/menu/chargers/settings">
 	{#each scheduleData as dayData, dayIndex}
 		<div class="w-full flex flex-col border border-lk-blue-800 rounded-2xl overflow-hidden">
-			<div class="flex flex-row justify-between items-center bg-lk-blue-900 px-4 py-3">
+			<div class="flex flex-row justify-between items-center bg-lk-blue-900 px-4 py-2">
 				<span class="font-bold">{dayData.day}</span>
-				<button
-					class="bg-lk-blue-700 text-white rounded-full p-2 transition-colors"
-					onclick={() => addTimeSlot(dayIndex)}
-					title="Add time slot"
-				>
-					<PlusClock />
-				</button>
+				<div class="w-2 h-2 rounded-full  {dayData.timeSlots.length > 0 ? "bg-lk-green-500" : "bg-lk-red-500"}"></div>
 			</div>
 			<div class="flex flex-col p-4 gap-4">
 				{#each dayData.timeSlots as timeSlot}
@@ -96,7 +90,7 @@
 						<InputField type="time" label="" bind:value={timeSlot.startTime} />
 						<InputField type="time" label="" bind:value={timeSlot.endTime} />
 						<button
-							class="text-lk-red-700 p-1"
+							class="text-lk-blue-100/70 p-1"
 							onclick={() => removeTimeSlot(dayIndex, timeSlot.id)}
 							title="Remove time slot"
 						>
@@ -104,6 +98,13 @@
 						</button>
 					</div>
 				{/each}
+				<button
+					class="flex p-2 border border-dashed border-lk-blue-100/70 rounded-2xl justify-center gap-3 items-center text-lk-blue-100/70"
+					onclick={() => addTimeSlot(dayIndex)}
+					title="Add time slot"
+				>
+					<PlusClock />Add time slot
+				</button>
 			</div>
 		</div>
 	{/each}
