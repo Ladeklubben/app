@@ -617,16 +617,74 @@ export class ManagedCharger {
 	}
 
 	/**
-	 * Updates the always on schedule for the charger
+	 * Adds a new always on schedule
 	 * @param data AlwaysOnSchedule object with new settings
 	 * @returns Promise<void>
 	 */
-	async patchAlwaysOnSchedule(data: AlwaysOnSchedule): Promise<void> {
+	async addAlwaysOnSchedule(data: AlwaysOnInterval): Promise<void> {
 		try {
 			await patch(`/schedule/${this.id}/alwayson`, data);
-			this.alwaysOnSchedule = data;
+
+			// Add the new data to the existing array
+			if (!this.alwaysOnSchedule) {
+				this.alwaysOnSchedule = [];
+			}
+			this.alwaysOnSchedule = [...this.alwaysOnSchedule, data];
 		} catch (error) {
 			console.error("Error updating always on schedule:", error);
+			throw error;
+		}
+	}
+
+	/**
+	 * Updates an existing always on schedule
+	 * @param schedule_new AlwaysOnSchedule object with new settings
+	 * @param schedule_org AlwaysOnSchedule object with original settings
+	 * @returns Promise<void>
+	 */
+	async updateAlwaysOnSchedule(schedule_new: AlwaysOnSchedule, schedule_org: AlwaysOnSchedule): Promise<void> {
+		try {
+			// Create the properly formatted data object
+			const data = {
+				schedule_new: schedule_new[0], // Assuming we're updating one schedule at a time
+				schedule_org: schedule_org[0], // Original schedule for comparison
+			};
+
+			await put(`/schedule/${this.id}/alwayson`, data);
+
+			// Update the local state if successful
+			if (this.alwaysOnSchedule) {
+				// Find and replace the old schedule with the new one
+				this.alwaysOnSchedule = this.alwaysOnSchedule.map((schedule) => {
+					if (schedule.start === schedule_org[0].start && schedule.interval === schedule_org[0].interval) {
+						return schedule_new[0];
+					}
+					return schedule;
+				});
+			}
+		} catch (error) {
+			console.error("Error updating always on schedule:", error);
+			throw error;
+		}
+	}
+
+	/**
+	 * Deletes an always on schedule
+	 * @param data AlwaysOnSchedule object with the schedule to delete
+	 * @returns Promise<void>
+	 */
+	async deleteAlwaysOnSchedule(data: AlwaysOnInterval): Promise<void> {
+		try {
+			await put(`/schedule/${this.id}/alwayson/rm`, data);
+
+			// Remove the deleted data from the existing array
+			if (this.alwaysOnSchedule) {
+				this.alwaysOnSchedule = this.alwaysOnSchedule.filter(
+					(schedule) => schedule.start !== data.start || schedule.interval !== data.interval,
+				);
+			}
+		} catch (error) {
+			console.error("Error deleting always on schedule:", error);
 			throw error;
 		}
 	}
