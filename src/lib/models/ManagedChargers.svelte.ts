@@ -642,12 +642,12 @@ export class ManagedCharger {
 	 * @param schedule_org AlwaysOnSchedule object with original settings
 	 * @returns Promise<void>
 	 */
-	async updateAlwaysOnSchedule(schedule_new: AlwaysOnSchedule, schedule_org: AlwaysOnSchedule): Promise<void> {
+	async updateAlwaysOnSchedule(schedule_new: AlwaysOnInterval, schedule_org: AlwaysOnInterval): Promise<void> {
 		try {
 			// Create the properly formatted data object
 			const data = {
-				schedule_new: schedule_new[0], // Assuming we're updating one schedule at a time
-				schedule_org: schedule_org[0], // Original schedule for comparison
+				schedule_new: schedule_new, // Assuming we're updating one schedule at a time
+				schedule_org: schedule_org, // Original schedule for comparison
 			};
 
 			await put(`/schedule/${this.id}/alwayson`, data);
@@ -656,8 +656,8 @@ export class ManagedCharger {
 			if (this.alwaysOnSchedule) {
 				// Find and replace the old schedule with the new one
 				this.alwaysOnSchedule = this.alwaysOnSchedule.map((schedule) => {
-					if (schedule.start === schedule_org[0].start && schedule.interval === schedule_org[0].interval) {
-						return schedule_new[0];
+					if (schedule.start === schedule_org.start && schedule.interval === schedule_org.interval) {
+						return schedule_new;
 					}
 					return schedule;
 				});
