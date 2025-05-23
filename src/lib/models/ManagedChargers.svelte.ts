@@ -1,4 +1,4 @@
-import { get, post, put, del } from "$lib/services/api";
+import { get, post, patch, put, del } from "$lib/services/api";
 import type { LocationInfo } from "$lib/types/charger.types";
 
 /**
@@ -612,6 +612,21 @@ export class ManagedCharger {
 			return this.alwaysOnSchedule;
 		} catch (error) {
 			console.error("Error getting always on schedule:", error);
+			throw error;
+		}
+	}
+
+	/**
+	 * Updates the always on schedule for the charger
+	 * @param data AlwaysOnSchedule object with new settings
+	 * @returns Promise<void>
+	 */
+	async patchAlwaysOnSchedule(data: AlwaysOnSchedule): Promise<void> {
+		try {
+			await patch(`/schedule/${this.id}/alwayson`, data);
+			this.alwaysOnSchedule = data;
+		} catch (error) {
+			console.error("Error updating always on schedule:", error);
 			throw error;
 		}
 	}
