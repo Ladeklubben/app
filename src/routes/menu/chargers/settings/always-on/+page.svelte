@@ -56,25 +56,32 @@
 	}
 
 	// Initialize display data from the actual AlwaysOnSchedule
-	let scheduleData: AlwaysOnSchedule = $state(managedChargers.selectedCharger?.alwaysOnSchedule || []);
-	let displaySchedules: DisplaySchedule[] = $state(convertScheduleDataToDisplayData(scheduleData));
+	let displaySchedules: DisplaySchedule[] = $state(
+		convertScheduleDataToDisplayData(managedChargers.selectedCharger?.alwaysOnSchedule || []),
+	);
 
 	// Add new schedule
 	function addNewSchedule() {
 		const newSchedule: DisplaySchedule = {
 			id: CryptoJS.MD5(Date.now().toString()).toString(),
-			days: [1], // Default to Monday
-			startTime: "08:00",
-			endTime: "18:00",
+			days: [0], // Default to Monday
+			startTime: "18:00",
+			endTime: "23:59",
 			expanded: true,
 		};
 		displaySchedules = [...displaySchedules, newSchedule];
+		managedChargers.selectedCharger?.addAlwaysOnSchedule(convertDisplayDataToScheduleData([newSchedule])[0]);
 	}
 
 	// Remove schedule
-	function removeSchedule(id: string) {
-		displaySchedules = displaySchedules.filter((schedule) => schedule.id !== id);
+	function removeSchedule(schedule: DisplaySchedule) {
+		// Remove from display
+		displaySchedules = displaySchedules.filter((s) => s.id !== schedule.id);
 		saveSchedules();
+
+		// Remove from managed charger
+		let scheduleToRemove = convertDisplayDataToScheduleData([schedule])[0];
+		managedChargers.selectedCharger?.deleteAlwaysOnSchedule(scheduleToRemove);
 	}
 
 	// Toggle schedule expansion
@@ -116,7 +123,6 @@
 	// Save schedules back to the main data structure
 	function saveSchedules() {
 		const newScheduleData = convertDisplayDataToScheduleData(displaySchedules);
-		scheduleData = newScheduleData;
 		// Update the managed charger's schedule
 		if (managedChargers.selectedCharger) {
 			managedChargers.selectedCharger.alwaysOnSchedule = newScheduleData;
@@ -168,8 +174,6 @@
 			return start < otherEnd && end > otherStart;
 		});
 	}
-
-	console.log($inspect(scheduleData));
 </script>
 
 <Subpage title="Always On" backURL="/menu/chargers/settings">
@@ -241,8 +245,13 @@
 						{/if}
 						<!-- Days Selection -->
 						<div>
-							<label class="block text-sm font-medium text-lk-blue-100 mb-3">Active Days</label>
-							<div class="grid grid-cols-7 gap-2">
+							<label
+								for="days-selection-{schedule.id}"
+								class="block text-sm font-medium text-lk-blue-100 mb-3"
+							>
+								Active Days
+							</label>
+							<div id="days-selection-{schedule.id}" class="grid grid-cols-7 gap-2">
 								{#each dayNames as dayName, index}
 									<button
 										class="py-2 text-xs text-lk-blue-50 font-medium rounded-xl border transition-colors overflow-hidden {schedule.days.includes(
@@ -261,8 +270,14 @@
 						<!-- Time Selection -->
 						<div class="grid grid-cols-2 gap-4">
 							<div>
-								<label class="block text-sm font-medium text-lk-blue-100 mb-2">Start Time</label>
+								<label
+									for="start-time-{schedule.id}"
+									class="block text-sm font-medium text-lk-blue-100 mb-2"
+								>
+									Start Time
+								</label>
 								<input
+									id="start-time-{schedule.id}"
 									type="time"
 									class="w-full bg-transparent text-center p-3 border border-lk-blue-800 rounded-2xl focus:border-lk-blue-300 focus:outline-none"
 									bind:value={schedule.startTime}
@@ -271,8 +286,14 @@
 								/>
 							</div>
 							<div>
-								<label class="block text-sm font-medium text-lk-blue-100 mb-2">End Time</label>
+								<label
+									for="end-time-{schedule.id}"
+									class="block text-sm font-medium text-lk-blue-100 mb-2"
+								>
+									End Time
+								</label>
 								<input
+									id="end-time-{schedule.id}"
 									type="time"
 									class="w-full bg-transparent text-center p-3 border border-lk-blue-800 rounded-2xl focus:border-lk-blue-300 focus:outline-none"
 									bind:value={schedule.endTime}
@@ -286,7 +307,7 @@
 							class="w-full flex p-4 text-lk-red-400 rounded-2xl justify-center gap-3 items-center text-sm"
 							onclick={(e) => {
 								e.stopPropagation();
-								removeSchedule(schedule.id);
+								removeSchedule(schedule);
 							}}
 							title="Add time slot"
 						>
