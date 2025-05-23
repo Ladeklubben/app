@@ -77,7 +77,10 @@
 	function removeSchedule(schedule: DisplaySchedule) {
 		// Remove from display
 		displaySchedules = displaySchedules.filter((s) => s.id !== schedule.id);
-		saveSchedules();
+		const newScheduleData = convertDisplayDataToScheduleData(displaySchedules);
+		if (managedChargers.selectedCharger) {
+			managedChargers.selectedCharger.alwaysOnSchedule = newScheduleData;
+		}
 
 		// Remove from managed charger
 		let scheduleToRemove = convertDisplayDataToScheduleData([schedule])[0];
@@ -92,9 +95,10 @@
 	}
 
 	// Toggle day selection
-	function toggleDay(scheduleId: string, day: number) {
+	function toggleDay(schedule_org: DisplaySchedule, day: number) {
+		let schedule_org_conv = convertDisplayDataToScheduleData([schedule_org])[0];
 		displaySchedules = displaySchedules.map((schedule) => {
-			if (schedule.id === scheduleId) {
+			if (schedule.id === schedule_org.id) {
 				const days = schedule.days.includes(day)
 					? schedule.days.filter((d) => d !== day)
 					: [...schedule.days, day].sort((a, b) => a - b);
@@ -102,13 +106,19 @@
 			}
 			return schedule;
 		});
-		saveSchedules();
+		// Find the updated schedule
+		let updatedSchedule = displaySchedules.find((s) => s.id === schedule_org.id);
+		if (updatedSchedule) {
+			let schedule_new_conv = convertDisplayDataToScheduleData([updatedSchedule])[0];
+			managedChargers.selectedCharger?.updateAlwaysOnSchedule(schedule_new_conv, schedule_org_conv);
+		}
 	}
 
 	// Update time
-	function updateTime(scheduleId: string, timeType: "start" | "end", value: string) {
+	function updateTime(schedule_org: DisplaySchedule, timeType: "start" | "end", value: string) {
+		let schedule_org_conv = convertDisplayDataToScheduleData([schedule_org])[0];
 		displaySchedules = displaySchedules.map((schedule) => {
-			if (schedule.id === scheduleId) {
+			if (schedule.id === schedule_org.id) {
 				if (timeType === "start") {
 					return { ...schedule, startTime: value };
 				} else {
@@ -117,16 +127,18 @@
 			}
 			return schedule;
 		});
-		saveSchedules();
+
+		// Find the updated schedule
+		let updatedSchedule = displaySchedules.find((s) => s.id === schedule_org.id);
+		if (updatedSchedule) {
+			let schedule_new_conv = convertDisplayDataToScheduleData([updatedSchedule])[0];
+			managedChargers.selectedCharger?.updateAlwaysOnSchedule(schedule_new_conv, schedule_org_conv);
+		}
 	}
 
 	// Save schedules back to the main data structure
 	function saveSchedules() {
-		const newScheduleData = convertDisplayDataToScheduleData(displaySchedules);
-		// Update the managed charger's schedule
-		if (managedChargers.selectedCharger) {
-			managedChargers.selectedCharger.alwaysOnSchedule = newScheduleData;
-		}
+		// Save data to managedcharger and server
 	}
 
 	// Format days for display
@@ -259,7 +271,7 @@
 										)
 											? 'bg-lk-blue-500 border-lk-blue-500'
 											: 'border-lk-blue-800'}"
-										onclick={() => toggleDay(schedule.id, index)}
+										onclick={() => toggleDay(schedule, index)}
 									>
 										{dayAbbreviations[index]}
 									</button>
@@ -280,9 +292,9 @@
 									id="start-time-{schedule.id}"
 									type="time"
 									class="w-full bg-transparent text-center p-3 border border-lk-blue-800 rounded-2xl focus:border-lk-blue-300 focus:outline-none"
-									bind:value={schedule.startTime}
+									value={schedule.startTime}
 									onchange={(e) =>
-										updateTime(schedule.id, "start", (e.target as HTMLInputElement).value)}
+										updateTime(schedule, "start", (e.target as HTMLInputElement).value)}
 								/>
 							</div>
 							<div>
@@ -296,9 +308,8 @@
 									id="end-time-{schedule.id}"
 									type="time"
 									class="w-full bg-transparent text-center p-3 border border-lk-blue-800 rounded-2xl focus:border-lk-blue-300 focus:outline-none"
-									bind:value={schedule.endTime}
-									onchange={(e) =>
-										updateTime(schedule.id, "end", (e.target as HTMLInputElement).value)}
+									value={schedule.endTime}
+									onchange={(e) => updateTime(schedule, "end", (e.target as HTMLInputElement).value)}
 								/>
 							</div>
 						</div>
