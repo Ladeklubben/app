@@ -2,7 +2,7 @@
 	import * as L from "leaflet";
 	import BaseMap from "./BaseMap.svelte";
 	import { onMount } from "svelte";
-	import type { PublicCharger } from "$lib/types/charger.types";
+	import type { PublicCharger } from "$lib/types/publicCharger.types";
 	import { pos, getPosition } from "$lib/services/map";
 	import { selectedChargerID } from "$lib/classes/PublicCharger";
 	import type { Position } from "@capacitor/geolocation";
