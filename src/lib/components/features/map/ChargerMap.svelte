@@ -140,9 +140,9 @@
 	function updateSelectedChargerView(): void {
 		if (!$selectedChargerID || !map) return;
 
-		const selectedCharger = chargers.find((charger: PublicCharger) => charger.stationid === $selectedChargerID);
-		if (selectedCharger) {
-			const latLng: L.LatLngTuple = [selectedCharger.location.latitude, selectedCharger.location.longitude];
+		const selected = chargers.find((charger: PublicCharger) => charger.stationid === $selectedChargerID);
+		if (selected) {
+			const latLng: L.LatLngTuple = [selected.location.latitude, selected.location.longitude];
 			const currentZoom = map.getZoom();
 			map.setView(latLng, currentZoom, { animate: true });
 		}

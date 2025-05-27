@@ -45,7 +45,7 @@
 
 	onMount(() => {
 		initialized = false;
-		const schedule = Chargers.selectedCharger?.smartChargeSchedule;
+		const schedule = Chargers.selected?.smartChargeSchedule;
 		if (schedule) {
 			enabled = schedule.enabled;
 			needed_energy = schedule.needed_energy;
@@ -61,9 +61,9 @@
 	});
 
 	$effect(() => {
-		if (initialized && Chargers.selectedCharger) {
+		if (initialized && Chargers.selected) {
 			// TODO: Implement a debounce function to avoid rapid updates
-			Chargers.selectedCharger.putSmartChargeSchedule({
+			Chargers.selected.putSmartChargeSchedule({
 				enabled,
 				needed_energy,
 				charging_begin_earliest: begin,

@@ -59,7 +59,7 @@
 
 	// Initialize display data from the actual AlwaysOnSchedule
 	let displaySchedules: DisplaySchedule[] = $state(
-		convertScheduleDataToDisplayData(Chargers.selectedCharger?.alwaysOnSchedule || []),
+		convertScheduleDataToDisplayData(Chargers.selected?.alwaysOnSchedule || []),
 	);
 
 	// Check if a schedule is valid (no conflicts and valid time range)
@@ -84,10 +84,10 @@
 				// Update existing schedule
 				console.log("Updating schedule:", originalScheduleData);
 				console.log("With new data:", scheduleData);
-				await Chargers.selectedCharger?.updateAlwaysOnSchedule(scheduleData, originalScheduleData);
+				await Chargers.selected?.updateAlwaysOnSchedule(scheduleData, originalScheduleData);
 			} else {
 				// Add new schedule
-				await Chargers.selectedCharger?.addAlwaysOnSchedule(scheduleData);
+				await Chargers.selected?.addAlwaysOnSchedule(scheduleData);
 				// Mark as saved to server
 				displaySchedules = displaySchedules.map((s) =>
 					s.id === schedule.id ? { ...s, savedToServer: true } : s,
@@ -120,15 +120,15 @@
 		// Remove from display
 		displaySchedules = displaySchedules.filter((s) => s.id !== schedule.id);
 		const newScheduleData = convertDisplayDataToScheduleData(displaySchedules);
-		if (Chargers.selectedCharger) {
-			Chargers.selectedCharger.alwaysOnSchedule = newScheduleData;
+		if (Chargers.selected) {
+			Chargers.selected.alwaysOnSchedule = newScheduleData;
 		}
 
 		// Only try to remove from server if it was saved there
 		if (schedule.savedToServer) {
 			try {
 				let scheduleToRemove = convertDisplayDataToScheduleData([schedule])[0];
-				await Chargers.selectedCharger?.deleteAlwaysOnSchedule(scheduleToRemove);
+				await Chargers.selected?.deleteAlwaysOnSchedule(scheduleToRemove);
 			} catch (error) {
 				console.error("Failed to remove schedule from server:", error);
 			}

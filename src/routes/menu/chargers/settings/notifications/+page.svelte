@@ -9,7 +9,7 @@
 	import Trashcan from "~icons/mdi/trash-can-outline";
 	import { validateEmail } from "$lib/services/forms";
 
-    let charger = Chargers.selectedCharger;
+    let charger = Chargers.selected;
     let notifcations = $derived(charger?.notificationSetupFormatted);
 
     async function handleDelete(email: string) {

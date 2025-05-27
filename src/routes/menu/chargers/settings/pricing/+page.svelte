@@ -52,10 +52,10 @@
 
 	onMount(() => {
 		initialized = false;
-		if (Chargers.selectedCharger) {
-			const initialPrices = Chargers.selectedCharger.listPrice;
+		if (Chargers.selected) {
+			const initialPrices = Chargers.selected.listPrice;
 			if (initialPrices) {
-				listPriceVAT = Chargers.selectedCharger.convertListPrice(initialPrices, true);
+				listPriceVAT = Chargers.selected.convertListPrice(initialPrices, true);
 			}
 		} else {
 			// TODO: Impelement error handling here
@@ -68,13 +68,13 @@
 	});
 
 	$effect(() => {
-		if (initialized && Chargers.selectedCharger) {
+		if (initialized && Chargers.selected) {
 			// TODO: Implement a debounce function to avoid rapid updates
 			if (!validateInputs()) {
 				return;
 			}
-			const priceForServer = Chargers.selectedCharger.convertListPrice(listPriceVAT, false);
-			Chargers.selectedCharger.putListPrice(priceForServer);
+			const priceForServer = Chargers.selected.convertListPrice(listPriceVAT, false);
+			Chargers.selected.putListPrice(priceForServer);
 			console.log("Updating price list: ", priceForServer);
 		} else {
 			// Ensures the variables are dependencies of the effect

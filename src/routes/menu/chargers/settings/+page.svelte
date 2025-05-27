@@ -19,11 +19,11 @@
 	import Chart from "~icons/mdi/chart-box-outline";
 
 	onMount(async () => {
-		if (Chargers.selectedCharger === null) {
+		if (Chargers.selected === null) {
 			// TODO: Show error message
 			goto("/menu/chargers");
 		} else {
-			await Chargers.selectedCharger.getAllData();
+			await Chargers.selected.getAllData();
 		}
 	});
 </script>

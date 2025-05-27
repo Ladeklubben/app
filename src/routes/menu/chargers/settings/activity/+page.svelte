@@ -5,7 +5,7 @@
 	import { Chargers } from "$lib/classes/Charger.svelte";
 	import { slide } from "svelte/transition";
 
-	const transactions = $derived(Chargers.selectedCharger?.transactionsList);
+	const transactions = $derived(Chargers.selected?.transactionsList);
 
 	// State for expanded transaction
 	let expandedId: string | null = $state(null);

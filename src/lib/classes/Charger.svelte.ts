@@ -8,7 +8,7 @@ export class ManagedChargers {
 	// Reactive map of chargers
 	chargers = $state<Map<string, ManagedCharger>>(new Map());
 	// Reactive selected charger
-	selectedCharger = $state<ManagedCharger | null>(null);
+	selected = $state<ManagedCharger | null>(null);
 
 	/**
 	 * Fetches the list of charger IDs from the server
@@ -32,7 +32,7 @@ export class ManagedChargers {
 		try {
 			const chargerIds = await this.fetchChargerIds();
 			this.chargers = new Map(); // Reset the reactive map
-			this.selectedCharger = null; // Clear selection on initialization
+			this.selected = null; // Clear selection on initialization
 
 			chargerIds.forEach((id) => {
 				this.chargers.set(id, new ManagedCharger(id));
@@ -115,7 +115,7 @@ export class ManagedChargers {
 	selectCharger(id: string): boolean {
 		const charger = this.chargers.get(id);
 		if (charger) {
-			this.selectedCharger = charger;
+			this.selected = charger;
 			return true;
 		}
 		return false;
@@ -125,7 +125,7 @@ export class ManagedChargers {
 	 * Clears the selected charger
 	 */
 	clearSelectedCharger(): void {
-		this.selectedCharger = null;
+		this.selected = null;
 	}
 }
 
