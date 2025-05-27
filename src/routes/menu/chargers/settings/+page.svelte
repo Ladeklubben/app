@@ -2,7 +2,7 @@
 	import { page } from "$app/state";
 	import Subpage from "$lib/components/ui/Subpage.svelte";
 	import { onMount } from "svelte";
-	import { Chargers } from "$lib/classes/Charger.svelte";
+	import { chargers } from "$lib/classes/Charger.svelte";
 	import MenuItem from "$lib/components/ui/MenuItem.svelte";
 	import MenuGroup from "$lib/components/ui/MenuGroup.svelte";
 	import { goto } from "$app/navigation";
@@ -19,11 +19,11 @@
 	import Chart from "~icons/mdi/chart-box-outline";
 
 	onMount(async () => {
-		if (Chargers.selected === null) {
+		if (chargers.selected === null) {
 			// TODO: Show error message
 			goto("/menu/chargers");
 		} else {
-			await Chargers.selected.getAllData();
+			await chargers.selected.getAllData();
 		}
 	});
 </script>

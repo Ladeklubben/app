@@ -3,13 +3,13 @@
     import InputField from "$lib/components/ui/InputField.svelte";
     import Button from "$lib/components/ui/Button.svelte";
 	import Subpage from "$lib/components/ui/Subpage.svelte";
-	import { Chargers } from "$lib/classes/Charger.svelte";
+	import { chargers } from "$lib/classes/Charger.svelte";
 	import { onMount } from "svelte";
 	import Email from "~icons/mdi/email";
 	import Trashcan from "~icons/mdi/trash-can-outline";
 	import { validateEmail } from "$lib/services/forms";
 
-    let charger = Chargers.selected;
+    let charger = chargers.selected;
     let notifcations = $derived(charger?.notificationSetupFormatted);
 
     async function handleDelete(email: string) {

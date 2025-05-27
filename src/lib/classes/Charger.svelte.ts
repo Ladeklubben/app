@@ -4,11 +4,11 @@ import type { LocationInfo } from "$lib/types/charger.types";
 /**
  * Class for managing a collection of Ladeklubben chargers
  */
-export class ManagedChargers {
+export class Chargers {
 	// Reactive map of chargers
-	chargers = $state<Map<string, ManagedCharger>>(new Map());
+	chargers = $state<Map<string, Charger>>(new Map());
 	// Reactive selected charger
-	selected = $state<ManagedCharger | null>(null);
+	selected = $state<Charger | null>(null);
 
 	/**
 	 * Fetches the list of charger IDs from the server
@@ -26,16 +26,16 @@ export class ManagedChargers {
 
 	/**
 	 * Initializes chargers with IDs from the server
-	 * @returns Promise<ManagedCharger[]> Array of initialized chargers
+	 * @returns Promise<Charger[]> Array of initialized chargers
 	 */
-	async initializeChargers(): Promise<ManagedCharger[]> {
+	async initializeChargers(): Promise<Charger[]> {
 		try {
 			const chargerIds = await this.fetchChargerIds();
 			this.chargers = new Map(); // Reset the reactive map
 			this.selected = null; // Clear selection on initialization
 
 			chargerIds.forEach((id) => {
-				this.chargers.set(id, new ManagedCharger(id));
+				this.chargers.set(id, new Charger(id));
 			});
 
 			return this.getAllChargers();
@@ -48,25 +48,25 @@ export class ManagedChargers {
 	/**
 	 * Returns a specific charger by ID
 	 * @param id Charger ID
-	 * @returns ManagedCharger or undefined if not found
+	 * @returns Charger or undefined if not found
 	 */
-	getCharger(id: string): ManagedCharger | undefined {
+	getCharger(id: string): Charger | undefined {
 		return this.chargers.get(id);
 	}
 
 	/**
 	 * Returns all managed chargers
-	 * @returns Array of ManagedCharger instances
+	 * @returns Array of Charger instances
 	 */
-	getAllChargers(): ManagedCharger[] {
+	getAllChargers(): Charger[] {
 		return Array.from(this.chargers.values());
 	}
 
 	/**
 	 * Returns all valid chargers
-	 * @returns Array of valid ManagedCharger instances
+	 * @returns Array of valid Charger instances
 	 */
-	getValidChargers(): ManagedCharger[] {
+	getValidChargers(): Charger[] {
 		return this.getAllChargers().filter((charger) => charger.valid);
 	}
 
@@ -132,7 +132,7 @@ export class ManagedChargers {
 /**
  * Class representing a single Ladeklubben charger with its associated data
  */
-export class ManagedCharger {
+export class Charger {
 	/** Unique identifier for the charger */
 	id = $state("");
 	/** Location information for the charger */
@@ -169,7 +169,7 @@ export class ManagedCharger {
 	alwaysOnSchedule = $state<AlwaysOnSchedule | undefined>();
 
 	/**
-	 * Creates a new ManagedCharger instance
+	 * Creates a new Charger instance
 	 * @param id The unique identifier for the charger
 	 */
 	constructor(id: string) {
@@ -678,8 +678,8 @@ export class ManagedCharger {
 	}
 }
 
-// Reactive state for the ManagedChargers instance
-export const Chargers = $state(new ManagedChargers());
+// Reactive state for the Chargers instance
+export const chargers = $state(new Chargers());
 
 /**
  * Interface representing the current state of a charger

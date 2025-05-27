@@ -4,7 +4,7 @@
 	import MenuItem from "$lib/components/ui/MenuItem.svelte";
 	import MenuGroup from "$lib/components/ui/MenuGroup.svelte";
 	import { onMount } from "svelte";
-	import { Chargers } from "$lib/classes/Charger.svelte";
+	import { chargers } from "$lib/classes/Charger.svelte";
 
 	// Icons
 	import Email from "~icons/mdi/email";
@@ -16,8 +16,8 @@
 
 	onMount(async () => {
 		try {
-			await Chargers.initializeChargers();
-			await Chargers.loadAllChargersCardData();
+			await chargers.initializeChargers();
+			await chargers.loadAllChargersCardData();
 		} catch (error) {
 			console.error("Failed to initialize charger data:", error);
 			// TODO: Show error message to the user

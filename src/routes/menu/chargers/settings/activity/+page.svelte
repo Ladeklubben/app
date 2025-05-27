@@ -2,10 +2,10 @@
 	import Subpage from "$lib/components/ui/Subpage.svelte";
 	import ChevronUp from "~icons/mdi/chevron-up";
 	import ChevronDown from "~icons/mdi/chevron-down";
-	import { Chargers } from "$lib/classes/Charger.svelte";
+	import { chargers } from "$lib/classes/Charger.svelte";
 	import { slide } from "svelte/transition";
 
-	const transactions = $derived(Chargers.selected?.transactionsList);
+	const transactions = $derived(chargers.selected?.transactionsList);
 
 	// State for expanded transaction
 	let expandedId: string | null = $state(null);

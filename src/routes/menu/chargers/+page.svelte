@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Chargers, ManagedCharger } from "$lib/classes/Charger.svelte";
+	import { chargers, Charger } from "$lib/classes/Charger.svelte";
 	import { onMount } from "svelte";
 	import Subpage from "$lib/components/ui/Subpage.svelte";
 	import Bolt from "~icons/mdi/lightning-bolt";
@@ -8,14 +8,14 @@
 	import { goto } from "$app/navigation";
 	import Button from "$lib/components/ui/Button.svelte";
 
-	const chargers = $derived(Array.from(Chargers.chargers.values()));
+	const chargerArray = $derived(Array.from(chargers.chargers.values()));
 
 	onMount(async () => {
-		await Chargers.loadAllChargersCardData();
+		await chargers.loadAllChargersCardData();
 	});
 
 	// Helper functions for the card
-	function getChargerStatus(charger: ManagedCharger) {
+	function getChargerStatus(charger: Charger) {
 		const isCharging = charger.chargeState?.is_charging === 1;
 		const isConnected = charger.chargeState?.connector_occupied === 1;
 
@@ -24,16 +24,16 @@
 		return { text: "Idle", class: "text-lk-blue-200" };
 	}
 
-	function handleChargerClick(charger: ManagedCharger) {
+	function handleChargerClick(charger: Charger) {
 		// Navigate to charger details page
-		Chargers.selectCharger(charger.id);
+		chargers.selectCharger(charger.id);
 		goto(`/menu/chargers/settings`);
 	}
 </script>
 
 <Subpage title="Chargers" backURL="/menu">
-	{#if chargers.length > 0}
-		{#each chargers as charger}
+	{#if chargerArray.length > 0}
+		{#each chargerArray as charger}
 			<button
 				type="button"
 				class="rounded-2xl overflow-hidden border border-lk-blue-800 w-full p-0 m-0 bg-transparent focus:outline-none text-left"

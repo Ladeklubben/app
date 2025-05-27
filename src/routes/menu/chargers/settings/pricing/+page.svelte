@@ -2,7 +2,7 @@
 	import { goto } from "$app/navigation";
 	import InputField from "$lib/components/ui/InputField.svelte";
 	import Subpage from "$lib/components/ui/Subpage.svelte";
-	import { Chargers } from "$lib/classes/Charger.svelte";
+	import { chargers } from "$lib/classes/Charger.svelte";
 	import type { ListPrice } from "$lib/classes/Charger.svelte";
 	import { onMount } from "svelte";
 
@@ -52,10 +52,10 @@
 
 	onMount(() => {
 		initialized = false;
-		if (Chargers.selected) {
-			const initialPrices = Chargers.selected.listPrice;
+		if (chargers.selected) {
+			const initialPrices = chargers.selected.listPrice;
 			if (initialPrices) {
-				listPriceVAT = Chargers.selected.convertListPrice(initialPrices, true);
+				listPriceVAT = chargers.selected.convertListPrice(initialPrices, true);
 			}
 		} else {
 			// TODO: Impelement error handling here
@@ -68,13 +68,13 @@
 	});
 
 	$effect(() => {
-		if (initialized && Chargers.selected) {
+		if (initialized && chargers.selected) {
 			// TODO: Implement a debounce function to avoid rapid updates
 			if (!validateInputs()) {
 				return;
 			}
-			const priceForServer = Chargers.selected.convertListPrice(listPriceVAT, false);
-			Chargers.selected.putListPrice(priceForServer);
+			const priceForServer = chargers.selected.convertListPrice(listPriceVAT, false);
+			chargers.selected.putListPrice(priceForServer);
 			console.log("Updating price list: ", priceForServer);
 		} else {
 			// Ensures the variables are dependencies of the effect
