@@ -8,5 +8,5 @@
 		Set specific time periods when your charger is open and doesn't require being unlocked. You can create multiple
 		schedules for different days and different time intervals.
 	</p>
-	<WeekSchedule></WeekSchedule>
+	<WeekSchedule scheduleType="alwayson"></WeekSchedule>
 </Subpage>

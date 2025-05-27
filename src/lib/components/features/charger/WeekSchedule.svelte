@@ -11,13 +11,18 @@
 	import type { DisplaySchedule } from "$lib/types/charger.types";
 	import { Charger } from "$lib/classes/Charger.svelte";
 
+	// Component Props
+	let { scheduleType }: { scheduleType: "alwayson" | "openhours" } = $props();
+
 	// Day names for display
 	const dayNames = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 	const dayAbbreviations = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
-	// Initialize display data from the actual ScheduleList
+	// Initialize display data from the appropriate schedule based on the scheduleType
 	let displaySchedules: DisplaySchedule[] = $state(
-		Charger.convertScheduleDataToDisplayData(chargers.selected?.alwaysOnSchedule || []),
+		scheduleType === "alwayson"
+			? Charger.convertScheduleDataToDisplayData(chargers.selected?.alwaysOnSchedule || [])
+			: Charger.convertScheduleDataToDisplayData(chargers.selected?.rentalSchedule || []),
 	);
 
 	// Check if a schedule is valid (no conflicts and valid time range)
@@ -41,10 +46,14 @@
 			if (schedule.savedToServer && originalScheduleData) {
 				// Update existing schedule
 				console.log("Updating schedule:", scheduleData);
-				await chargers.selected?.updateAlwaysOnSchedule(scheduleData, originalScheduleData);
+				scheduleType === "alwayson"
+					? await chargers.selected?.updateAlwaysOnSchedule(scheduleData, originalScheduleData)
+					: await chargers.selected?.updateRentalSchedule(scheduleData, originalScheduleData);
 			} else {
 				// Add new schedule
-				await chargers.selected?.addAlwaysOnSchedule(scheduleData);
+				scheduleType === "alwayson"
+					? await chargers.selected?.addAlwaysOnSchedule(scheduleData)
+					: await chargers.selected?.addRentalSchedule(scheduleData);
 				// Mark as saved to server
 				displaySchedules = displaySchedules.map((s) =>
 					s.id === schedule.id ? { ...s, savedToServer: true } : s,
@@ -77,15 +86,23 @@
 		// Remove from display
 		displaySchedules = displaySchedules.filter((s) => s.id !== schedule.id);
 		const newScheduleData = Charger.convertDisplayDataToScheduleData(displaySchedules);
+
+		// Update the selected charger's schedule
 		if (chargers.selected) {
-			chargers.selected.alwaysOnSchedule = newScheduleData;
+			if (scheduleType === "alwayson") {
+				chargers.selected.alwaysOnSchedule = newScheduleData;
+			} else {
+				chargers.selected.rentalSchedule = newScheduleData;
+			}
 		}
 
 		// Only try to remove from server if it was saved there
 		if (schedule.savedToServer) {
 			try {
 				let scheduleToRemove = Charger.convertDisplayDataToScheduleData([schedule])[0];
-				await chargers.selected?.deleteAlwaysOnSchedule(scheduleToRemove);
+				scheduleType === "alwayson"
+					? await chargers.selected?.deleteAlwaysOnSchedule(scheduleToRemove)
+					: await chargers.selected?.deleteRentalSchedule(scheduleToRemove);
 			} catch (error) {
 				console.error("Failed to remove schedule from server:", error);
 			}

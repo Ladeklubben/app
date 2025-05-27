@@ -8,5 +8,5 @@
 		Make money by renting out your charger. Set your available time periods for different days, and you'll
 		automatically earn money based on how much other members use it.
 	</p>
-	<WeekSchedule></WeekSchedule>
+	<WeekSchedule scheduleType="openhours"></WeekSchedule>
 </Subpage>

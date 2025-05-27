@@ -104,6 +104,7 @@ export class Charger {
 				this.getTransactionsPlot(),
 				this.getListPrice(),
 				this.getAlwaysOnSchedule(),
+				this.getRentalSchedule(),
 			]);
 		} catch (error) {
 			console.error("Error getting all data:", error);
@@ -495,78 +496,163 @@ export class Charger {
 	}
 
 	/**
-	 * Fetches the always on schedule for the charger
-	 * @returns Promise with the charger's always on schedule
+	 * Generic method to fetch a schedule by type
+	 * @param scheduleType The type of schedule ('alwayson' or 'openhours')
+	 * @returns Promise with the schedule data
 	 */
-	async getAlwaysOnSchedule(): Promise<ScheduleList | undefined> {
+	private async getSchedule(scheduleType: "alwayson" | "openhours"): Promise<ScheduleList | undefined> {
 		try {
-			const response = await get(`/schedule/${this.id}/alwayson`);
-			this.alwaysOnSchedule = response;
-			return this.alwaysOnSchedule;
+			const response = await get(`/schedule/${this.id}/${scheduleType}`);
+			return response;
 		} catch (error) {
-			console.error("Error getting always on schedule:", error);
+			console.error(`Error getting ${scheduleType} schedule:`, error);
 			throw error;
 		}
 	}
 
 	/**
-	 * Adds a new always on schedule
-	 * @param data ScheduleList object with new settings
+	 * Generic method to add a schedule
+	 * @param scheduleType The type of schedule ('alwayson' or 'openhours')
+	 * @param data SingleSchedule object with new settings
+	 * @returns Promise<void>
+	 */
+	private async addSchedule(scheduleType: "alwayson" | "openhours", data: SingleSchedule): Promise<void> {
+		try {
+			await patch(`/schedule/${this.id}/${scheduleType}`, data);
+		} catch (error) {
+			console.error(`Error adding ${scheduleType} schedule:`, error);
+			throw error;
+		}
+	}
+
+	/**
+	 * Generic method to update a schedule
+	 * @param scheduleType The type of schedule ('alwayson' or 'openhours')
+	 * @param schedule_new SingleSchedule object with new settings
+	 * @param schedule_org SingleSchedule object with original settings
+	 * @returns Promise<void>
+	 */
+	private async updateSchedule(
+		scheduleType: "alwayson" | "openhours",
+		schedule_new: SingleSchedule,
+		schedule_org: SingleSchedule,
+	): Promise<void> {
+		try {
+			const data = {
+				schedule_new: schedule_new,
+				schedule_org: schedule_org,
+			};
+			await put(`/schedule/${this.id}/${scheduleType}`, data);
+		} catch (error) {
+			console.error(`Error updating ${scheduleType} schedule:`, error);
+			throw error;
+		}
+	}
+
+	/**
+	 * Generic method to delete a schedule
+	 * @param scheduleType The type of schedule ('alwayson' or 'openhours')
+	 * @param data SingleSchedule object with the schedule to delete
+	 * @returns Promise<void>
+	 */
+	private async deleteSchedule(scheduleType: "alwayson" | "openhours", data: SingleSchedule): Promise<void> {
+		try {
+			await put(`/schedule/${this.id}/${scheduleType}/rm`, data);
+		} catch (error) {
+			console.error(`Error deleting ${scheduleType} schedule:`, error);
+			throw error;
+		}
+	}
+
+	/**
+	 * Fetches the always on schedule for free charging
+	 * @returns Promise with the always on schedule data
+	 * */
+	async getAlwaysOnSchedule(): Promise<ScheduleList | undefined> {
+		this.alwaysOnSchedule = await this.getSchedule("alwayson");
+		return this.alwaysOnSchedule;
+	}
+
+	/**
+	 * Adds a new always on schedule for free charging
+	 * @param data SingleSchedule object with new settings
 	 * @returns Promise<void>
 	 */
 	async addAlwaysOnSchedule(data: SingleSchedule): Promise<void> {
-		try {
-			await patch(`/schedule/${this.id}/alwayson`, data);
-
-			// Add the new data to the existing array
-			if (!this.alwaysOnSchedule) {
-				this.alwaysOnSchedule = [];
-			}
-			this.alwaysOnSchedule = [...this.alwaysOnSchedule, data];
-		} catch (error) {
-			console.error("Error updating always on schedule:", error);
-			throw error;
+		await this.addSchedule("alwayson", data);
+		if (!this.alwaysOnSchedule) {
+			this.alwaysOnSchedule = [];
 		}
+		this.alwaysOnSchedule = [...this.alwaysOnSchedule, data];
 	}
 
 	/**
-	 * Updates an existing always on schedule
-	 * @param schedule_new ScheduleList object with new settings
-	 * @param schedule_org ScheduleList object with original settings
+	 * Updates an existing always on schedule for free charging
+	 * @param schedule_new SingleSchedule object with new settings
+	 * @param schedule_org SingleSchedule object with original settings
 	 * @returns Promise<void>
 	 */
 	async updateAlwaysOnSchedule(schedule_new: SingleSchedule, schedule_org: SingleSchedule): Promise<void> {
-		try {
-			// Create the properly formatted data object
-			const data = {
-				schedule_new: schedule_new, // Assuming we're updating one schedule at a time
-				schedule_org: schedule_org, // Original schedule for comparison
-			};
-			await put(`/schedule/${this.id}/alwayson`, data);
-		} catch (error) {
-			console.error("Error updating always on schedule:", error);
-			throw error;
+		await this.updateSchedule("alwayson", schedule_new, schedule_org);
+	}
+
+	/**
+	 * Deletes an existing always on schedule for free charging
+	 * @param data SingleSchedule object with the schedule to delete
+	 * @returns Promise<void>
+	 */
+	async deleteAlwaysOnSchedule(data: SingleSchedule): Promise<void> {
+		await this.deleteSchedule("alwayson", data);
+		if (this.alwaysOnSchedule) {
+			this.alwaysOnSchedule = this.alwaysOnSchedule.filter(
+				(schedule) => schedule.start !== data.start || schedule.interval !== data.interval,
+			);
 		}
 	}
 
 	/**
-	 * Deletes an always on schedule
-	 * @param data ScheduleList object with the schedule to delete
+	 * Fetches the rental schedule for the charger
+	 * @returns Promise with the rental schedule data
+	 */
+	async getRentalSchedule(): Promise<ScheduleList | undefined> {
+		this.rentalSchedule = await this.getSchedule("openhours");
+		return this.rentalSchedule;
+	}
+
+	/**
+	 * Adds a new rental schedule for the charger
+	 * @param data SingleSchedule object with new settings
 	 * @returns Promise<void>
 	 */
-	async deleteAlwaysOnSchedule(data: SingleSchedule): Promise<void> {
-		try {
-			await put(`/schedule/${this.id}/alwayson/rm`, data);
+	async addRentalSchedule(data: SingleSchedule): Promise<void> {
+		await this.addSchedule("openhours", data);
+		if (!this.rentalSchedule) {
+			this.rentalSchedule = [];
+		}
+		this.rentalSchedule = [...this.rentalSchedule, data];
+	}
 
-			// Remove the deleted data from the existing array
-			if (this.alwaysOnSchedule) {
-				this.alwaysOnSchedule = this.alwaysOnSchedule.filter(
-					(schedule) => schedule.start !== data.start || schedule.interval !== data.interval,
-				);
-			}
-		} catch (error) {
-			console.error("Error deleting always on schedule:", error);
-			throw error;
+	/**
+	 * Updates an existing rental schedule for the charger
+	 * @param schedule_new SingleSchedule object with new settings
+	 * @param schedule_org SingleSchedule object with original settings
+	 * @returns Promise<void>
+	 */
+	async updateRentalSchedule(schedule_new: SingleSchedule, schedule_org: SingleSchedule): Promise<void> {
+		await this.updateSchedule("openhours", schedule_new, schedule_org);
+	}
+
+	/**
+	 * Deletes an existing rental schedule for the charger
+	 * @param data SingleSchedule object with the schedule to delete
+	 * @returns Promise<void>
+	 */
+	async deleteRentalSchedule(data: SingleSchedule): Promise<void> {
+		await this.deleteSchedule("openhours", data);
+		if (this.rentalSchedule) {
+			this.rentalSchedule = this.rentalSchedule.filter(
+				(schedule) => schedule.start !== data.start || schedule.interval !== data.interval,
+			);
 		}
 	}
 
