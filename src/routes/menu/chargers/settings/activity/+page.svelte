@@ -2,7 +2,7 @@
 	import Subpage from "$lib/components/ui/Subpage.svelte";
 	import ChevronUp from "~icons/mdi/chevron-up";
 	import ChevronDown from "~icons/mdi/chevron-down";
-	import { managedChargers } from "$lib/models/ManagedChargers.svelte";
+	import { managedChargers } from "$lib/classes/Charger.svelte";
 	import { slide } from "svelte/transition";
 
 	const transactions = $derived(managedChargers.selectedCharger?.transactionsList);

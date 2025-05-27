@@ -2,8 +2,8 @@
 	import { goto } from "$app/navigation";
 	import InputField from "$lib/components/ui/InputField.svelte";
 	import Subpage from "$lib/components/ui/Subpage.svelte";
-	import { managedChargers } from "$lib/models/ManagedChargers.svelte";
-	import type { ListPrice } from "$lib/models/ManagedChargers.svelte";
+	import { managedChargers } from "$lib/classes/Charger.svelte";
+	import type { ListPrice } from "$lib/classes/Charger.svelte";
 	import { onMount } from "svelte";
 
 	let initialized = false;

@@ -3,7 +3,7 @@
 	import ChargerWaypoints from "$lib/components/features/map/ChargerWaypoints.svelte";
 	import Glass from "$lib/components/ui/Glass.svelte";
 	import { get } from "$lib/services/api";
-	import { PublicCharger, selectedChargerID } from "$lib/models/PublicCharger";
+	import { PublicCharger, selectedChargerID } from "$lib/classes/PublicCharger";
 	import type { ChargerAPIResponse } from "$lib/types/charger.types";
 	import Layer from "~icons/mdi/layers-outline";
 	import CrossHairs from "~icons/mdi/crosshairs-gps";

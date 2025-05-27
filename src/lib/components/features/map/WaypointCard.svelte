@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Directions from "~icons/mdi/directions";
-	import { PublicCharger, selectedChargerID } from "$lib/models/PublicCharger";
+	import { PublicCharger, selectedChargerID } from "$lib/classes/PublicCharger";
 	import Glass from "$lib/components/ui/Glass.svelte";
 	import Bolt from "~icons/mdi/lightning-bolt";
 	import MapMarker from "~icons/mdi/map-marker";

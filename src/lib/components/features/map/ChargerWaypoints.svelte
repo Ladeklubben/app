@@ -2,7 +2,7 @@
 	import type { PublicCharger } from "$lib/types/charger.types";
 	import WaypointCard from "./WaypointCard.svelte";
 	import { pos } from "$lib/services/map";
-	import { selectedChargerID } from "$lib/models/PublicCharger";
+	import { selectedChargerID } from "$lib/classes/PublicCharger";
 
 	let { chargers = [] as PublicCharger[] } = $props<{
 		chargers?: PublicCharger[];

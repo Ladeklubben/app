@@ -3,7 +3,7 @@
     import InputField from "$lib/components/ui/InputField.svelte";
     import Button from "$lib/components/ui/Button.svelte";
 	import Subpage from "$lib/components/ui/Subpage.svelte";
-	import { managedChargers } from "$lib/models/ManagedChargers.svelte";
+	import { managedChargers } from "$lib/classes/Charger.svelte";
 	import { onMount } from "svelte";
 	import Email from "~icons/mdi/email";
 	import Trashcan from "~icons/mdi/trash-can-outline";
