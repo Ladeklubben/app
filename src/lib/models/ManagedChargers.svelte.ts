@@ -1038,7 +1038,7 @@ export interface AlwaysOnSchedule extends Array<AlwaysOnInterval> {
 /**
  * Interface for a free charging interval configuration
  */
-interface AlwaysOnInterval {
+export interface AlwaysOnInterval {
 	/** Array of weekdays where this interval applies (0 = Monday, 1 = Tuesday, etc.) */
 	days: number[];
 	/** Starting time in minutes from midnight */

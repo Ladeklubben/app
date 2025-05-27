@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Subpage from "$lib/components/ui/Subpage.svelte";
-	import { managedChargers, type AlwaysOnSchedule } from "$lib/models/ManagedChargers.svelte";
+	import { managedChargers, type AlwaysOnSchedule, type AlwaysOnInterval } from "$lib/models/ManagedChargers.svelte";
 	import Trashcan from "~icons/mdi/trash-can-outline";
 	import PlusClock from "~icons/mdi/clock-plus-outline";
 	import ChevronDown from "~icons/mdi/chevron-down";
@@ -72,7 +72,7 @@
 	}
 
 	// Sync schedule with server (add or update as needed)
-	async function syncScheduleWithServer(schedule: DisplaySchedule) {
+	async function syncScheduleWithServer(schedule: DisplaySchedule, originalScheduleData?: AlwaysOnInterval) {
 		if (!isScheduleValid(schedule)) {
 			return; // Don't sync invalid schedules
 		}
@@ -80,10 +80,11 @@
 		const scheduleData = convertDisplayDataToScheduleData([schedule])[0];
 
 		try {
-			if (schedule.savedToServer) {
+			if (schedule.savedToServer && originalScheduleData) {
 				// Update existing schedule
-				const originalSchedule = convertDisplayDataToScheduleData([schedule])[0];
-				await managedChargers.selectedCharger?.updateAlwaysOnSchedule(scheduleData, originalSchedule);
+				console.log("Updating schedule:", originalScheduleData);
+				console.log("With new data:", scheduleData);
+				await managedChargers.selectedCharger?.updateAlwaysOnSchedule(scheduleData, originalScheduleData);
 			} else {
 				// Add new schedule
 				await managedChargers.selectedCharger?.addAlwaysOnSchedule(scheduleData);
@@ -143,6 +144,8 @@
 
 	// Toggle day selection
 	async function toggleDay(schedule_org: DisplaySchedule, day: number) {
+		const originalScheduleData = convertDisplayDataToScheduleData([schedule_org])[0];
+
 		displaySchedules = displaySchedules.map((schedule) => {
 			if (schedule.id === schedule_org.id) {
 				const days = schedule.days.includes(day)
@@ -156,12 +159,14 @@
 		// Find the updated schedule and sync with server
 		let updatedSchedule = displaySchedules.find((s) => s.id === schedule_org.id);
 		if (updatedSchedule) {
-			await syncScheduleWithServer(updatedSchedule);
+			await syncScheduleWithServer(updatedSchedule, originalScheduleData);
 		}
 	}
 
 	// Update time
 	async function updateTime(schedule_org: DisplaySchedule, timeType: "start" | "end", value: string) {
+		const originalScheduleData = convertDisplayDataToScheduleData([schedule_org])[0];
+
 		displaySchedules = displaySchedules.map((schedule) => {
 			if (schedule.id === schedule_org.id) {
 				if (timeType === "start") {
@@ -176,7 +181,7 @@
 		// Find the updated schedule and sync with server
 		let updatedSchedule = displaySchedules.find((s) => s.id === schedule_org.id);
 		if (updatedSchedule) {
-			await syncScheduleWithServer(updatedSchedule);
+			await syncScheduleWithServer(updatedSchedule, originalScheduleData);
 		}
 	}
 
