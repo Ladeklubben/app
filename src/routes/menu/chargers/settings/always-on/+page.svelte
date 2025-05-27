@@ -136,11 +136,6 @@
 		}
 	}
 
-	// Save schedules back to the main data structure
-	function saveSchedules() {
-		// Save data to managedcharger and server
-	}
-
 	// Format days for display
 	function formatDaysDisplay(days: number[]): string {
 		if (days.length === 0) return "No days";
@@ -215,9 +210,7 @@
 					</div>
 					<div class="flex items-center gap-2">
 						{#if schedule.days.length === 0 || !isValidTimeRange(schedule.startTime, schedule.endTime) || hasConflicts(schedule.id, schedule.days, schedule.startTime, schedule.endTime)}
-							<div class="text-md bg-lk-red-100 text-lk-red-700 p-1.5 rounded-full">
-								<AlertCircle />
-							</div>
+							<AlertCircle class="text-lk-red-500 text-lg" />
 						{/if}
 
 						{#if schedule.expanded}
