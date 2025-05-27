@@ -16,6 +16,7 @@
 		startTime: string;
 		endTime: string;
 		expanded: boolean;
+		savedToServer: boolean; // Track if this schedule exists on the server
 	}
 
 	// Day names for display
@@ -43,6 +44,7 @@
 			startTime: minutesToTimeString(schedule.start),
 			endTime: minutesToTimeString(schedule.start + schedule.interval),
 			expanded: false,
+			savedToServer: true, // Existing schedules are already on the server
 		}));
 	}
 
@@ -60,6 +62,42 @@
 		convertScheduleDataToDisplayData(managedChargers.selectedCharger?.alwaysOnSchedule || []),
 	);
 
+	// Check if a schedule is valid (no conflicts and valid time range)
+	function isScheduleValid(schedule: DisplaySchedule): boolean {
+		return (
+			schedule.days.length > 0 &&
+			isValidTimeRange(schedule.startTime, schedule.endTime) &&
+			!hasConflicts(schedule.id, schedule.days, schedule.startTime, schedule.endTime)
+		);
+	}
+
+	// Sync schedule with server (add or update as needed)
+	async function syncScheduleWithServer(schedule: DisplaySchedule) {
+		if (!isScheduleValid(schedule)) {
+			return; // Don't sync invalid schedules
+		}
+
+		const scheduleData = convertDisplayDataToScheduleData([schedule])[0];
+
+		try {
+			if (schedule.savedToServer) {
+				// Update existing schedule
+				const originalSchedule = convertDisplayDataToScheduleData([schedule])[0];
+				await managedChargers.selectedCharger?.updateAlwaysOnSchedule(scheduleData, originalSchedule);
+			} else {
+				// Add new schedule
+				await managedChargers.selectedCharger?.addAlwaysOnSchedule(scheduleData);
+				// Mark as saved to server
+				displaySchedules = displaySchedules.map((s) =>
+					s.id === schedule.id ? { ...s, savedToServer: true } : s,
+				);
+			}
+		} catch (error) {
+			console.error("Failed to sync schedule with server:", error);
+			// Optionally show user feedback about the error
+		}
+	}
+
 	// Add new schedule
 	function addNewSchedule() {
 		const newSchedule: DisplaySchedule = {
@@ -68,13 +106,16 @@
 			startTime: "18:00",
 			endTime: "23:59",
 			expanded: true,
+			savedToServer: false, // New schedule not saved to server yet
 		};
 		displaySchedules = [...displaySchedules, newSchedule];
-		managedChargers.selectedCharger?.addAlwaysOnSchedule(convertDisplayDataToScheduleData([newSchedule])[0]);
+
+		// Try to sync with server if valid
+		syncScheduleWithServer(newSchedule);
 	}
 
 	// Remove schedule
-	function removeSchedule(schedule: DisplaySchedule) {
+	async function removeSchedule(schedule: DisplaySchedule) {
 		// Remove from display
 		displaySchedules = displaySchedules.filter((s) => s.id !== schedule.id);
 		const newScheduleData = convertDisplayDataToScheduleData(displaySchedules);
@@ -82,9 +123,15 @@
 			managedChargers.selectedCharger.alwaysOnSchedule = newScheduleData;
 		}
 
-		// Remove from managed charger
-		let scheduleToRemove = convertDisplayDataToScheduleData([schedule])[0];
-		managedChargers.selectedCharger?.deleteAlwaysOnSchedule(scheduleToRemove);
+		// Only try to remove from server if it was saved there
+		if (schedule.savedToServer) {
+			try {
+				let scheduleToRemove = convertDisplayDataToScheduleData([schedule])[0];
+				await managedChargers.selectedCharger?.deleteAlwaysOnSchedule(scheduleToRemove);
+			} catch (error) {
+				console.error("Failed to remove schedule from server:", error);
+			}
+		}
 	}
 
 	// Toggle schedule expansion
@@ -95,8 +142,7 @@
 	}
 
 	// Toggle day selection
-	function toggleDay(schedule_org: DisplaySchedule, day: number) {
-		let schedule_org_conv = convertDisplayDataToScheduleData([schedule_org])[0];
+	async function toggleDay(schedule_org: DisplaySchedule, day: number) {
 		displaySchedules = displaySchedules.map((schedule) => {
 			if (schedule.id === schedule_org.id) {
 				const days = schedule.days.includes(day)
@@ -106,17 +152,16 @@
 			}
 			return schedule;
 		});
-		// Find the updated schedule
+
+		// Find the updated schedule and sync with server
 		let updatedSchedule = displaySchedules.find((s) => s.id === schedule_org.id);
 		if (updatedSchedule) {
-			let schedule_new_conv = convertDisplayDataToScheduleData([updatedSchedule])[0];
-			managedChargers.selectedCharger?.updateAlwaysOnSchedule(schedule_new_conv, schedule_org_conv);
+			await syncScheduleWithServer(updatedSchedule);
 		}
 	}
 
 	// Update time
-	function updateTime(schedule_org: DisplaySchedule, timeType: "start" | "end", value: string) {
-		let schedule_org_conv = convertDisplayDataToScheduleData([schedule_org])[0];
+	async function updateTime(schedule_org: DisplaySchedule, timeType: "start" | "end", value: string) {
 		displaySchedules = displaySchedules.map((schedule) => {
 			if (schedule.id === schedule_org.id) {
 				if (timeType === "start") {
@@ -128,11 +173,10 @@
 			return schedule;
 		});
 
-		// Find the updated schedule
+		// Find the updated schedule and sync with server
 		let updatedSchedule = displaySchedules.find((s) => s.id === schedule_org.id);
 		if (updatedSchedule) {
-			let schedule_new_conv = convertDisplayDataToScheduleData([updatedSchedule])[0];
-			managedChargers.selectedCharger?.updateAlwaysOnSchedule(schedule_new_conv, schedule_org_conv);
+			await syncScheduleWithServer(updatedSchedule);
 		}
 	}
 
@@ -203,6 +247,11 @@
 							<span class="font-bold text-left text-lk-blue-50">
 								{formatDaysDisplay(schedule.days)}
 							</span>
+							{#if !schedule.savedToServer}
+								<span class="text-xs bg-lk-yellow-500 text-lk-yellow-900 px-2 py-1 rounded-full">
+									Unsaved
+								</span>
+							{/if}
 						</div>
 						<span class="text-sm text-lk-blue-300">
 							{schedule.startTime} - {schedule.endTime}
@@ -248,6 +297,7 @@
 								<span class="text-sm">This schedule conflicts with another schedule</span>
 							</div>
 						{/if}
+
 						<!-- Days Selection -->
 						<div>
 							<label
