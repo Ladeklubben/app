@@ -1,4 +1,4 @@
-import { get, post, put, del } from "$lib/services/api";
+import { get, post, patch, put, del } from "$lib/services/api";
 import type { LocationInfo } from "$lib/types/charger.types";
 
 /**
@@ -165,6 +165,8 @@ export class ManagedCharger {
 	transactionsPlot = $state<ChargerTransactionPlot | undefined>();
 	/** List price information for the charger */
 	listPrice = $state<ListPrice | undefined>();
+	/** Always on schedule for free charging */
+	alwaysOnSchedule = $state<AlwaysOnSchedule | undefined>();
 
 	/**
 	 * Creates a new ManagedCharger instance
@@ -208,6 +210,7 @@ export class ManagedCharger {
 				this.getTransactionsInfo(),
 				this.getTransactionsPlot(),
 				this.getListPrice(),
+				this.getAlwaysOnSchedule(),
 			]);
 		} catch (error) {
 			console.error("Error getting all data:", error);
@@ -329,7 +332,7 @@ export class ManagedCharger {
 	async putSmartChargeSchedule(data: SmartChargeSchedule): Promise<void> {
 		try {
 			console.log("Updating smart charge schedule:", data);
-			const querystring = data.enabled ? '?enable=1' : '';
+			const querystring = data.enabled ? "?enable=1" : "";
 			await put(`/cp/${this.id}/smart${querystring}`, data);
 			this.smartChargeSchedule = data;
 		} catch (error) {
@@ -598,6 +601,81 @@ export class ManagedCharger {
 		return convertedListPrice;
 	}
 
+	/**
+	 * Fetches the always on schedule for the charger
+	 * @returns Promise with the charger's always on schedule
+	 */
+	async getAlwaysOnSchedule(): Promise<AlwaysOnSchedule | undefined> {
+		try {
+			const response = await get(`/schedule/${this.id}/alwayson`);
+			this.alwaysOnSchedule = response;
+			return this.alwaysOnSchedule;
+		} catch (error) {
+			console.error("Error getting always on schedule:", error);
+			throw error;
+		}
+	}
+
+	/**
+	 * Adds a new always on schedule
+	 * @param data AlwaysOnSchedule object with new settings
+	 * @returns Promise<void>
+	 */
+	async addAlwaysOnSchedule(data: AlwaysOnInterval): Promise<void> {
+		try {
+			await patch(`/schedule/${this.id}/alwayson`, data);
+
+			// Add the new data to the existing array
+			if (!this.alwaysOnSchedule) {
+				this.alwaysOnSchedule = [];
+			}
+			this.alwaysOnSchedule = [...this.alwaysOnSchedule, data];
+		} catch (error) {
+			console.error("Error updating always on schedule:", error);
+			throw error;
+		}
+	}
+
+	/**
+	 * Updates an existing always on schedule
+	 * @param schedule_new AlwaysOnSchedule object with new settings
+	 * @param schedule_org AlwaysOnSchedule object with original settings
+	 * @returns Promise<void>
+	 */
+	async updateAlwaysOnSchedule(schedule_new: AlwaysOnInterval, schedule_org: AlwaysOnInterval): Promise<void> {
+		try {
+			// Create the properly formatted data object
+			const data = {
+				schedule_new: schedule_new, // Assuming we're updating one schedule at a time
+				schedule_org: schedule_org, // Original schedule for comparison
+			};
+			await put(`/schedule/${this.id}/alwayson`, data);
+		} catch (error) {
+			console.error("Error updating always on schedule:", error);
+			throw error;
+		}
+	}
+
+	/**
+	 * Deletes an always on schedule
+	 * @param data AlwaysOnSchedule object with the schedule to delete
+	 * @returns Promise<void>
+	 */
+	async deleteAlwaysOnSchedule(data: AlwaysOnInterval): Promise<void> {
+		try {
+			await put(`/schedule/${this.id}/alwayson/rm`, data);
+
+			// Remove the deleted data from the existing array
+			if (this.alwaysOnSchedule) {
+				this.alwaysOnSchedule = this.alwaysOnSchedule.filter(
+					(schedule) => schedule.start !== data.start || schedule.interval !== data.interval,
+				);
+			}
+		} catch (error) {
+			console.error("Error deleting always on schedule:", error);
+			throw error;
+		}
+	}
 }
 
 // Reactive state for the ManagedChargers instance
@@ -934,4 +1012,25 @@ export interface ListPrice {
 	valuta: string;
 	/** Whether the charger follows spot prices */
 	follow_spot: boolean;
+}
+
+/**
+ * Interface for free charging schedule
+ * Represents an array of schedule entries
+ */
+export interface AlwaysOnSchedule extends Array<AlwaysOnInterval> {
+	/** Number of schedule entries */
+	length: number;
+}
+
+/**
+ * Interface for a free charging interval configuration
+ */
+export interface AlwaysOnInterval {
+	/** Array of weekdays where this interval applies (0 = Monday, 1 = Tuesday, etc.) */
+	days: number[];
+	/** Starting time in minutes from midnight */
+	start: number;
+	/** Duration of the interval in minutes */
+	interval: number;
 }

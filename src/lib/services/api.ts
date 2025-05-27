@@ -61,3 +61,7 @@ export async function put(endpoint: string, data: any, auth: boolean = true) {
 export async function del(endpoint: string, data: any, auth: boolean = true) {
 	return request("DELETE", endpoint, data, auth);
 }
+
+export async function patch(endpoint: string, data: any, auth: boolean = true) {
+	return request("PATCH", endpoint, data, auth);
+}

@@ -60,8 +60,8 @@
     </Form>
 	{#if notifcations && notifcations.length > 0}
 		{#each notifcations as card}
-			<div class="flex flex-col border border-lk-blue-800 rounded-2xl mt-5">
-				<div class="flex gap-5 items-center font-bold p-5  bg-lk-blue-900 rounded-t-2xl">
+			<div class="flex flex-col border border-lk-blue-800 rounded-2xl mt-5 overflow-hidden">
+				<div class="flex gap-5 items-center font-bold p-5  bg-lk-blue-900">
 					<Email />
 					{card.email}
 					<Trashcan class="ml-auto" onclick={() => handleDelete(card.email)}/>

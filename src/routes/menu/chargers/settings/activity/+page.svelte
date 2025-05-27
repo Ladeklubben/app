@@ -62,8 +62,8 @@
 					onclick={() => toggleExpand(tx.Tid)}
 				>
 					<div class="flex-1">
-						<h3 class="font-bold text-lk-blue-50 pb-0.5">{formatDate(tx.Started, "date")}</h3>
-						<p class="text-xs text-lk-blue-300">
+						<h3 class="font-bold text-lk-blue-50 pb-1">{formatDate(tx.Started, "date")}</h3>
+						<p class="text-sm text-lk-blue-300">
 							{formatDate(tx.Started, "time")} - {formatDate(tx.Ended, "time")}
 						</p>
 					</div>

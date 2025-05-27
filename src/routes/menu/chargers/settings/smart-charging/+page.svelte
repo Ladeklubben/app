@@ -10,15 +10,14 @@
 
 	let enabled = $state(false);
 	let needed_energy = $state(0);
-	let begin_H = $state("18");
-	let begin_M = $state("00");
-	let end_H = $state("06");
-	let end_M = $state("00");
+	let begin = $state("18:00");
+	let end = $state("06:00");
 	let preheat = $state(0);
 
 	async function selectTime(timeType: "begin" | "end") {
 		if ($device === Platform.Web) {
 			console.warn("TimePicker is not supported on web.");
+			// TODO: Implement a web version of the time picker
 			return;
 		}
 
@@ -27,19 +26,16 @@
 			theme: "dark",
 			locale: "en-DK",
 			format: "HH:mm",
-			value: timeType === "begin" ? `${begin_H}:${begin_M}` : `${end_H}:${end_M}`,
+			value: timeType === "begin" ? begin : end,
 		});
 
 		if (value) {
-			const [hour, minute] = value.split(":");
 			switch (timeType) {
 				case "begin":
-					begin_H = hour;
-					begin_M = minute;
+					begin = value;
 					break;
 				case "end":
-					end_H = hour;
-					end_M = minute;
+					end = value;
 					break;
 				default:
 					console.warn(`Unsupported timeType: ${timeType}`);
@@ -53,10 +49,8 @@
 		if (schedule) {
 			enabled = schedule.enabled;
 			needed_energy = schedule.needed_energy;
-			begin_H = schedule.charging_begin_earliest.split(":")[0];
-			begin_M = schedule.charging_begin_earliest.split(":")[1];
-			end_H = schedule.charging_end_latest.split(":")[0];
-			end_M = schedule.charging_end_latest.split(":")[1];
+			begin = schedule.charging_begin_earliest.split(':').slice(0, 2).join(':');
+			end = schedule.charging_end_latest.split(':').slice(0, 2).join(':');
 			preheat = schedule.preheat;
 		}
 
@@ -72,8 +66,8 @@
 			managedChargers.selectedCharger.putSmartChargeSchedule({
 				enabled,
 				needed_energy,
-				charging_begin_earliest: `${begin_H}:${begin_M}`,
-				charging_end_latest: `${end_H}:${end_M}`,
+				charging_begin_earliest: begin,
+				charging_end_latest: end,
 				preheat,
 			});
 		} else {
@@ -81,10 +75,8 @@
 			// and will be tracked by Svelte 5
 			void enabled;
 			void needed_energy;
-			void begin_H;
-			void begin_M;
-			void end_H;
-			void end_M;
+			void begin;
+			void end;
 			void preheat;
 		}
 	});
@@ -103,7 +95,7 @@
 	<div class="flex flex-col gap-1.5">
 		<span>
 			<span class="font-bold">Earliest Start</span>
-			- {begin_H}:{begin_M}
+			- {begin}
 		</span>
 		<p>This is the earliest possible time you want to start charging your car.</p>
 		<button
@@ -117,7 +109,7 @@
 	<div class="flex flex-col gap-1.5">
 		<span>
 			<span class="font-bold">Ready Time</span>
-			- {end_H}:{end_M}
+			- {end}
 		</span>
 		<p>This is usually when you need to use your car. It will be fully charged by this time.</p>
 		<button
