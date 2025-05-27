@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Subpage from "$lib/components/ui/Subpage.svelte";
-	import { chargers, type AlwaysOnSchedule, type AlwaysOnInterval } from "$lib/classes/Charger.svelte";
+	import { chargers } from "$lib/classes/Chargers.svelte";
+	import type { AlwaysOnSchedule, AlwaysOnInterval } from "$lib/types/charger.types";
 	import Trashcan from "~icons/mdi/trash-can-outline";
 	import PlusClock from "~icons/mdi/clock-plus-outline";
 	import ChevronDown from "~icons/mdi/chevron-down";

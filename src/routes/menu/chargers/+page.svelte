@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { chargers, Charger } from "$lib/classes/Charger.svelte";
+	import { chargers } from "$lib/classes/Chargers.svelte";
+	import { Charger } from "$lib/classes/Charger.svelte";
 	import { onMount } from "svelte";
 	import Subpage from "$lib/components/ui/Subpage.svelte";
 	import Bolt from "~icons/mdi/lightning-bolt";

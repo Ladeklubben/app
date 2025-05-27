@@ -4,7 +4,7 @@
 	import MenuItem from "$lib/components/ui/MenuItem.svelte";
 	import MenuGroup from "$lib/components/ui/MenuGroup.svelte";
 	import { onMount } from "svelte";
-	import { chargers } from "$lib/classes/Charger.svelte";
+	import { chargers } from "$lib/classes/Chargers.svelte";
 
 	// Icons
 	import Email from "~icons/mdi/email";

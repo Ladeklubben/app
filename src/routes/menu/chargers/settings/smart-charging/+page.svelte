@@ -2,7 +2,7 @@
 	import InputField from "$lib/components/ui/InputField.svelte";
 	import Subpage from "$lib/components/ui/Subpage.svelte";
 	import { DatetimePicker } from "@capawesome-team/capacitor-datetime-picker";
-	import { chargers } from "$lib/classes/Charger.svelte";
+	import { chargers } from "$lib/classes/Chargers.svelte";
 	import { device, Platform } from "$lib/services/layout";
 	import { onMount } from "svelte";
 
