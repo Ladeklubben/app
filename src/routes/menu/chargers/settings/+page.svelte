@@ -69,7 +69,7 @@
 		<MenuItem
 			text="Rental"
 			onclick={() => {
-				console.log("Clicked");
+				goto("/menu/chargers/settings/rental");
 			}}
 		>
 			<Star />
