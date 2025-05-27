@@ -1,5 +1,6 @@
 import { get, post, patch, put, del } from "$lib/services/api";
 import type { LocationInfo } from "$lib/types/publicCharger.types";
+import CryptoJS from "crypto-js";
 import type {
 	ChargerStats,
 	ChargerState,
@@ -16,6 +17,7 @@ import type {
 	ListPrice,
 	AlwaysOnSchedule,
 	AlwaysOnInterval,
+	DisplaySchedule,
 } from "$lib/types/charger.types";
 
 /**
@@ -564,5 +566,119 @@ export class Charger {
 			console.error("Error deleting always on schedule:", error);
 			throw error;
 		}
+	}
+
+	/**
+	 * Converts time string (HH:MM) to minutes from midnight
+	 */
+	static timeStringToMinutes(timeString: string): number {
+		if (!timeString) return 0;
+		const [hours, minutes] = timeString.split(":").map(Number);
+		return hours * 60 + minutes;
+	}
+
+	/**
+	 * Converts minutes from midnight to time string (HH:MM)
+	 */
+	static minutesToTimeString(minutes: number): string {
+		const hours = Math.floor(minutes / 60);
+		const mins = minutes % 60;
+		return `${hours.toString().padStart(2, "0")}:${mins.toString().padStart(2, "0")}`;
+	}
+
+	/**
+	 * Converts AlwaysOnSchedule data to display format
+	 */
+	static convertScheduleDataToDisplayData(scheduleData: AlwaysOnSchedule): DisplaySchedule[] {
+		return scheduleData.map((schedule) => ({
+			id: CryptoJS.MD5(JSON.stringify(schedule)).toString(),
+			days: schedule.days,
+			startTime: Charger.minutesToTimeString(schedule.start),
+			endTime: Charger.minutesToTimeString(schedule.start + schedule.interval),
+			expanded: false,
+			savedToServer: true,
+		}));
+	}
+
+	/**
+	 * Converts display data back to schedule format
+	 */
+	static convertDisplayDataToScheduleData(displayData: DisplaySchedule[]): AlwaysOnSchedule {
+		return displayData.map((schedule) => ({
+			days: schedule.days,
+			start: Charger.timeStringToMinutes(schedule.startTime),
+			interval: Charger.timeStringToMinutes(schedule.endTime) - Charger.timeStringToMinutes(schedule.startTime),
+		}));
+	}
+
+	/**
+	 * Validates if a time range is valid (end time after start time)
+	 */
+	static isValidTimeRange(startTime: string, endTime: string): boolean {
+		const start = Charger.timeStringToMinutes(startTime);
+		const end = Charger.timeStringToMinutes(endTime);
+		return end > start;
+	}
+
+	/**
+	 * Checks for schedule conflicts with existing schedules
+	 */
+	static hasConflicts(
+		scheduleId: string,
+		days: number[],
+		startTime: string,
+		endTime: string,
+		existingSchedules: DisplaySchedule[],
+	): boolean {
+		const start = Charger.timeStringToMinutes(startTime);
+		const end = Charger.timeStringToMinutes(endTime);
+
+		return existingSchedules.some((schedule) => {
+			if (schedule.id === scheduleId) return false;
+
+			const otherStart = Charger.timeStringToMinutes(schedule.startTime);
+			const otherEnd = Charger.timeStringToMinutes(schedule.endTime);
+
+			// Check if any days overlap
+			const daysOverlap = days.some((day) => schedule.days.includes(day));
+			if (!daysOverlap) return false;
+
+			// Check if times overlap
+			return start < otherEnd && end > otherStart;
+		});
+	}
+
+	/**
+	 * Checks if a schedule is valid (no conflicts and valid time range)
+	 */
+	static isScheduleValid(schedule: DisplaySchedule, existingSchedules: DisplaySchedule[]): boolean {
+		return (
+			schedule.days.length > 0 &&
+			Charger.isValidTimeRange(schedule.startTime, schedule.endTime) &&
+			!Charger.hasConflicts(schedule.id, schedule.days, schedule.startTime, schedule.endTime, existingSchedules)
+		);
+	}
+
+	/**
+	 * Formats days array for display
+	 */
+	static formatDaysDisplay(days: number[]): string {
+		const dayAbbreviations = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+
+		if (days.length === 0) return "No days";
+		if (days.length === 7) return "Every day";
+
+		// Check for weekdays (0 - 4)
+		const weekdays = [0, 1, 2, 3, 4];
+		const isWeekdays = weekdays.every((day) => days.includes(day)) && days.length === 5;
+		if (isWeekdays) return "Weekdays";
+
+		// Check for weekend (5 - 6)
+		const weekend = [5, 6];
+		const isWeekend = weekend.every((day) => days.includes(day)) && days.length === 2;
+		if (isWeekend) return "Weekend";
+
+		// Otherwise, show abbreviated day names
+		return days.map((day) => dayAbbreviations[day]).join(", ");
 	}
 }

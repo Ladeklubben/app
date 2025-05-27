@@ -351,3 +351,16 @@ export interface AlwaysOnInterval {
 	/** Duration of the interval in minutes */
 	interval: number;
 }
+
+/**
+ * Interface for display schedule
+ * Represents a schedule that can be displayed in the app
+ */
+export interface DisplaySchedule {
+	id: string;
+	days: number[];
+	startTime: string;
+	endTime: string;
+	expanded: boolean;
+	savedToServer: boolean;
+}

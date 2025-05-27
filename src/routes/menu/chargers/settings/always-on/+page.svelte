@@ -9,66 +9,24 @@
 	import AlertCircle from "~icons/mdi/alert-circle-outline";
 	import CryptoJS from "crypto-js";
 	import { slide } from "svelte/transition";
-
-	// Types for display data
-	interface DisplaySchedule {
-		id: string;
-		days: number[];
-		startTime: string;
-		endTime: string;
-		expanded: boolean;
-		savedToServer: boolean; // Track if this schedule exists on the server
-	}
+	import type { DisplaySchedule } from "$lib/types/charger.types";
+	import { Charger } from "$lib/classes/Charger.svelte";
 
 	// Day names for display
 	const dayNames = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 	const dayAbbreviations = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
-	// Helper functions for time conversion
-	function timeStringToMinutes(timeString: string): number {
-		if (!timeString) return 0;
-		const [hours, minutes] = timeString.split(":").map(Number);
-		return hours * 60 + minutes;
-	}
-
-	function minutesToTimeString(minutes: number): string {
-		const hours = Math.floor(minutes / 60);
-		const mins = minutes % 60;
-		return `${hours.toString().padStart(2, "0")}:${mins.toString().padStart(2, "0")}`;
-	}
-
-	// Convert schedule data to display format
-	function convertScheduleDataToDisplayData(scheduleData: AlwaysOnSchedule): DisplaySchedule[] {
-		return scheduleData.map((schedule) => ({
-			id: CryptoJS.MD5(JSON.stringify(schedule)).toString(),
-			days: schedule.days,
-			startTime: minutesToTimeString(schedule.start),
-			endTime: minutesToTimeString(schedule.start + schedule.interval),
-			expanded: false,
-			savedToServer: true, // Existing schedules are already on the server
-		}));
-	}
-
-	// Convert display data back to schedule format
-	function convertDisplayDataToScheduleData(displayData: DisplaySchedule[]): AlwaysOnSchedule {
-		return displayData.map((schedule) => ({
-			days: schedule.days,
-			start: timeStringToMinutes(schedule.startTime),
-			interval: timeStringToMinutes(schedule.endTime) - timeStringToMinutes(schedule.startTime),
-		}));
-	}
-
 	// Initialize display data from the actual AlwaysOnSchedule
 	let displaySchedules: DisplaySchedule[] = $state(
-		convertScheduleDataToDisplayData(chargers.selected?.alwaysOnSchedule || []),
+		Charger.convertScheduleDataToDisplayData(chargers.selected?.alwaysOnSchedule || []),
 	);
 
 	// Check if a schedule is valid (no conflicts and valid time range)
 	function isScheduleValid(schedule: DisplaySchedule): boolean {
 		return (
 			schedule.days.length > 0 &&
-			isValidTimeRange(schedule.startTime, schedule.endTime) &&
-			!hasConflicts(schedule.id, schedule.days, schedule.startTime, schedule.endTime)
+			Charger.isValidTimeRange(schedule.startTime, schedule.endTime) &&
+			!Charger.hasConflicts(schedule.id, schedule.days, schedule.startTime, schedule.endTime, displaySchedules)
 		);
 	}
 
@@ -78,7 +36,7 @@
 			return; // Don't sync invalid schedules
 		}
 
-		const scheduleData = convertDisplayDataToScheduleData([schedule])[0];
+		const scheduleData = Charger.convertDisplayDataToScheduleData([schedule])[0];
 
 		try {
 			if (schedule.savedToServer && originalScheduleData) {
@@ -120,7 +78,7 @@
 	async function removeSchedule(schedule: DisplaySchedule) {
 		// Remove from display
 		displaySchedules = displaySchedules.filter((s) => s.id !== schedule.id);
-		const newScheduleData = convertDisplayDataToScheduleData(displaySchedules);
+		const newScheduleData = Charger.convertDisplayDataToScheduleData(displaySchedules);
 		if (chargers.selected) {
 			chargers.selected.alwaysOnSchedule = newScheduleData;
 		}
@@ -128,7 +86,7 @@
 		// Only try to remove from server if it was saved there
 		if (schedule.savedToServer) {
 			try {
-				let scheduleToRemove = convertDisplayDataToScheduleData([schedule])[0];
+				let scheduleToRemove = Charger.convertDisplayDataToScheduleData([schedule])[0];
 				await chargers.selected?.deleteAlwaysOnSchedule(scheduleToRemove);
 			} catch (error) {
 				console.error("Failed to remove schedule from server:", error);
@@ -145,7 +103,7 @@
 
 	// Toggle day selection
 	async function toggleDay(schedule_org: DisplaySchedule, day: number) {
-		const originalScheduleData = convertDisplayDataToScheduleData([schedule_org])[0];
+		const originalScheduleData = Charger.convertDisplayDataToScheduleData([schedule_org])[0];
 
 		displaySchedules = displaySchedules.map((schedule) => {
 			if (schedule.id === schedule_org.id) {
@@ -166,7 +124,7 @@
 
 	// Update time
 	async function updateTime(schedule_org: DisplaySchedule, timeType: "start" | "end", value: string) {
-		const originalScheduleData = convertDisplayDataToScheduleData([schedule_org])[0];
+		const originalScheduleData = Charger.convertDisplayDataToScheduleData([schedule_org])[0];
 
 		displaySchedules = displaySchedules.map((schedule) => {
 			if (schedule.id === schedule_org.id) {
@@ -184,52 +142,6 @@
 		if (updatedSchedule) {
 			await syncScheduleWithServer(updatedSchedule, originalScheduleData);
 		}
-	}
-
-	// Format days for display
-	function formatDaysDisplay(days: number[]): string {
-		if (days.length === 0) return "No days";
-		if (days.length === 7) return "Every day";
-
-		// Check for weekdays (0 - 4)
-		const weekdays = [0, 1, 2, 3, 4];
-		const isWeekdays = weekdays.every((day) => days.includes(day)) && days.length === 5;
-		if (isWeekdays) return "Weekdays";
-
-		// Check for weekend (5 - 6)
-		const weekend = [5, 6];
-		const isWeekend = weekend.every((day) => days.includes(day)) && days.length === 2;
-		if (isWeekend) return "Weekend";
-
-		// Otherwise, show abbreviated day names
-		return days.map((day) => dayAbbreviations[day]).join(", ");
-	}
-
-	// Validate time range
-	function isValidTimeRange(startTime: string, endTime: string): boolean {
-		const start = timeStringToMinutes(startTime);
-		const end = timeStringToMinutes(endTime);
-		return end > start;
-	}
-
-	// Check for schedule conflicts
-	function hasConflicts(scheduleId: string, days: number[], startTime: string, endTime: string): boolean {
-		const start = timeStringToMinutes(startTime);
-		const end = timeStringToMinutes(endTime);
-
-		return displaySchedules.some((schedule) => {
-			if (schedule.id === scheduleId) return false;
-
-			const otherStart = timeStringToMinutes(schedule.startTime);
-			const otherEnd = timeStringToMinutes(schedule.endTime);
-
-			// Check if any days overlap
-			const daysOverlap = days.some((day) => schedule.days.includes(day));
-			if (!daysOverlap) return false;
-
-			// Check if times overlap
-			return start < otherEnd && end > otherStart;
-		});
 	}
 </script>
 
@@ -251,7 +163,7 @@
 					<div class="flex flex-col items-start gap-1">
 						<div class="flex gap-2">
 							<span class="font-bold text-left text-lk-blue-50">
-								{formatDaysDisplay(schedule.days)}
+								{Charger.formatDaysDisplay(schedule.days)}
 							</span>
 							{#if !schedule.savedToServer}
 								<span class="text-xs bg-lk-yellow-500 text-lk-yellow-900 px-2 py-1 rounded-full">
@@ -264,7 +176,7 @@
 						</span>
 					</div>
 					<div class="flex items-center gap-2">
-						{#if schedule.days.length === 0 || !isValidTimeRange(schedule.startTime, schedule.endTime) || hasConflicts(schedule.id, schedule.days, schedule.startTime, schedule.endTime)}
+						{#if schedule.days.length === 0 || !Charger.isValidTimeRange(schedule.startTime, schedule.endTime) || Charger.hasConflicts(schedule.id, schedule.days, schedule.startTime, schedule.endTime, displaySchedules)}
 							<AlertCircle class="text-lk-red-500 text-lg" />
 						{/if}
 
@@ -290,14 +202,14 @@
 							</div>
 						{/if}
 
-						{#if !isValidTimeRange(schedule.startTime, schedule.endTime)}
+						{#if !Charger.isValidTimeRange(schedule.startTime, schedule.endTime)}
 							<div class="p-3 bg-lk-red-100 text-lk-red-700 rounded-2xl flex items-center gap-2">
 								<AlertCircle class="flex-shrink-0" />
 								<span class="text-sm">End time must be after start time</span>
 							</div>
 						{/if}
 
-						{#if hasConflicts(schedule.id, schedule.days, schedule.startTime, schedule.endTime)}
+						{#if Charger.hasConflicts(schedule.id, schedule.days, schedule.startTime, schedule.endTime, displaySchedules)}
 							<div class="p-3 bg-lk-red-100 text-lk-red-700 rounded-2xl flex items-center gap-2">
 								<AlertCircle class="flex-shrink-0" />
 								<span class="text-sm">This schedule conflicts with another schedule</span>
