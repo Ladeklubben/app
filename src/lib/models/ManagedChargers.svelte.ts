@@ -649,19 +649,7 @@ export class ManagedCharger {
 				schedule_new: schedule_new, // Assuming we're updating one schedule at a time
 				schedule_org: schedule_org, // Original schedule for comparison
 			};
-
 			await put(`/schedule/${this.id}/alwayson`, data);
-
-			// Update the local state if successful
-			if (this.alwaysOnSchedule) {
-				// Find and replace the old schedule with the new one
-				this.alwaysOnSchedule = this.alwaysOnSchedule.map((schedule) => {
-					if (schedule.start === schedule_org.start && schedule.interval === schedule_org.interval) {
-						return schedule_new;
-					}
-					return schedule;
-				});
-			}
 		} catch (error) {
 			console.error("Error updating always on schedule:", error);
 			throw error;
