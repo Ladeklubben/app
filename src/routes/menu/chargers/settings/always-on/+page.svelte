@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Subpage from "$lib/components/ui/Subpage.svelte";
-	import { managedChargers, type AlwaysOnSchedule, type AlwaysOnInterval } from "$lib/classes/Charger.svelte";
+	import { Chargers, type AlwaysOnSchedule, type AlwaysOnInterval } from "$lib/classes/Charger.svelte";
 	import Trashcan from "~icons/mdi/trash-can-outline";
 	import PlusClock from "~icons/mdi/clock-plus-outline";
 	import ChevronDown from "~icons/mdi/chevron-down";
@@ -59,7 +59,7 @@
 
 	// Initialize display data from the actual AlwaysOnSchedule
 	let displaySchedules: DisplaySchedule[] = $state(
-		convertScheduleDataToDisplayData(managedChargers.selectedCharger?.alwaysOnSchedule || []),
+		convertScheduleDataToDisplayData(Chargers.selectedCharger?.alwaysOnSchedule || []),
 	);
 
 	// Check if a schedule is valid (no conflicts and valid time range)
@@ -84,10 +84,10 @@
 				// Update existing schedule
 				console.log("Updating schedule:", originalScheduleData);
 				console.log("With new data:", scheduleData);
-				await managedChargers.selectedCharger?.updateAlwaysOnSchedule(scheduleData, originalScheduleData);
+				await Chargers.selectedCharger?.updateAlwaysOnSchedule(scheduleData, originalScheduleData);
 			} else {
 				// Add new schedule
-				await managedChargers.selectedCharger?.addAlwaysOnSchedule(scheduleData);
+				await Chargers.selectedCharger?.addAlwaysOnSchedule(scheduleData);
 				// Mark as saved to server
 				displaySchedules = displaySchedules.map((s) =>
 					s.id === schedule.id ? { ...s, savedToServer: true } : s,
@@ -120,15 +120,15 @@
 		// Remove from display
 		displaySchedules = displaySchedules.filter((s) => s.id !== schedule.id);
 		const newScheduleData = convertDisplayDataToScheduleData(displaySchedules);
-		if (managedChargers.selectedCharger) {
-			managedChargers.selectedCharger.alwaysOnSchedule = newScheduleData;
+		if (Chargers.selectedCharger) {
+			Chargers.selectedCharger.alwaysOnSchedule = newScheduleData;
 		}
 
 		// Only try to remove from server if it was saved there
 		if (schedule.savedToServer) {
 			try {
 				let scheduleToRemove = convertDisplayDataToScheduleData([schedule])[0];
-				await managedChargers.selectedCharger?.deleteAlwaysOnSchedule(scheduleToRemove);
+				await Chargers.selectedCharger?.deleteAlwaysOnSchedule(scheduleToRemove);
 			} catch (error) {
 				console.error("Failed to remove schedule from server:", error);
 			}

@@ -2,7 +2,7 @@
 	import InputField from "$lib/components/ui/InputField.svelte";
 	import Subpage from "$lib/components/ui/Subpage.svelte";
 	import { DatetimePicker } from "@capawesome-team/capacitor-datetime-picker";
-	import { managedChargers } from "$lib/classes/Charger.svelte";
+	import { Chargers } from "$lib/classes/Charger.svelte";
 	import { device, Platform } from "$lib/services/layout";
 	import { onMount } from "svelte";
 
@@ -45,7 +45,7 @@
 
 	onMount(() => {
 		initialized = false;
-		const schedule = managedChargers.selectedCharger?.smartChargeSchedule;
+		const schedule = Chargers.selectedCharger?.smartChargeSchedule;
 		if (schedule) {
 			enabled = schedule.enabled;
 			needed_energy = schedule.needed_energy;
@@ -61,9 +61,9 @@
 	});
 
 	$effect(() => {
-		if (initialized && managedChargers.selectedCharger) {
+		if (initialized && Chargers.selectedCharger) {
 			// TODO: Implement a debounce function to avoid rapid updates
-			managedChargers.selectedCharger.putSmartChargeSchedule({
+			Chargers.selectedCharger.putSmartChargeSchedule({
 				enabled,
 				needed_energy,
 				charging_begin_earliest: begin,

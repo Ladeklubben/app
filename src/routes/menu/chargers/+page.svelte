@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { managedChargers, ManagedCharger } from "$lib/classes/Charger.svelte";
+	import { Chargers, ManagedCharger } from "$lib/classes/Charger.svelte";
 	import { onMount } from "svelte";
 	import Subpage from "$lib/components/ui/Subpage.svelte";
 	import Bolt from "~icons/mdi/lightning-bolt";
@@ -8,10 +8,10 @@
 	import { goto } from "$app/navigation";
 	import Button from "$lib/components/ui/Button.svelte";
 
-	const chargers = $derived(Array.from(managedChargers.chargers.values()));
+	const chargers = $derived(Array.from(Chargers.chargers.values()));
 
 	onMount(async () => {
-		await managedChargers.loadAllChargersCardData();
+		await Chargers.loadAllChargersCardData();
 	});
 
 	// Helper functions for the card
@@ -26,7 +26,7 @@
 
 	function handleChargerClick(charger: ManagedCharger) {
 		// Navigate to charger details page
-		managedChargers.selectCharger(charger.id);
+		Chargers.selectCharger(charger.id);
 		goto(`/menu/chargers/settings`);
 	}
 </script>

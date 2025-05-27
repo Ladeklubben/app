@@ -679,7 +679,7 @@ export class ManagedCharger {
 }
 
 // Reactive state for the ManagedChargers instance
-export const managedChargers = $state(new ManagedChargers());
+export const Chargers = $state(new ManagedChargers());
 
 /**
  * Interface representing the current state of a charger
