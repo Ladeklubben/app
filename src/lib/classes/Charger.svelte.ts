@@ -15,8 +15,8 @@ import type {
 	ChargerTransactionInfo,
 	ChargerTransactionPlot,
 	ListPrice,
-	AlwaysOnSchedule,
-	AlwaysOnInterval,
+	ScheduleList,
+	SingleSchedule,
 	DisplaySchedule,
 } from "$lib/types/charger.types";
 
@@ -57,7 +57,9 @@ export class Charger {
 	/** List price information for the charger */
 	listPrice = $state<ListPrice | undefined>();
 	/** Always on schedule for free charging */
-	alwaysOnSchedule = $state<AlwaysOnSchedule | undefined>();
+	alwaysOnSchedule = $state<ScheduleList | undefined>();
+	/** Rental schedule */
+	rentalSchedule = $state<ScheduleList | undefined>();
 
 	/**
 	 * Creates a new Charger instance
@@ -496,7 +498,7 @@ export class Charger {
 	 * Fetches the always on schedule for the charger
 	 * @returns Promise with the charger's always on schedule
 	 */
-	async getAlwaysOnSchedule(): Promise<AlwaysOnSchedule | undefined> {
+	async getAlwaysOnSchedule(): Promise<ScheduleList | undefined> {
 		try {
 			const response = await get(`/schedule/${this.id}/alwayson`);
 			this.alwaysOnSchedule = response;
@@ -509,10 +511,10 @@ export class Charger {
 
 	/**
 	 * Adds a new always on schedule
-	 * @param data AlwaysOnSchedule object with new settings
+	 * @param data ScheduleList object with new settings
 	 * @returns Promise<void>
 	 */
-	async addAlwaysOnSchedule(data: AlwaysOnInterval): Promise<void> {
+	async addAlwaysOnSchedule(data: SingleSchedule): Promise<void> {
 		try {
 			await patch(`/schedule/${this.id}/alwayson`, data);
 
@@ -529,11 +531,11 @@ export class Charger {
 
 	/**
 	 * Updates an existing always on schedule
-	 * @param schedule_new AlwaysOnSchedule object with new settings
-	 * @param schedule_org AlwaysOnSchedule object with original settings
+	 * @param schedule_new ScheduleList object with new settings
+	 * @param schedule_org ScheduleList object with original settings
 	 * @returns Promise<void>
 	 */
-	async updateAlwaysOnSchedule(schedule_new: AlwaysOnInterval, schedule_org: AlwaysOnInterval): Promise<void> {
+	async updateAlwaysOnSchedule(schedule_new: SingleSchedule, schedule_org: SingleSchedule): Promise<void> {
 		try {
 			// Create the properly formatted data object
 			const data = {
@@ -549,10 +551,10 @@ export class Charger {
 
 	/**
 	 * Deletes an always on schedule
-	 * @param data AlwaysOnSchedule object with the schedule to delete
+	 * @param data ScheduleList object with the schedule to delete
 	 * @returns Promise<void>
 	 */
-	async deleteAlwaysOnSchedule(data: AlwaysOnInterval): Promise<void> {
+	async deleteAlwaysOnSchedule(data: SingleSchedule): Promise<void> {
 		try {
 			await put(`/schedule/${this.id}/alwayson/rm`, data);
 
@@ -587,9 +589,9 @@ export class Charger {
 	}
 
 	/**
-	 * Converts AlwaysOnSchedule data to display format
+	 * Converts ScheduleList data to display format
 	 */
-	static convertScheduleDataToDisplayData(scheduleData: AlwaysOnSchedule): DisplaySchedule[] {
+	static convertScheduleDataToDisplayData(scheduleData: ScheduleList): DisplaySchedule[] {
 		return scheduleData.map((schedule) => ({
 			id: CryptoJS.MD5(JSON.stringify(schedule)).toString(),
 			days: schedule.days,
@@ -603,7 +605,7 @@ export class Charger {
 	/**
 	 * Converts display data back to schedule format
 	 */
-	static convertDisplayDataToScheduleData(displayData: DisplaySchedule[]): AlwaysOnSchedule {
+	static convertDisplayDataToScheduleData(displayData: DisplaySchedule[]): ScheduleList {
 		return displayData.map((schedule) => ({
 			days: schedule.days,
 			start: Charger.timeStringToMinutes(schedule.startTime),

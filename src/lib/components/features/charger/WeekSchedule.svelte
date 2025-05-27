@@ -1,7 +1,6 @@
 <script lang="ts">
-	import Subpage from "$lib/components/ui/Subpage.svelte";
 	import { chargers } from "$lib/classes/Chargers.svelte";
-	import type { AlwaysOnSchedule, AlwaysOnInterval } from "$lib/types/charger.types";
+	import type { SingleSchedule } from "$lib/types/charger.types";
 	import Trashcan from "~icons/mdi/trash-can-outline";
 	import PlusClock from "~icons/mdi/clock-plus-outline";
 	import ChevronDown from "~icons/mdi/chevron-down";
@@ -16,7 +15,7 @@
 	const dayNames = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 	const dayAbbreviations = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
-	// Initialize display data from the actual AlwaysOnSchedule
+	// Initialize display data from the actual ScheduleList
 	let displaySchedules: DisplaySchedule[] = $state(
 		Charger.convertScheduleDataToDisplayData(chargers.selected?.alwaysOnSchedule || []),
 	);
@@ -31,7 +30,7 @@
 	}
 
 	// Sync schedule with server (add or update as needed)
-	async function syncScheduleWithServer(schedule: DisplaySchedule, originalScheduleData?: AlwaysOnInterval) {
+	async function syncScheduleWithServer(schedule: DisplaySchedule, originalScheduleData?: SingleSchedule) {
 		if (!isScheduleValid(schedule)) {
 			return; // Don't sync invalid schedules
 		}
