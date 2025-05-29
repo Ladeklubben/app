@@ -1,9 +1,7 @@
 <script lang="ts">
 	import InputField from "$lib/components/ui/InputField.svelte";
 	import Subpage from "$lib/components/ui/Subpage.svelte";
-	import { DatetimePicker } from "@capawesome-team/capacitor-datetime-picker";
 	import { chargers } from "$lib/classes/Chargers.svelte";
-	import { device, Platform } from "$lib/services/layout";
 	import { onMount } from "svelte";
 
 	let initialized = false;
@@ -14,43 +12,14 @@
 	let end = $state("06:00");
 	let preheat = $state(0);
 
-	async function selectTime(timeType: "begin" | "end") {
-		if ($device === Platform.Web) {
-			console.warn("TimePicker is not supported on web.");
-			// TODO: Implement a web version of the time picker
-			return;
-		}
-
-		const { value } = await DatetimePicker.present({
-			mode: "time",
-			theme: "dark",
-			locale: "en-DK",
-			format: "HH:mm",
-			value: timeType === "begin" ? begin : end,
-		});
-
-		if (value) {
-			switch (timeType) {
-				case "begin":
-					begin = value;
-					break;
-				case "end":
-					end = value;
-					break;
-				default:
-					console.warn(`Unsupported timeType: ${timeType}`);
-			}
-		}
-	}
-
 	onMount(() => {
 		initialized = false;
 		const schedule = chargers.selected?.smartChargeSchedule;
 		if (schedule) {
 			enabled = schedule.enabled;
 			needed_energy = schedule.needed_energy;
-			begin = schedule.charging_begin_earliest.split(':').slice(0, 2).join(':');
-			end = schedule.charging_end_latest.split(':').slice(0, 2).join(':');
+			begin = schedule.charging_begin_earliest.split(":").slice(0, 2).join(":");
+			end = schedule.charging_end_latest.split(":").slice(0, 2).join(":");
 			preheat = schedule.preheat;
 		}
 
@@ -93,32 +62,24 @@
 		description="The amount of kWh your car needs. This is typically set to your daily average."
 	/>
 	<div class="flex flex-col gap-1.5">
-		<span>
-			<span class="font-bold">Earliest Start</span>
-			- {begin}
-		</span>
+		<span class="font-bold">Earliest Start</span>
 		<p>This is the earliest possible time you want to start charging your car.</p>
-		<button
-			class="p-3 mt-2 font-bold bg-lk-blue-500 border border-lk-blue-500 rounded-xl text-lk-blue-50
-							cursor-pointer disabled:cursor-not-allowed w-full"
-			onclick={async () => selectTime("begin")}
-		>
-			Set Time
-		</button>
+		<input
+			id="earliest-start"
+			type="time"
+			class="w-full text-center rounded-2xl border border-lk-blue-500 bg-transparent p-3 text-lg text-lk-blue-50 focus:border-lk-blue-300"
+			bind:value={begin}
+		/>
 	</div>
 	<div class="flex flex-col gap-1.5">
-		<span>
-			<span class="font-bold">Ready Time</span>
-			- {end}
-		</span>
+		<span class="font-bold">Ready Time</span>
 		<p>This is usually when you need to use your car. It will be fully charged by this time.</p>
-		<button
-			class="p-3 mt-2 font-bold bg-lk-blue-500 border border-lk-blue-500 rounded-xl text-lk-blue-50
-							cursor-pointer disabled:cursor-not-allowed w-full"
-			onclick={async () => selectTime("end")}
-		>
-			Set Time
-		</button>
+		<input
+			id="earliest-start"
+			type="time"
+			class="w-full text-center rounded-2xl border border-lk-blue-500 bg-transparent p-3 text-lg text-lk-blue-50 focus:border-lk-blue-300"
+			bind:value={end}
+		/>
 	</div>
 	<InputField
 		label="Preheat"
