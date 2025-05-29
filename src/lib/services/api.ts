@@ -29,8 +29,7 @@ async function request(method: string, endpoint: string, data?: any, auth: boole
 
 		// Check if request was successful (status code in 2xx range)
 		if (response.status < 200 || response.status >= 300) {
-			const errorData = response.data || {};
-			throw new Error(errorData.detail || `API request failed with status ${response.status}`);
+			throw new Error(response.data.detail || `API request failed with status ${response.status}`, { cause: response.status });
 		}
 
 		// Only parse JSON if there's a body (check status isn't 204)
@@ -54,7 +53,7 @@ export async function post(endpoint: string, data: any, auth: boolean = true) {
 	return request("POST", endpoint, data, auth);
 }
 
-export async function put(endpoint: string, data: any, auth: boolean = true) {
+export async function put(endpoint: string, data?: any, auth: boolean = true) {
 	return request("PUT", endpoint, data, auth);
 }
 

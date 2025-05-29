@@ -16,8 +16,8 @@ export interface ChargerState {
 	online: [number, boolean];
 	/** Indicates if the charger is available for public use */
 	open_for_public: boolean;
-	/** Public charging mode status (1 for on, 0 for off) */
-	public: number;
+	/** Public charging mode status (true for on, false for off) */
+	public: boolean;
 	/** Indicates if smart charging mode is active */
 	smart_active: boolean;
 	/** Timestamp for the smart charging start time */
@@ -335,7 +335,7 @@ export interface ListPrice {
  * Interface for free charging schedule
  * Represents an array of schedule entries
  */
-export interface AlwaysOnSchedule extends Array<AlwaysOnInterval> {
+export interface ScheduleList extends Array<SingleSchedule> {
 	/** Number of schedule entries */
 	length: number;
 }
@@ -343,7 +343,7 @@ export interface AlwaysOnSchedule extends Array<AlwaysOnInterval> {
 /**
  * Interface for a free charging interval configuration
  */
-export interface AlwaysOnInterval {
+export interface SingleSchedule {
 	/** Array of weekdays where this interval applies (0 = Monday, 1 = Tuesday, etc.) */
 	days: number[];
 	/** Starting time in minutes from midnight */
