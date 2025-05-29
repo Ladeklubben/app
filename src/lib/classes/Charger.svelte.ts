@@ -234,9 +234,9 @@ export class Charger {
 
 			// Return true to indicate charger is possible to be public
 			return true;
-			
+
 		} catch (error: any) {
-			if (error.cause === 404) {
+			if (error.cause === 403) {
 				console.error("This kind og charger cannot be made public");
 				return false;
 			}
