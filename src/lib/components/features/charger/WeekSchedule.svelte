@@ -161,7 +161,7 @@
 </script>
 
 <!-- Schedule List -->
-<div class="flex flex-col gap-3">
+<div class="flex flex-col gap-5">
 	{#each displaySchedules as schedule (schedule.id)}
 		<div class="border border-lk-blue-800 rounded-2xl overflow-hidden">
 			<!-- Schedule Header -->
@@ -288,13 +288,12 @@
 			{/if}
 		</div>
 	{/each}
+	<!-- Add New Schedule Button -->
+	<button
+		class="flex p-6 border border-dashed border-lk-blue-300/60 rounded-2xl justify-center gap-3 items-center text-lk-blue-300/60"
+		onclick={addNewSchedule}
+		title="Add time slot"
+	>
+		<PlusClock />Add New Schedule
+	</button>
 </div>
-
-<!-- Add New Schedule Button -->
-<button
-	class="flex p-6 border border-dashed border-lk-blue-300/60 rounded-2xl justify-center gap-3 items-center text-lk-blue-300/60"
-	onclick={addNewSchedule}
-	title="Add time slot"
->
-	<PlusClock />Add New Schedule
-</button>
