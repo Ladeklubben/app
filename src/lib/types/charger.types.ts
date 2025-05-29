@@ -16,8 +16,8 @@ export interface ChargerState {
 	online: [number, boolean];
 	/** Indicates if the charger is available for public use */
 	open_for_public: boolean;
-	/** Public charging mode status (1 for on, 0 for off) */
-	public: number;
+	/** Public charging mode status (true for on, false for off) */
+	public: boolean;
 	/** Indicates if smart charging mode is active */
 	smart_active: boolean;
 	/** Timestamp for the smart charging start time */

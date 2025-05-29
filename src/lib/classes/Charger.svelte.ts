@@ -219,6 +219,25 @@ export class Charger {
 	}
 
 	/**
+	 * Updates the public status of the charger
+	 * @param enabled Whether to enable or disable public access
+	 * @returns Promise indicating success or failure
+	 */
+	async putPublicCharger(enabled: boolean): Promise<boolean> {
+		try {
+			await put(`/cp/${this.id}/public?enable=${enabled}`);
+			return true;
+		} catch (error: any) {
+			if (error.cause === 404) {
+				console.error("This kind og charger cannot be made public");
+				return false;
+			};
+			console.error("Error updating charger public status:", error);
+			throw error;
+		}
+	}
+
+	/**
 	 * Updates the smart charging schedule for the charger
 	 * @param data SmartChargeSchedule object with new settings
 	 * @returns Promise<void>
