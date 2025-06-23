@@ -514,9 +514,9 @@ export class Charger {
 	convertListPrice(listPrice: ListPrice, addVAT: boolean): ListPrice {
 		const convertedListPrice: ListPrice = {
 			...listPrice,
-			nominal: listPrice.nominal * (addVAT ? 1.25 : 0.8),
-			minimum: listPrice.minimum * (addVAT ? 1.25 : 0.8),
-			fallback: listPrice.fallback * (addVAT ? 1.25 : 0.8),
+			nominal: Math.round(listPrice.nominal * (addVAT ? 1.25 : 0.8) * 100) / 100, // Round to 2 decimal places
+			minimum: Math.round(listPrice.minimum * (addVAT ? 1.25 : 0.8) * 100) / 100,
+			fallback: Math.round(listPrice.fallback * (addVAT ? 1.25 : 0.8) * 100) / 100,
 		};
 
 		return convertedListPrice;
