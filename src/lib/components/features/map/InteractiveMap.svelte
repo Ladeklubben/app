@@ -6,8 +6,8 @@
 	import type { Position } from "@capacitor/geolocation";
 
 	// Props
-	let { isDark = false } = $props<{
-		isDark?: boolean;
+	let { tileServer = "dark" } = $props<{
+		tileServer: TileServer;
 	}>();
 
 	// Reactive variables
@@ -96,4 +96,4 @@
 	});
 </script>
 
-<BaseMap {isDark} defaultZoom={6} onMapClick={handleMapClick} onMapInit={handleMapInit} />
+<BaseMap {tileServer} defaultZoom={6} onMapClick={handleMapClick} onMapInit={handleMapInit} />

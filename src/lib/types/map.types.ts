@@ -1,0 +1,1 @@
+type TileServer = "light" | "dark" | "satellite";
