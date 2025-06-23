@@ -2,12 +2,16 @@
 	import { onMount, onDestroy } from "svelte";
 	import * as L from "leaflet";
 	import BaseMap from "./BaseMap.svelte";
-	import { pos, getPosition } from "$lib/services/map";
+	import { pos, getPosition, getAddressFromCoordinates } from "$lib/services/map";
 	import type { Position } from "@capacitor/geolocation";
 
 	// Props
-	let { tileServer = "dark" } = $props<{
+	let { 
+		tileServer = "dark",
+		onLocationFound 
+	 } = $props<{
 		tileServer: TileServer;
+		onLocationFound: (address: AddressFromCoords) => void;
 	}>();
 
 	// Reactive variables
@@ -56,11 +60,24 @@
 	}
 
 	// Handle map clicks
-	function handleMapClick(e: L.LeafletMouseEvent) {
+	async function handleMapClick(e: L.LeafletMouseEvent) {
 		if (!map) return;
 
 		const { lat, lng } = e.latlng;
 		console.log("Clicked coordinates:", { latitude: lat, longitude: lng });
+
+		// Get address from coordinates
+		try {
+			const address: AddressFromCoords | null = await getAddressFromCoordinates(lat, lng);
+			if (!address) {
+				console.warn("No address found for clicked coordinates.");
+				return;
+			}
+			onLocationFound(address);
+			
+		} catch (error) {
+			console.error("Error getting address:", error);
+		}
 
 		if (clickMarker) {
 			clickMarker.remove();

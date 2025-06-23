@@ -62,3 +62,36 @@ export function calculateDistance(lat1: number, lon1: number, lat2: number, lon2
 	const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 	return R * c;
 }
+
+// Get the address from coordinates using OSM
+export async function getAddressFromCoordinates(lat: number, lon: number): Promise<AddressFromCoords | null> {
+	try {
+		const response = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`);
+		if (!response.ok) {
+			throw new Error("Failed to fetch address");
+		}
+		const data = await response.json();
+
+		// Validate and extract only the properties you need
+        if (!data.address) {
+            return null;
+        }
+        
+        // Transform to match your AddressFromCoords type structure
+        const address: AddressFromCoords = {
+            house_number: data.address.house_number || undefined,
+			road: data.address.road || undefined,
+			town: data.address.town || data.address.city || undefined,
+			postcode: data.address.postcode || undefined,
+			country: data.address.country || undefined,
+			lat: parseFloat(data.lat),
+			lon: parseFloat(data.lon)
+        };
+        
+		console.info("Address fetched:", data.address);
+        return address;
+	} catch (error) {
+		console.error("Error fetching address:", error);
+		return null;
+	}
+}
