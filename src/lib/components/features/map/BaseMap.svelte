@@ -6,14 +6,14 @@
 
 	// Props for customization
 	let {
-		isDark = false,
+		tileServer = "dark",
 		defaultCenter = [56, 10.5] as L.LatLngTuple,
 		defaultZoom = 6,
 		maxZoom = 20,
 		onMapClick = undefined as ((e: L.LeafletMouseEvent) => void) | undefined,
 		onMapInit = undefined as ((map: L.Map) => void) | undefined,
 	} = $props<{
-		isDark?: boolean;
+		tileServer: TileServer;
 		defaultCenter?: L.LatLngTuple;
 		defaultZoom?: number;
 		maxZoom?: number;
@@ -30,6 +30,7 @@
 	const TILE_SERVERS = {
 		light: `https://tile.jawg.io/jawg-streets/{z}/{x}/{y}{r}.png?access-token=${$MAP_TOKENS.JAWG}`,
 		dark: `https://tile.jawg.io/jawg-dark/{z}/{x}/{y}{r}.png?access-token=${$MAP_TOKENS.JAWG}`,
+		satellite: "https://tiles.stadiamaps.com/tiles/alidade_satellite/{z}/{x}/{y}{r}.jpg"
 	};
 
 	// Initialize map
@@ -69,14 +70,14 @@
 			map.removeLayer(currentTileLayer);
 		}
 
-		// Add the new tile layer based on current isDark value
-		currentTileLayer = L.tileLayer(TILE_SERVERS[isDark ? "light" : "dark"], {
+		// Add the new tile layer based on current tileserver value
+		currentTileLayer = L.tileLayer(TILE_SERVERS[tileServer as TileServer], {
 			maxZoom,
 		}).addTo(map);
 	}
 
 	$effect(() => {
-		if (isDark !== undefined) {
+		if (tileServer !== undefined) {
 			updateTileLayer();
 		}
 	});

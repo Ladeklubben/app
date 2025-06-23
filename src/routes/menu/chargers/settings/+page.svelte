@@ -33,7 +33,7 @@
 		<MenuItem
 			text="Location"
 			onclick={() => {
-				console.log("Clicked");
+				goto("/menu/chargers/settings/location");
 			}}
 		>
 			<MapMarker />

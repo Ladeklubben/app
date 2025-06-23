@@ -13,7 +13,7 @@
 	import { onDestroy } from "svelte";
 
 	let chargers: PublicCharger[] = $state([]);
-	let isDark: boolean = $state(false);
+	let tileServer: TileServer = $state("dark");
 	let isSorted: boolean = $state(false);
 	let chargerWaypointsComponent: any = $state(null);
 
@@ -64,6 +64,12 @@
 		getPosition();
 	}
 
+	function cycleTileServer() {
+		const servers: TileServer[] = ["dark", "light", "satellite"];
+		const currentIndex = servers.indexOf(tileServer);
+		tileServer = servers[(currentIndex + 1) % servers.length];
+	}
+
 	onDestroy(() => {
 		// Clear selected charger
 		$selectedChargerID = "";
@@ -79,7 +85,7 @@
 	>
 		<Glass>
 			<div class="flex flex-col">
-				<button class="p-3 border-b border-lk-blue-800" onclick={() => (isDark = !isDark)}>
+				<button class="p-3 border-b border-lk-blue-800" onclick={() => cycleTileServer()}>
 					<Layer class="text-lg" />
 				</button>
 				<button class="p-3">
@@ -94,7 +100,7 @@
 			</button>
 		</Glass>
 	</div>
-	<ChargerMap {chargers} {isDark} />
+	<ChargerMap {chargers} {tileServer} />
 	{#if isSorted}
 		<div class="absolute bottom-0 left-0 right-0 z-500">
 			<ChargerWaypoints bind:this={chargerWaypointsComponent}  {chargers} />

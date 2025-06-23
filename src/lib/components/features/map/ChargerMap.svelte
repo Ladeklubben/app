@@ -11,8 +11,8 @@
 	import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 
 	// Props
-	let { isDark = false, chargers = [] as PublicCharger[] } = $props<{
-		isDark?: boolean;
+	let { tileServer = "dark", chargers = [] as PublicCharger[] } = $props<{
+		tileServer: TileServer;
 		chargers?: PublicCharger[];
 	}>();
 
@@ -167,4 +167,4 @@
 	});
 </script>
 
-<BaseMap {isDark} defaultZoom={6} onMapInit={initializeMap} />
+<BaseMap {tileServer} defaultZoom={6} onMapInit={initializeMap} />

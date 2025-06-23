@@ -234,7 +234,6 @@ export class Charger {
 
 			// Return true to indicate charger is possible to be public
 			return true;
-
 		} catch (error: any) {
 			if (error.cause === 403) {
 				console.error("This kind og charger cannot be made public");
@@ -348,6 +347,23 @@ export class Charger {
 			return this.transactionsPlot;
 		} catch (error) {
 			console.error("Error getting transactions plot:", error);
+			throw error;
+		}
+	}
+
+	/**
+	 * Updates the location information for the charger
+	 * @param data LocationInfo object with new settings
+	 * @returns Promise<void>
+	 */
+	async putLocationInfo(data: LocationInfo): Promise<void> {
+		try {
+			// Using /info instead of /location, since I was getting CORS errors
+			await put(`/cp/${this.id}/info`, { location: data }); 
+			this.locationInfo = data;
+			console.log("Location info updated successfully:", data);
+		} catch (error) {
+			console.error("Error updating location info:", error);
 			throw error;
 		}
 	}
