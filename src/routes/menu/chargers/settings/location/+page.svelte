@@ -1,12 +1,22 @@
 <script lang="ts">
 	import InteractiveMap from "$lib/components/features/map/InteractiveMap.svelte";
 	import Subpage from "$lib/components/ui/Subpage.svelte";
+    import { chargers } from "$lib/classes/Chargers.svelte";
+    import type { LocationInfo } from "$lib/types/publicCharger.types";
 
 	let address: AddressFromCoords | undefined = $state(undefined);
 
 	function onLocationFound(newAddress: AddressFromCoords) {
 		address = newAddress;
-        console.log("Address found:", newAddress);
+        const locationInfo: LocationInfo = {
+            brief : "Charger", // TODO: Consider making this editable
+            address: newAddress.road + " " + newAddress.house_number,
+            city: newAddress.town || "Unknown",
+            zip: newAddress.postcode || "Unknown",
+            latitude: newAddress.lat,
+            longitude: newAddress.lon,
+        }
+        chargers.selected?.putLocationInfo(locationInfo);
 	}
 </script>
 
