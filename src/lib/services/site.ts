@@ -31,7 +31,7 @@ export async function createNewSite(data: any) {
 		await post("/site/new", data, true);
 	} catch (err) {
 		console.error((err as Error).message);
-		showError("Error", "Failed to create new site. Please try again later or contact support.");
+		showError("Failed to create new site.");
 	}
 }
 

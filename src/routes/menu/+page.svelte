@@ -13,6 +13,7 @@
 	import BellRing from "~icons/mdi/bell-ring";
 	import Lock from "~icons/mdi/lock";
 	import { goto } from "$app/navigation";
+	import { showError } from "$lib/services/dialog.svelte";
 
 	onMount(async () => {
 		try {
@@ -20,7 +21,7 @@
 			await chargers.loadAllChargersCardData();
 		} catch (error) {
 			console.error("Failed to initialize charger data:", error);
-			// TODO: Show error message to the user
+			showError("Failed to load charger data.", );
 		}
 	});
 </script>
