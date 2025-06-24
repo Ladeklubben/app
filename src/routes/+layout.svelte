@@ -8,6 +8,7 @@
 	import { showTabBar } from "$lib/services/layout";
 	import { setDevice, device, Platform } from "$lib/services/layout";
 	import { page } from "$app/state";
+	import Dialog from "$lib/components/ui/Dialog.svelte";
 	import "../app.css";
 
 	let { children } = $props();
@@ -34,6 +35,7 @@
 			{#if $showTabBar}
 				<TabBar />
 			{/if}
+			<Dialog />
 		{/if}
 	</div>
 </ParaglideJS>

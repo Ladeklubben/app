@@ -1,5 +1,6 @@
 import { writable } from "svelte/store";
 import { get, post } from "$lib/services/api";
+import { showError } from "./dialog.svelte";
 
 const siteInitialState = {
 	name: "",
@@ -30,6 +31,7 @@ export async function createNewSite(data: any) {
 		await post("/site/new", data, true);
 	} catch (err) {
 		console.error((err as Error).message);
+		showError("Failed to create new site.");
 	}
 }
 

@@ -5,6 +5,7 @@
 	import { chargers } from "$lib/classes/Chargers.svelte";
 	import type { ListPrice } from "$lib/types/charger.types";
 	import { onMount } from "svelte";
+	import { showError } from "$lib/services/dialog.svelte";
 
 	let initialized = false;
 
@@ -58,7 +59,8 @@
 				listPriceVAT = chargers.selected.convertListPrice(initialPrices, true);
 			}
 		} else {
-			// TODO: Impelement error handling here
+			showError("No charger selected, please select a charger first.", false);
+			goto("/menu/chargers");
 		}
 
 		// Workaround to ensure that the effect is not triggered immediately
