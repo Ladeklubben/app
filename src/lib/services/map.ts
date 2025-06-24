@@ -79,11 +79,11 @@ export async function getAddressFromCoordinates(lat: number, lon: number): Promi
         
         // Transform to match your AddressFromCoords type structure
         const address: AddressFromCoords = {
-            house_number: data.address.house_number || undefined,
-			road: data.address.road || undefined,
-			town: data.address.town || data.address.city || undefined,
-			postcode: data.address.postcode || undefined,
-			country: data.address.country || undefined,
+            house_number: data.address.house_number || "",
+			road: data.address.road || "",
+			city: data.address.town || data.address.city || data.address.village || data.address.municipality || "",
+			postcode: data.address.postcode || "",
+			country: data.address.country || "",
 			lat: parseFloat(data.lat),
 			lon: parseFloat(data.lon)
         };

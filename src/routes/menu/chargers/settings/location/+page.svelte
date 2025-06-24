@@ -5,14 +5,15 @@
     import type { LocationInfo } from "$lib/types/publicCharger.types";
 
 	let address: AddressFromCoords | undefined = $state(undefined);
+	let locationInfo: LocationInfo | undefined = $state(undefined);
 
 	function onLocationFound(newAddress: AddressFromCoords) {
 		address = newAddress;
-        const locationInfo: LocationInfo = {
+        locationInfo = {
             brief : "Charger", // TODO: Consider making this editable
             address: newAddress.road + " " + newAddress.house_number,
-            city: newAddress.town || "Unknown",
-            zip: newAddress.postcode || "Unknown",
+            city: newAddress.city,
+            zip: newAddress.postcode,
             latitude: newAddress.lat,
             longitude: newAddress.lon,
         }
@@ -24,27 +25,22 @@
 	<p>Click on the map to mark your charger's exact location. The address will be automatically calculated.</p>
 
 	<div class="h-100 w-full rounded-2xl overflow-auto">
-		<InteractiveMap tileServer={"satellite"} {onLocationFound} />
+		<InteractiveMap tileServer={"dark"} {onLocationFound} />
 	</div>
 
-	{#if address}
+	{#if locationInfo}
 		<div class="flex flex-col gap-2">
 			<p>
 				<strong>Address: </strong>
-				{address.road}
-				{address.house_number}
+				{locationInfo.address}
 			</p>
 			<p>
 				<strong>City: </strong>
-				{address.town}
+				{locationInfo.city}
 			</p>
 			<p>
 				<strong>Postcode: </strong>
-				{address.postcode}
-			</p>
-			<p>
-				<strong>Country: </strong>
-				{address.country}
+				{locationInfo.zip}
 			</p>
 		</div>
 	{/if}
