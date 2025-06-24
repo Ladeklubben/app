@@ -17,13 +17,14 @@
 	import Cash from "~icons/mdi/cash-multiple";
 	import Star from "~icons/mdi/star";
 	import Chart from "~icons/mdi/chart-box-outline";
+	import { showError } from "$lib/services/dialog.svelte";
 
 	onMount(async () => {
-		if (chargers.selected === null) {
-			// TODO: Show error message
-			goto("/menu/chargers");
-		} else {
+		if (chargers.selected ) {
 			await chargers.selected.getAllData();
+		} else {
+			showError("No charger selected, please select a charger first.", false);
+			goto("/menu/chargers");
 		}
 	});
 </script>
