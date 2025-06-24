@@ -31,13 +31,11 @@
 				class:pt-[env(safe-area-inset-top)]={$device === Platform.IOS && page.url.pathname !== "/map"}
 			>
 				{@render children()}
-
-				<!-- Global Dialog -->
-				<Dialog />
 			</main>
 			{#if $showTabBar}
 				<TabBar />
 			{/if}
+			<Dialog />
 		{/if}
 	</div>
 </ParaglideJS>

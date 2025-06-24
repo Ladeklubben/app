@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { dialogState, closeDialog } from "$lib/services/dialog";
+	import { dialogState, closeDialog } from "$lib/services/dialog.svelte";
 	import { fade, scale } from "svelte/transition";
 
 	// Color classes for different dialog types
@@ -35,7 +35,7 @@
 <!-- Global Dialog -->
 {#if dialogState.isOpen}
 	<div
-		class="fixed inset-0 bg-black/25 flex items-center justify-center z-50 p-4"
+		class="fixed inset-0 bg-black/25 flex items-center justify-center z-1001 p-4"
 		role="button"
 		tabindex="0"
 		aria-label="Close dialog"
