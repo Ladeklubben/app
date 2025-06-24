@@ -14,16 +14,6 @@
 	import Lock from "~icons/mdi/lock";
 	import { goto } from "$app/navigation";
 	import { showError } from "$lib/services/dialog.svelte";
-
-	onMount(async () => {
-		try {
-			await chargers.initializeChargers();
-			await chargers.loadAllChargersCardData();
-		} catch (error) {
-			console.error("Failed to initialize charger data:", error);
-			showError("Failed to load charger data.", );
-		}
-	});
 </script>
 
 <div class="wrapper">

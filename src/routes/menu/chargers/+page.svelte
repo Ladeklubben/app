@@ -8,11 +8,18 @@
 	import ChevronRight from "~icons/mdi/chevron-right";
 	import { goto } from "$app/navigation";
 	import Button from "$lib/components/ui/Button.svelte";
+	import { showError } from "$lib/services/dialog.svelte";
 
 	const chargerArray = $derived(Array.from(chargers.chargers.values()));
 
 	onMount(async () => {
-		await chargers.loadAllChargersCardData();
+		try {
+			await chargers.initializeChargers();
+			await chargers.loadAllChargersCardData();
+		} catch (error) {
+			console.error("Failed to initialize charger data:", error);
+			showError("Failed to load charger data.", );
+		}
 	});
 
 	// Helper functions for the card
