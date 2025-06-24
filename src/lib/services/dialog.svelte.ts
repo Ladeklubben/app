@@ -14,9 +14,11 @@ function setDialog(title: string, message: string, type: DialogType) {
 	dialogState.type = type;
 }
 
-// Shows an error dialog with red styling
-export const showError = (title: string = "Error", message: string) => {
-	setDialog(title, message, "error");
+export const showError = (message: string, appendHelp: boolean = true) => {
+	if (appendHelp) {
+		message += " Please try again later or contact support.";
+	}
+	setDialog("Error", message, "error");
 };
 
 // Shows a success dialog with blue styling
