@@ -8,6 +8,7 @@
 	import { showTabBar } from "$lib/services/layout";
 	import { setDevice, device, Platform } from "$lib/services/layout";
 	import { page } from "$app/state";
+	import Dialog from "$lib/components/ui/Dialog.svelte";
 	import "../app.css";
 
 	let { children } = $props();
@@ -30,6 +31,9 @@
 				class:pt-[env(safe-area-inset-top)]={$device === Platform.IOS && page.url.pathname !== "/map"}
 			>
 				{@render children()}
+
+				<!-- Global Dialog -->
+				<Dialog />
 			</main>
 			{#if $showTabBar}
 				<TabBar />
