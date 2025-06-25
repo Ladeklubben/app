@@ -46,7 +46,7 @@
         }
     }
 
-    const gap = $derived(error ? 5 : 0);
+    const gap = $derived(error ? 5 : 4);
 
     onMount(async() => {
         charger?.getNotificationSetup();
