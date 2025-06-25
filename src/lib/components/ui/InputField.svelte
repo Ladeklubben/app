@@ -82,9 +82,9 @@
 	<div class="flex flex-col gap-1">
 		<label for={id} class="font-bold">{label}</label>
 		{#if description}
-			<p class="mb-2">{description}</p>
+			<p>{description}</p>
 		{/if}
-		<div class="relative">
+		<div class="relative mt-2">
 			<input
 				{type}
 				{id}
