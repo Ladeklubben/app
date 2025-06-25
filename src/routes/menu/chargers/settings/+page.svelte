@@ -86,7 +86,7 @@
 		<MenuItem
 			text="QR Code"
 			onclick={() => {
-				console.log("Clicked");
+				goto("/menu/chargers/settings/qr");
 			}}
 		>
 			<QRCode />

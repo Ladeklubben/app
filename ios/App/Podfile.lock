@@ -3,6 +3,11 @@ PODS:
     - CapacitorCordova
   - CapacitorApp (7.0.0):
     - Capacitor
+  - CapacitorBarcodeScanner (2.0.3):
+    - Capacitor
+    - OSBarcodeLib (~> 1.1.3)
+  - CapacitorCamera (7.0.1):
+    - Capacitor
   - CapacitorCordova (7.0.1)
   - CapacitorGeolocation (7.1.1):
     - Capacitor
@@ -13,26 +18,37 @@ PODS:
     - Capacitor
   - CapacitorTextZoom (7.0.0):
     - Capacitor
+  - CapawesomeTeamCapacitorDatetimePicker (7.0.1):
+    - Capacitor
   - IONGeolocationLib (1.0.0)
+  - OSBarcodeLib (1.1.3)
 
 DEPENDENCIES:
   - "Capacitor (from `../../node_modules/@capacitor/ios`)"
   - "CapacitorApp (from `../../node_modules/@capacitor/app`)"
+  - "CapacitorBarcodeScanner (from `../../node_modules/@capacitor/barcode-scanner`)"
+  - "CapacitorCamera (from `../../node_modules/@capacitor/camera`)"
   - "CapacitorCordova (from `../../node_modules/@capacitor/ios`)"
   - "CapacitorGeolocation (from `../../node_modules/@capacitor/geolocation`)"
   - "CapacitorHaptics (from `../../node_modules/@capacitor/haptics`)"
   - "CapacitorPreferences (from `../../node_modules/@capacitor/preferences`)"
   - "CapacitorTextZoom (from `../../node_modules/@capacitor/text-zoom`)"
+  - "CapawesomeTeamCapacitorDatetimePicker (from `../../node_modules/@capawesome-team/capacitor-datetime-picker`)"
 
 SPEC REPOS:
   trunk:
     - IONGeolocationLib
+    - OSBarcodeLib
 
 EXTERNAL SOURCES:
   Capacitor:
     :path: "../../node_modules/@capacitor/ios"
   CapacitorApp:
     :path: "../../node_modules/@capacitor/app"
+  CapacitorBarcodeScanner:
+    :path: "../../node_modules/@capacitor/barcode-scanner"
+  CapacitorCamera:
+    :path: "../../node_modules/@capacitor/camera"
   CapacitorCordova:
     :path: "../../node_modules/@capacitor/ios"
   CapacitorGeolocation:
@@ -43,17 +59,23 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/preferences"
   CapacitorTextZoom:
     :path: "../../node_modules/@capacitor/text-zoom"
+  CapawesomeTeamCapacitorDatetimePicker:
+    :path: "../../node_modules/@capawesome-team/capacitor-datetime-picker"
 
 SPEC CHECKSUMS:
   Capacitor: de199cba6c8b20995428ad0b7cb0bc6ca625ffd4
   CapacitorApp: 9cb31064a6c6bb2b1438583733a7bf45557fc1da
+  CapacitorBarcodeScanner: 29c88bf098adb0830975d4f14c107a6bb7722e3d
+  CapacitorCamera: 6e73f1fc6c629a672658705a02409b60854bc0f1
   CapacitorCordova: 63d476958d5022d76f197031e8b7ea3519988c64
   CapacitorGeolocation: c0755715aaadf5c86dc0053e1127b368444c914b
   CapacitorHaptics: 1f1e17041f435d8ead9ff2a34edd592c6aa6a8d6
   CapacitorPreferences: 8e4bef1f937fc991a19d7ea99330c36a62edd24b
   CapacitorTextZoom: 254c75dffb54d34d582a4f14cc7ba432fcfb5cad
+  CapawesomeTeamCapacitorDatetimePicker: efbcc48bc69fbc550502235513691302871c9fad
   IONGeolocationLib: 81f33f88d025846946de2cf63b0c7628e7c6bc9d
+  OSBarcodeLib: f2e981270a64faf476cb790864262b29ab8cd68a
 
-PODFILE CHECKSUM: ae7101b340f498c1c06ff0aa8c8014fcf0db7921
+PODFILE CHECKSUM: 41462d68c96fdb14479c0f5d138235c71518c8c0
 
 COCOAPODS: 1.16.2

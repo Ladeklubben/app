@@ -2,6 +2,7 @@
 	import { onMount } from "svelte";
 	import { CapacitorBarcodeScanner } from "@capacitor/barcode-scanner";
     import type { CapacitorBarcodeScannerScanResult } from "@capacitor/barcode-scanner";
+	import Subpage from "$lib/components/ui/Subpage.svelte";
 
     let scannedValue = $state<CapacitorBarcodeScannerScanResult | null>(null);
 
@@ -22,4 +23,6 @@
 		}
 	});
 </script>
-{scannedValue}
+<Subpage title="QR Code Scanner" backURL="/menu/chargers/settings">
+	{scannedValue}
+</Subpage>
