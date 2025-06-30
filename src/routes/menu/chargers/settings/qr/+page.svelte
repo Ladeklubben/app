@@ -21,7 +21,8 @@
 				scannedValue = result.ScanResult;
 			}
 		} catch (e) {
-			throw e;
+			console.error("QR code scanning failed:", e);
+			showError("Failed to scan QR code.");
 		}
 	}
 
