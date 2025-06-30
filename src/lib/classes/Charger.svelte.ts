@@ -60,6 +60,8 @@ export class Charger {
 	alwaysOnSchedule = $state<ScheduleList | undefined>();
 	/** Rental schedule */
 	rentalSchedule = $state<ScheduleList | undefined>();
+	/** QR Code */
+	qrCode = $state<string | undefined>();
 
 	/**
 	 * Creates a new Charger instance
@@ -105,6 +107,7 @@ export class Charger {
 				this.getListPrice(),
 				this.getAlwaysOnSchedule(),
 				this.getRentalSchedule(),
+				this.getQRCode(),
 			]);
 		} catch (error) {
 			console.error("Error getting all data:", error);
@@ -696,6 +699,36 @@ export class Charger {
 			this.rentalSchedule = this.rentalSchedule.filter(
 				(schedule) => schedule.start !== data.start || schedule.interval !== data.interval,
 			);
+		}
+	}
+
+	/**
+	 * Fetches the QR code for the charger
+	 * @returns Promise with the QR code string
+	 */
+	async getQRCode(): Promise<string | undefined> {
+		try {
+			const response = await get(`/cp/${this.id}/qrtag`);
+			this.qrCode = response;
+			return this.qrCode;
+		} catch (error) {
+			console.error("Error getting QR code:", error);
+			throw error;
+		}
+	}
+
+	/**
+	 * Updates the QR code for the charger
+	 * @param qrCode The new QR code string
+	 * @returns Promise<void>
+	 */
+	async putQRCode(qrCode: string): Promise<void> {
+		try {
+			await put(`/cp/${this.id}/qrtag?qrcode=${encodeURIComponent(qrCode)}`);
+			this.qrCode = qrCode;
+		} catch (error) {
+			console.error("Error updating QR code:", error);
+			throw error;
 		}
 	}
 
