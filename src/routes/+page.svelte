@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { goto } from "$app/navigation";
 	import SmartCharge from "$lib/components/features/charger/SmartCharge.svelte";
+	import UnlockCharger from "$lib/components/features/charger/UnlockCharger.svelte";
 </script>
 
 <div class="wrapper">
@@ -14,4 +15,5 @@
 		</button>
 	</div>
 	<SmartCharge />
+	<UnlockCharger />
 </div>

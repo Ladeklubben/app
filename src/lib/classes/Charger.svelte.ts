@@ -20,6 +20,7 @@ import type {
 	DisplaySchedule,
 	ChargerStatus,
 } from "$lib/types/charger.types";
+import { showError } from "$lib/services/dialog.svelte";
 
 /**
  * Class representing a single Ladeklubben charger with its associated data
@@ -194,6 +195,26 @@ export class Charger {
 		if (isConnected) return "EV Connected";
 		if (isOnline) return "Ready";
 		return "Offline";
+	}
+
+	async startCharging(): Promise<void> {
+		try {
+			await put(`/cp/${this.id}/startmanuelcharge`);
+		} catch (error) {
+			console.error("Failed to start charging.", error);
+			showError("Failed to start charging.");
+			throw error; // Re-throw to handle it in the calling code
+		}
+	}
+
+	async stopCharging(): Promise<void> {
+		try {
+			await put(`/cp/${this.id}/stopcharge`);
+		} catch (error) {
+			console.error("Failed to stop charging.", error);
+			showError("Failed to stop charging.");
+			throw error; // Re-throw to handle it in the calling code
+		}
 	}
 
 	/**
