@@ -20,9 +20,20 @@
 				console.info("QR scanned: ", result.ScanResult);
 				scannedValue = result.ScanResult;
 			}
-		} catch (e) {
+		} catch (e: any) {
 			console.error("QR code scanning failed:", e);
-			showError("Failed to scan QR code.");
+
+			// Check error message if code is not available
+			const errorMessage = e.message || e.description || String(e);
+
+			if (errorMessage.includes("cancelled") || errorMessage.includes("cancel")) {
+				// User cancelled - don't show error
+				return;
+			} else if (errorMessage.includes("camera") && errorMessage.includes("permission")) {
+				showError("Camera permission is required to scan QR codes.");
+			} else {
+				showError("Failed to scan QR code. Please try again.");
+			}
 		}
 	}
 
