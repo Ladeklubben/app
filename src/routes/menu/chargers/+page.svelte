@@ -27,16 +27,6 @@
 		}
 	});
 
-	// Helper functions for the card
-	function getChargerStatus(charger: Charger) {
-		const isCharging = charger.chargeState?.is_charging === 1;
-		const isConnected = charger.chargeState?.connector_occupied === 1;
-
-		if (isCharging) return { text: "Charging", class: "text-green-400" };
-		if (isConnected) return { text: "Connected", class: "text-lk-blue-200" };
-		return { text: "Idle", class: "text-lk-blue-200" };
-	}
-
 	function handleChargerClick(charger: Charger) {
 		// Navigate to charger details page
 		chargers.selectCharger(charger.id);
@@ -78,8 +68,8 @@
 							<div class="grid grid-cols-2 gap-2 text-sm">
 								<div>
 									<span class="text-lk-blue-400">Status:</span>
-									<span class={`ml-1 ${getChargerStatus(charger).class}`}>
-										{getChargerStatus(charger).text}
+									<span class={`ml-1 text-lk-blue-50`}>
+										{charger.getChargerStatus(charger)}
 									</span>
 								</div>
 

@@ -28,6 +28,8 @@ export interface ChargerState {
 	smartcharge_ready: boolean;
 }
 
+export type ChargerStatus = "Charging" | "EV Connected" | "Ready" | "Offline";
+
 /**
  * Interface representing usage statistics for a charger
  */

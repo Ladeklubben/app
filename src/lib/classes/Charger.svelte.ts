@@ -18,6 +18,7 @@ import type {
 	ScheduleList,
 	SingleSchedule,
 	DisplaySchedule,
+	ChargerStatus,
 } from "$lib/types/charger.types";
 
 /**
@@ -173,6 +174,26 @@ export class Charger {
 			console.error("Error getting charger state:", error);
 			throw error;
 		}
+	}
+
+	/**
+	 * Returns a human-readable status of the charger based on its current state
+	 * @param charger The Charger instance to get the status for
+	 * @returns A string representing the charger's status
+	 */
+	getChargerStatus(charger: Charger): ChargerStatus {
+		if (!charger.chargeState) {
+			return "Offline"; // Default to offline if no chargeState is available
+		}
+
+		const isCharging = charger.chargeState.is_charging === 1;
+		const isConnected = charger.chargeState.connector_occupied === 1;
+		const isOnline = charger.chargeState.online?.[1] === true;
+
+		if (isCharging) return "Charging";
+		if (isConnected) return "EV Connected";
+		if (isOnline) return "Ready";
+		return "Offline";
 	}
 
 	/**
