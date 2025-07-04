@@ -2,12 +2,12 @@
 	import { goto } from "$app/navigation";
 	import { forgotPasswordEmail, login } from "$lib/services/auth";
 	import { showTabBar } from "$lib/services/layout";
-	import { onDestroy, onMount } from "svelte";
-	import InputField from "$lib/components/ui/InputField.svelte";
+	import { onMount } from "svelte";
 	import Form from "$lib/components/ui/Form.svelte";
 	import Button from "$lib/components/ui/Button.svelte";
 	import { put } from "$lib/services/api";
 	import { validateEmail } from "$lib/services/forms";
+	import TextInput from "$lib/components/ui/inputs/TextInput.svelte";
 
 	let fields: { [key: string]: string } = $state({ email: "", password: "" });
 	let errors = $state({ email: "", password: "" });
@@ -63,8 +63,7 @@
 			errors.email = "Invalid email";
 			errors.password = "";
 			valid = false;
-		}
-		else {
+		} else {
 			errors.email = "";
 			errors.password = "";
 		}
@@ -89,14 +88,14 @@
 
 <div class="wrapper items-center">
 	<img src="/logo_white_trans.png" alt="Ladeklubben Logo" class="w-24" />
-	<Form {handleSubmit}>
-		<InputField id="email" type="email" label="Email" bind:value={fields.email} error={errors.email} />
-		<InputField
+	<Form {handleSubmit} gap={0}>
+		<TextInput id="email" label="Email" bind:value={fields.email} error={errors.email} />
+		<TextInput
 			id="password"
-			type="password"
 			label="Password"
 			bind:value={fields.password}
 			error={errors.password}
+			type="password"
 		/>
 		<Button type="submit" {loading}>Login</Button>
 	</Form>

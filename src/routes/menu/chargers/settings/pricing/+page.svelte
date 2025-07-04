@@ -1,11 +1,12 @@
 <script lang="ts">
 	import { goto } from "$app/navigation";
-	import InputField from "$lib/components/ui/InputField.svelte";
+	import NumberInput from "$lib/components/ui/inputs/NumberInput.svelte";
 	import Subpage from "$lib/components/ui/Subpage.svelte";
 	import { chargers } from "$lib/classes/Chargers.svelte";
 	import type { ListPrice } from "$lib/types/charger.types";
 	import { onMount } from "svelte";
 	import { showError } from "$lib/services/dialog.svelte";
+	import ToggleInput from "$lib/components/ui/inputs/ToggleInput.svelte";
 
 	let initialized = false;
 
@@ -48,6 +49,20 @@
 			return false;
 		}
 
+		// Ensure all prices are non-negative
+		if (listPriceVAT.nominal < 0) {
+			inputErrors.nominal = "Price cannot be negative";
+			return false;
+		}
+		if (listPriceVAT.minimum < 0) {
+			inputErrors.minimum = "Minimum price cannot be negative";
+			return false;
+		}
+		if (listPriceVAT.follow_spot && listPriceVAT.fallback < 0) {
+			inputErrors.fallback = "Fallback price cannot be negative";
+			return false;
+		}
+
 		return true;
 	}
 
@@ -73,6 +88,7 @@
 		if (initialized && chargers.selected) {
 			// TODO: Implement a debounce function to avoid rapid updates
 			if (!validateInputs()) {
+				console.warn("Invalid input detected, not updating price list.");
 				return;
 			}
 			const priceForServer = chargers.selected.convertListPrice(listPriceVAT, false);
@@ -90,42 +106,35 @@
 </script>
 
 <Subpage title="Pricing" backURL="/menu/chargers/settings">
-	<InputField label="Follow live energy prices" type="toggle" bind:value={listPriceVAT.follow_spot} />
+	<ToggleInput label="Follow live energy prices" bind:value={listPriceVAT.follow_spot} />
+	
 	{#if listPriceVAT.follow_spot}
-		<InputField
+		<NumberInput
 			label="Price Markup"
-			type="number"
 			suffix="DKK/kWh"
-			center={true}
 			bind:value={listPriceVAT.nominal}
 			error={inputErrors.nominal}
 			description="Price added to the live energy price"
 		/>
-		<InputField
+		<NumberInput
 			label="Fallback Price"
-			type="number"
 			suffix="DKK/kWh"
-			center={true}
 			bind:value={listPriceVAT.fallback}
 			error={inputErrors.fallback}
 			description="Default price if public spot prices are unavailable"
 		/>
 	{:else}
-		<InputField
+		<NumberInput
 			label="Fixed Price"
-			type="number"
 			suffix="DKK/kWh"
-			center={true}
 			bind:value={listPriceVAT.nominal}
 			error={inputErrors.nominal}
 			description="Price per kWh"
 		/>
 	{/if}
-	<InputField
+	<NumberInput
 		label="Minimum Price"
-		type="number"
 		suffix="DKK/kWh"
-		center={true}
 		bind:value={listPriceVAT.minimum}
 		error={inputErrors.minimum}
 		description="Minimal price regardless of live energy prices or discounts"

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Subpage from "$lib/components/ui/Subpage.svelte";
-	import InputField from "$lib/components/ui/InputField.svelte";
+	import TextInput from "$lib/components/ui/inputs/TextInput.svelte";
 	import Form from "$lib/components/ui/Form.svelte";
 	import { siteFormData } from "$lib/services/site";
 	import BottomButton from "$lib/components/ui/BottomButton.svelte";
@@ -36,7 +36,7 @@
 
 		// Cost code validation (basic 4-digit DK postCode code check)
 		if (!$siteFormData.location.zip || !validateZip($siteFormData.location.zip)) {
-			newErrors.zip = "Please enter a valid 4-digit postcode";
+			newErrors.zip = "Not a valid 4-digit postcode";
 			isValid = false;
 		}
 
@@ -57,28 +57,25 @@
 
 <Subpage title="Site Location" backURL="/setup/site">
 	<div id="height-check">
-		<Form {handleSubmit} id="form">
-			<p>
+		<Form {handleSubmit} id="form" gap={0}>
+			<p class="mb-4">
 				Use the map to select the location of your site, or enter the address manually. This is used to
 				calculate energy tariffs automatically.
 			</p>
-			<InputField
+			<TextInput
 				id="address"
-				type="text"
 				label="Address"
 				bind:value={$siteFormData.location.address}
 				error={errors.address}
 			/>
-			<InputField
+			<TextInput
 				id="city"
-				type="text"
 				label="City"
 				bind:value={$siteFormData.location.city}
 				error={errors.city}
 			/>
-			<InputField
+			<TextInput
 				id="postCode"
-				type="text"
 				label="Postcode"
 				bind:value={$siteFormData.location.zip}
 				error={errors.zip}

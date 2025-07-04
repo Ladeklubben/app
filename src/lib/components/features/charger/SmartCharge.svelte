@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Card from "$lib/components/ui/Card.svelte";
-	import InputField from "$lib/components/ui/InputField.svelte";
+	import ToggleInput from "$lib/components/ui/inputs/ToggleInput.svelte";
 	import TimePicker from "$lib/components/ui/TimePicker.svelte";
 
 	let timeH = $state();
@@ -18,6 +18,5 @@
 		<TimePicker bind:selectedTime={timeH} maxValue={24} align="right" />
 		<TimePicker bind:selectedTime={timeM} maxValue={60} jump={15} align="left" />
 	</div>
-
-	<InputField label="Charge Now" labelBold={false} type="toggle" bind:value={chargeNow} />
+	<ToggleInput label="Charge Now" bind:value={chargeNow} />
 </Card>

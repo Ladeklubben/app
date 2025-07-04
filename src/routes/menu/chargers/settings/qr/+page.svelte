@@ -2,11 +2,11 @@
 	import { onMount } from "svelte";
 	import { CapacitorBarcodeScanner } from "@capacitor/barcode-scanner";
 	import Subpage from "$lib/components/ui/Subpage.svelte";
-	import InputField from "$lib/components/ui/InputField.svelte";
 	import { chargers } from "$lib/classes/Chargers.svelte";
 	import { showError } from "$lib/services/dialog.svelte";
+	import TextInput from "$lib/components/ui/inputs/TextInput.svelte";
 
-	let scannedValue = $state<string | null>(chargers.selected?.qrCode || null);
+	let scannedValue = $state<string>(chargers.selected?.qrCode || "");
 
 	async function scanQRCode() {
 		try {
@@ -76,11 +76,10 @@
 		<a class="text-lk-blue-400 font-bold" href="mailto:info@ladeklubben.dk">info@ladeklubben.dk</a>
 	</p>
 
-	<InputField label="QR Code" bind:value={scannedValue}></InputField>
+	<TextInput label="QR Code" bind:value={scannedValue}></TextInput>
 
 	<button
-		class="p-3 font-bold bg-lk-blue-500 border border-lk-blue-500 rounded-xl text-lk-blue-50
-	mt-4 cursor-pointer disabled:cursor-not-allowed w-full"
+		class="p-3 font-bold bg-lk-blue-500 border border-lk-blue-500 rounded-xl text-lk-blue-50 cursor-pointer disabled:cursor-not-allowed w-full"
 		onclick={scanQRCode}
 	>
 		Scan QR Code

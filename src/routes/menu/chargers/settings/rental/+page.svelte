@@ -1,8 +1,8 @@
 <script lang="ts">
 	import WeekSchedule from "$lib/components/features/charger/WeekSchedule.svelte";
 	import Subpage from "$lib/components/ui/Subpage.svelte";
-	import InputField from "$lib/components/ui/InputField.svelte";
 	import { chargers } from "$lib/classes/Chargers.svelte";
+	import ToggleInput from "$lib/components/ui/inputs/ToggleInput.svelte";
 
 	let rentalEnabled = $state(chargers.selected?.chargeState?.public ?? false);
 	let rentPossible = $state(false);
@@ -25,8 +25,7 @@
 				Make money by renting out your charger. Set your available time periods for different days, and you'll
 				automatically earn money based on how much other members use it.
 			</p>
-			<InputField label="Enable Rental" labelBold={true} type="toggle" bind:value={rentalEnabled} />
-
+			<ToggleInput label="Enable Rental" bind:value={rentalEnabled} />
 			{#if rentalEnabled}
 				<WeekSchedule scheduleType="openhours"></WeekSchedule>
 			{/if}

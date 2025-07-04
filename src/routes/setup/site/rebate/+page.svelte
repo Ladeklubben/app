@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Subpage from "$lib/components/ui/Subpage.svelte";
-	import InputField from "$lib/components/ui/InputField.svelte";
+	import ToggleInput from "$lib/components/ui/inputs/ToggleInput.svelte";
 	import Form from "$lib/components/ui/Form.svelte";
 	import { siteFormData } from "$lib/services/site";
 	import BottomButton from "$lib/components/ui/BottomButton.svelte";
@@ -36,34 +36,26 @@
 				you are eligible for the Danish electricty tax rebate.
 			</p>
 
-			<InputField
+			<ToggleInput
 				id="solarPanels"
-				type="checkbox"
 				label="Solar Panels"
 				bind:value={$siteFormData.taxRebate.solarPanels}
-				error={""}
 			/>
-			<InputField
+			<ToggleInput
 				id="heatPump"
-				type="checkbox"
 				label="Heat Pump"
 				bind:value={$siteFormData.taxRebate.heatPump}
-				error={""}
 			/>
-			<InputField
+			<ToggleInput
 				id="electricHeating"
-				type="checkbox"
 				label="Electric Heating"
 				bind:value={$siteFormData.taxRebate.electricHeating}
-				error={""}
 			/>
-			<InputField
+			<ToggleInput
 				id="noneOfTheAbove"
-				type="checkbox"
 				label="None of the above"
 				bind:value={$siteFormData.taxRebate.noneOfTheAbove}
 				disabled={true}
-				error={""}
 			/>
 
 			{#if !isEligible}
