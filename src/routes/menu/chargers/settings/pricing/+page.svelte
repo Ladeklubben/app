@@ -1,12 +1,12 @@
 <script lang="ts">
 	import { goto } from "$app/navigation";
-	import InputField from "$lib/components/ui/InputField.svelte";
 	import NumberInput from "$lib/components/ui/inputs/NumberInput.svelte";
 	import Subpage from "$lib/components/ui/Subpage.svelte";
 	import { chargers } from "$lib/classes/Chargers.svelte";
 	import type { ListPrice } from "$lib/types/charger.types";
 	import { onMount } from "svelte";
 	import { showError } from "$lib/services/dialog.svelte";
+	import ToggleInput from "$lib/components/ui/inputs/ToggleInput.svelte";
 
 	let initialized = false;
 
@@ -106,7 +106,8 @@
 </script>
 
 <Subpage title="Pricing" backURL="/menu/chargers/settings">
-	<InputField label="Follow live energy prices" type="toggle" bind:value={listPriceVAT.follow_spot} />
+	<ToggleInput label="Follow live energy prices" bind:value={listPriceVAT.follow_spot} />
+	
 	{#if listPriceVAT.follow_spot}
 		<NumberInput
 			label="Price Markup"

@@ -1,10 +1,9 @@
 <script lang="ts">
-	import InputField from "$lib/components/ui/InputField.svelte";
 	import Subpage from "$lib/components/ui/Subpage.svelte";
 	import { chargers } from "$lib/classes/Chargers.svelte";
 	import { onMount } from "svelte";
-	import TextInput from "$lib/components/ui/inputs/TextInput.svelte";
 	import NumberInput from "$lib/components/ui/inputs/NumberInput.svelte";
+	import ToggleInput from "$lib/components/ui/inputs/ToggleInput.svelte";
 
 	let initialized = false;
 
@@ -85,7 +84,7 @@
 </script>
 
 <Subpage title="Smart Charging" backURL="/menu/chargers/settings">
-	<InputField label="Enable Smart Charging" type="toggle" bind:value={enabled} />
+	<ToggleInput label="Enable Smart Charging" bind:value={enabled} />
 	<NumberInput label="Power Requirement" suffix="kWh" error={inputErrors.needed_energy} bind:value={needed_energy} description="The amount of kWh your car needs. This is typically set to your daily average." />
 	<div class="flex flex-col gap-1.5">
 		<span class="font-bold">Earliest Start</span>
