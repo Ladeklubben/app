@@ -1,9 +1,17 @@
 <script lang="ts">
-	let { id, label, description, error, children } = $props<{
+	let {
+		id,
+		label,
+		description,
+		error,
+		removeError = false,
+		children,
+	} = $props<{
 		id?: string;
 		label?: string;
 		description?: string;
 		error?: string;
+		removeError?: boolean;
 		children: import("svelte").Snippet;
 	}>();
 </script>
@@ -16,11 +24,13 @@
 		<p>{description}</p>
 	{/if}
 	{@render children?.()}
-	<span class="text-center text-lk-red-600">
-		{#if error}
-			{error}
-		{:else}
-			&nbsp;
-		{/if}
-	</span>
+	{#if !removeError}
+		<span class="text-center text-lk-red-600">
+			{#if error}
+				{error}
+			{:else}
+				&nbsp;
+			{/if}
+		</span>
+	{/if}
 </div>
