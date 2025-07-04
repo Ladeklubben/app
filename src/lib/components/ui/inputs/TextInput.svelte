@@ -1,14 +1,13 @@
 <script lang="ts">
-	import { bind } from "leaflet";
 	import BaseInput from "./BaseInput.svelte";
 
 	let { id, label, description, value = $bindable(), error, type="text", disabled, textCenter, suffix } = $props<{
 		id?: string;
 		label?: string;
 		description?: string;
-		value: string | number;
+		value: string | number | null;
 		error?: string;
-		type: "text" | "password" | "number";
+		type?: "text" | "password" | "number";
 		disabled?: boolean;
 		textCenter?: boolean;
 		suffix?: string;

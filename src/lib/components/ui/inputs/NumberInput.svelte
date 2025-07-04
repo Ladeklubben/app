@@ -13,7 +13,7 @@
 		id?: string;
 		label?: string;
 		description?: string;
-		value: number;
+		value: number | null;
 		error?: string;
 		disabled?: boolean;
 		suffix?: string;
