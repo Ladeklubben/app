@@ -20,4 +20,4 @@
 	}>();
 </script>
 
-<TextInput {id} {label} {description} {error} {value} type="number" {disabled} textCenter={true} {suffix}></TextInput>
+<TextInput {id} {label} {description} {error} bind:value type="number" {disabled} textCenter={true} {suffix}></TextInput>
