@@ -1,16 +1,16 @@
 <!-- ResetPassword.svelte -->
 <script lang="ts">
 	import Subpage from "$lib/components/ui/Subpage.svelte";
-	import InputField from "$lib/components/ui/InputField.svelte";
 	import Form from "$lib/components/ui/Form.svelte";
 	import Button from "$lib/components/ui/Button.svelte";
 	import { put } from "$lib/services/api";
 	import { forgotPasswordEmail } from "$lib/services/auth";
 	import { goto } from "$app/navigation";
+	import NumberInput from "$lib/components/ui/inputs/NumberInput.svelte";
 
-	let code = $state("");
-	let error = $state("");
-	let loading = $state(false);
+	let code: number | null = $state(null);
+	let error: string = $state("");
+	let loading: boolean = $state(false);
 
 	async function handleSubmit(event: Event) {
 		loading = true;
@@ -26,7 +26,7 @@
 		try {
 			await put("/user/validate_password_code", {
 				email: $forgotPasswordEmail,
-				code: parseInt(code, 10),
+				code: code,
 			});
 			goto("/login/new-password");
 		} catch (e: any) {
@@ -41,8 +41,8 @@
 <Subpage title="Reset Password" backURL="/login">
 	<p>Enter the code you received in your email to reset your password.</p>
 
-	<Form {handleSubmit}>
-		<InputField id="code" type="number" label="Code from email" bind:value={code} {error} />
+	<Form {handleSubmit} gap={0}>
+		<NumberInput id="code" label="Code from email" bind:value={code} error={error} />
 
 		<Button type="submit" {loading}>Reset Password</Button>
 	</Form>

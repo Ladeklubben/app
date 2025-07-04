@@ -107,11 +107,9 @@
 			bind:value={end}
 		/>
 	</div>
-	<InputField
+	<NumberInput
 		label="Preheat"
-		type="number"
 		suffix="min"
-		center={true}
 		bind:value={preheat}
 		description="Set the amount of minutes that your car will need power to heat the cabin"
 		error={inputErrors.preheat}

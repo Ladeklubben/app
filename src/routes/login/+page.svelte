@@ -95,7 +95,7 @@
 			label="Password"
 			bind:value={fields.password}
 			error={errors.password}
-			password={true}
+			type="password"
 		/>
 		<Button type="submit" {loading}>Login</Button>
 	</Form>
