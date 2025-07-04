@@ -48,7 +48,6 @@
 				charger.chargeState.is_charging = 1;
 			}
 		} catch (error) {
-            console.log("TEST")
 			return;
 		}
 	}
