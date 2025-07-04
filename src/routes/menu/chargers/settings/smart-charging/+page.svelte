@@ -3,6 +3,8 @@
 	import Subpage from "$lib/components/ui/Subpage.svelte";
 	import { chargers } from "$lib/classes/Chargers.svelte";
 	import { onMount } from "svelte";
+	import TextInput from "$lib/components/ui/inputs/TextInput.svelte";
+	import NumberInput from "$lib/components/ui/inputs/NumberInput.svelte";
 
 	let initialized = false;
 
@@ -11,6 +13,33 @@
 	let begin = $state("18:00");
 	let end = $state("06:00");
 	let preheat = $state(0);
+
+	let inputErrors = $state({
+		needed_energy: "",
+		preheat: "",
+	});
+
+	function validateSchedule(): boolean {
+		if (needed_energy < 0) {
+			inputErrors.needed_energy = "Cannot be negative.";
+			return false;
+		}
+		if (needed_energy === null) {
+			inputErrors.needed_energy = "This field is required.";
+			return false;
+		}
+		if (preheat < 0) {
+			inputErrors.preheat = "Cannot be negative.";
+			return false;
+		}
+		if (preheat === null) {
+			inputErrors.preheat = "This field is required.";
+			return false;
+		}
+		inputErrors.needed_energy = "";
+		inputErrors.preheat = "";
+		return true;
+	}
 
 	onMount(() => {
 		initialized = false;
@@ -32,6 +61,10 @@
 	$effect(() => {
 		if (initialized && chargers.selected) {
 			// TODO: Implement a debounce function to avoid rapid updates
+
+			// Validate the schedule before saving
+			if (!validateSchedule()) return;
+
 			chargers.selected.putSmartChargeSchedule({
 				enabled,
 				needed_energy,
@@ -53,14 +86,7 @@
 
 <Subpage title="Smart Charging" backURL="/menu/chargers/settings">
 	<InputField label="Enable Smart Charging" type="toggle" bind:value={enabled} />
-	<InputField
-		label="Power Requirement"
-		type="number"
-		suffix="kWh"
-		center={true}
-		bind:value={needed_energy}
-		description="The amount of kWh your car needs. This is typically set to your daily average."
-	/>
+	<NumberInput label="Power Requirement" suffix="kWh" error={inputErrors.needed_energy} bind:value={needed_energy} description="The amount of kWh your car needs. This is typically set to your daily average." />
 	<div class="flex flex-col gap-1.5">
 		<span class="font-bold">Earliest Start</span>
 		<p>This is the earliest possible time you want to start charging your car.</p>
@@ -88,5 +114,6 @@
 		center={true}
 		bind:value={preheat}
 		description="Set the amount of minutes that your car will need power to heat the cabin"
+		error={inputErrors.preheat}
 	/>
 </Subpage>
