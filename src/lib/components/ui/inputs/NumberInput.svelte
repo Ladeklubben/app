@@ -2,7 +2,7 @@
 	import TextInput from "./TextInput.svelte";
 
 	let {
-		id,
+		id = `input-${CryptoJS.lib.WordArray.random(16).toString()}`, // Random ID if ID is not provided
 		label,
 		description,
 		value = $bindable(),

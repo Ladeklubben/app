@@ -2,16 +2,14 @@
 	import BaseInput from "./BaseInput.svelte";
 
 	let {
-		id,
+		id = `input-${CryptoJS.lib.WordArray.random(16).toString()}`, // Random ID if ID is not provided
 		label,
 		value = $bindable(),
 		disabled,
 	} = $props<{
 		id?: string;
 		label?: string;
-		description?: string;
 		value: boolean;
-		error?: string;
 		disabled?: boolean;
 	}>();
 </script>
