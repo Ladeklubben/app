@@ -49,6 +49,20 @@
 			return false;
 		}
 
+		// Ensure all prices are non-negative
+		if (listPriceVAT.nominal < 0) {
+			inputErrors.nominal = "Price cannot be negative";
+			return false;
+		}
+		if (listPriceVAT.minimum < 0) {
+			inputErrors.minimum = "Minimum price cannot be negative";
+			return false;
+		}
+		if (listPriceVAT.follow_spot && listPriceVAT.fallback < 0) {
+			inputErrors.fallback = "Fallback price cannot be negative";
+			return false;
+		}
+
 		return true;
 	}
 
