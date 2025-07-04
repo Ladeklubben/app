@@ -1,6 +1,5 @@
 <script lang="ts">
 	import Form from "$lib/components/ui/Form.svelte";
-    import InputField from "$lib/components/ui/InputField.svelte";
     import Button from "$lib/components/ui/Button.svelte";
 	import Subpage from "$lib/components/ui/Subpage.svelte";
 	import { chargers } from "$lib/classes/Chargers.svelte";
@@ -8,6 +7,7 @@
 	import Email from "~icons/mdi/email";
 	import Trashcan from "~icons/mdi/trash-can-outline";
 	import { validateEmail } from "$lib/services/forms";
+	import TextInput from "$lib/components/ui/inputs/TextInput.svelte";
 
     let charger = chargers.selected;
     let notifcations = $derived(charger?.notificationSetupFormatted);
@@ -46,16 +46,14 @@
         }
     }
 
-    const gap = $derived(error ? 5 : 4);
-
     onMount(async() => {
         charger?.getNotificationSetup();
     })
 </script>
 
 <Subpage title="Notifications" backURL="/menu/chargers/settings">
-    <Form {handleSubmit} gap={gap}>
-        <InputField id="email" type="text" label="New notification email" bind:value={inputEmail} {error} />
+    <Form {handleSubmit} gap={0}>
+        <TextInput id="email" label="New notification email" bind:value={inputEmail} error={error}/>
 		<Button type="submit" {loading}>Add Email</Button>
     </Form>
 	{#if notifcations && notifcations.length > 0}

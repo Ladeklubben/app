@@ -1,7 +1,7 @@
 <!-- ResetPassword.svelte -->
 <script lang="ts">
 	import Subpage from "$lib/components/ui/Subpage.svelte";
-	import InputField from "$lib/components/ui/InputField.svelte";
+	import TextInput from "$lib/components/ui/inputs/TextInput.svelte";
 	import Form from "$lib/components/ui/Form.svelte";
 	import Button from "$lib/components/ui/Button.svelte";
 	import { put } from "$lib/services/api";
@@ -70,20 +70,18 @@
 </script>
 
 <Subpage title="Reset Password" backURL="/login/reset-password">
-	<Form {handleSubmit}>
-		<p>Password needs to be at least 6 characters, 1 big letter, 1 small letter and 1 number.</p>
+	<Form {handleSubmit} gap={0}>
+		<p class="mb-4">Password needs to be at least 6 characters, 1 big letter, 1 small letter and 1 number.</p>
 
-		<InputField
+		<TextInput
 			id="new-password"
-			type="text"
 			label="New Password"
 			bind:value={fields.newPassword}
 			error={errors.newPassword}
 		/>
 
-		<InputField
+		<TextInput
 			id="new-password-repeat"
-			type="text"
 			label="Repeat New Password"
 			bind:value={fields.newPasswordRepeat}
 			error={errors.newPasswordRepeat}

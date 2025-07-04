@@ -1,11 +1,11 @@
 <script lang="ts">
 	import Subpage from "$lib/components/ui/Subpage.svelte";
-	import InputField from "$lib/components/ui/InputField.svelte";
 	import Form from "$lib/components/ui/Form.svelte";
 	import BottomButton from "$lib/components/ui/BottomButton.svelte";
 	import { siteFormData, resetSiteFormData } from "$lib/services/site";
 	import { goto } from "$app/navigation";
 	import { onMount } from "svelte";
+	import TextInput from "$lib/components/ui/inputs/TextInput.svelte";
 
 	let errors = {
 		name: "",
@@ -29,8 +29,7 @@
 				A site is a physical location, like a home, summer house, office or other property, where you have a
 				power meter installed. You can add multiple sites to your account.
 			</p>
-
-			<InputField id="name" type="text" label="Site Name" bind:value={$siteFormData.name} error={errors.name} />
+			<TextInput id="name" label="Site Name" bind:value={$siteFormData.name} error={errors.name} /> 
 		</Form>
 	</div>
 	<BottomButton activeDot={1} totalDots={4} formID="form" buttonText="Next" />
