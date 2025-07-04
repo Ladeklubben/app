@@ -2,13 +2,13 @@
 	import { bind } from "leaflet";
 	import BaseInput from "./BaseInput.svelte";
 
-	let { id, label, description, value = $bindable(), error, password, disabled, textCenter, suffix } = $props<{
+	let { id, label, description, value = $bindable(), error, type="text", disabled, textCenter, suffix } = $props<{
 		id?: string;
 		label?: string;
 		description?: string;
-		value: string;
+		value: string | number;
 		error?: string;
-		password?: boolean;
+		type: "text" | "password" | "number";
 		disabled?: boolean;
 		textCenter?: boolean;
 		suffix?: string;
@@ -20,10 +20,10 @@
 		<input
 			{id}
 			name={id}
-			type={password ? "password" : "text"}
+			{type}
 			{disabled}
 			bind:value
-			class="w-full rounded-2xl border border-lk-blue-500 bg-transparent p-3 text-lg text-lk-blue-50 focus:border-lk-blue-300 focus:outline-none
+			class="w-full rounded-2xl border border-lk-blue-500 bg-transparent p-3 text-lg text-lk-blue-50 focus:border-lk-blue-300 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none
 				{textCenter ? 'text-center' : ''}
 				{error ? 'border-lk-red-600' : ''}
                 {disabled ? "border-lk-blue-800" : ""}"
