@@ -1,9 +1,8 @@
 <script lang="ts">
 	import BaseInput from "./BaseInput.svelte";
-	import CryptoJS from "crypto-js";
 
 	let {
-		id = `input-${CryptoJS.lib.WordArray.random(16).toString()}`, // Random ID if ID is not provided
+		id = `input-${crypto.randomUUID()}`, // Random ID if ID is not provided
 		label,
 		value = $bindable(),
 		error,
