@@ -8,7 +8,7 @@
 	let initialized = false;
 
 	let enabled = $state(false);
-	let needed_energy = $state(0);
+	let needed_energy = $state(10);
 	let begin = $state("18:00");
 	let end = $state("06:00");
 	let preheat = $state(0);
@@ -19,8 +19,12 @@
 	});
 
 	function validateSchedule(): boolean {
-		if (needed_energy < 0) {
-			inputErrors.needed_energy = "Cannot be negative.";
+		// Make sure values are integer
+		needed_energy = Math.round(needed_energy);
+		preheat = Math.round(preheat);
+
+		if (needed_energy < 1) {
+			inputErrors.needed_energy = "Cannot be less than 1kWh";
 			return false;
 		}
 		if (needed_energy === null) {
@@ -85,32 +89,40 @@
 
 <Subpage title="Smart Charging" backURL="/menu/chargers/settings">
 	<ToggleInput label="Enable Smart Charging" bind:value={enabled} />
-	<NumberInput label="Power Requirement" suffix="kWh" error={inputErrors.needed_energy} bind:value={needed_energy} description="The amount of kWh your car needs. This is typically set to your daily average." />
-	<div class="flex flex-col gap-1.5">
-		<span class="font-bold">Earliest Start</span>
-		<p>This is the earliest possible time you want to start charging your car.</p>
-		<input
-			id="earliest-start"
-			type="time"
-			class="w-full text-center rounded-2xl border border-lk-blue-500 bg-transparent p-3 text-lg text-lk-blue-50 focus:border-lk-blue-300"
-			bind:value={begin}
+	{#if enabled}
+		<NumberInput
+			label="Power Requirement"
+			suffix="kWh"
+			error={inputErrors.needed_energy}
+			bind:value={needed_energy}
+			description="The amount of kWh your car needs. This is typically set to your daily average."
 		/>
-	</div>
-	<div class="flex flex-col gap-1.5">
-		<span class="font-bold">Ready Time</span>
-		<p>This is usually when you need to use your car. It will be fully charged by this time.</p>
-		<input
-			id="earliest-start"
-			type="time"
-			class="w-full text-center rounded-2xl border border-lk-blue-500 bg-transparent p-3 text-lg text-lk-blue-50 focus:border-lk-blue-300"
-			bind:value={end}
+		<div class="flex flex-col gap-1.5">
+			<span class="font-bold">Earliest Start</span>
+			<p>This is the earliest possible time you want to start charging your car.</p>
+			<input
+				id="earliest-start"
+				type="time"
+				class="w-full text-center rounded-2xl border border-lk-blue-500 bg-transparent p-3 text-lg text-lk-blue-50 focus:border-lk-blue-300"
+				bind:value={begin}
+			/>
+		</div>
+		<div class="flex flex-col gap-1.5">
+			<span class="font-bold">Ready Time</span>
+			<p>This is usually when you need to use your car. It will be fully charged by this time.</p>
+			<input
+				id="earliest-start"
+				type="time"
+				class="w-full text-center rounded-2xl border border-lk-blue-500 bg-transparent p-3 text-lg text-lk-blue-50 focus:border-lk-blue-300"
+				bind:value={end}
+			/>
+		</div>
+		<NumberInput
+			label="Preheat"
+			suffix="min"
+			bind:value={preheat}
+			description="Set the amount of minutes that your car will need power to heat the cabin"
+			error={inputErrors.preheat}
 		/>
-	</div>
-	<NumberInput
-		label="Preheat"
-		suffix="min"
-		bind:value={preheat}
-		description="Set the amount of minutes that your car will need power to heat the cabin"
-		error={inputErrors.preheat}
-	/>
+	{/if}
 </Subpage>
