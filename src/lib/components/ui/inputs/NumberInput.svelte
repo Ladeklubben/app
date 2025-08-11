@@ -1,8 +1,9 @@
 <script lang="ts">
 	import TextInput from "./TextInput.svelte";
+	import { generateUUID } from "$lib/utils";
 	
 	let {
-		id = `input-${crypto.randomUUID()}`, // Random ID if ID is not provided
+		id = `input-${generateUUID()}`, // Random ID if ID is not provided
 		label,
 		description,
 		value = $bindable(),
