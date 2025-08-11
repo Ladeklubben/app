@@ -6,7 +6,7 @@
 	"scripts": {
 		"dev": "vite dev --host",
 		"build": "vite build",
-		"cap-dev-android": "export MODE=dev && npm run build && npx cap sync && npx cap run android && npm run dev",
+		"cap-dev-android": "export MODE=dev && npm run build && npx cap sync && npm run dev",
 		"cap-dev-ios": "export MODE=dev && npm run build && npx cap sync && npm run dev",
 		"cap-sync": "export MODE=prod && npm run build && npx cap sync",
 		"preview": "vite preview",

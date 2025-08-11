@@ -13,8 +13,8 @@ Free and open-source app to control your EV charger
 ```
 IP=192.168.XXX.XXX
 VITE_JAWG_ACCESS_TOKEN=<INSERT_HERE>
+MODE=dev
 ```
-
 1. Open port 5173 on your development computer.
 1. Run `npm run dev` and open the link in the terminal
 
@@ -28,6 +28,11 @@ VITE_JAWG_ACCESS_TOKEN=<INSERT_HERE>
 1. In a new terminal, run `npx cap run ios` to install the app
 
 ### Android Setup
+1. Install Android Studio and setup simulators or physical devices
+1. Run `npx cap open android` to open project in Android Studio
+1. Run the application from Android Studio
+1. Run `npm run cap-dev-android` to setup the live reloading server
+1. As long as you are making frontend changes (`src/` directory), then you don't need to reinstall the application using Android Studio.
 
 # Adding Icons
 
