@@ -6,7 +6,7 @@ Free and open-source app to control your EV charger
 
 ## Step 1 - Prerequisites
 
-#### Live Reloading
+### Basic Webserver Setup
 
 1. Create a .env file with the IP of your development computer. Also add a Jawg Access Token
 
@@ -15,17 +15,19 @@ IP=192.168.XXX.XXX
 VITE_JAWG_ACCESS_TOKEN=<INSERT_HERE>
 ```
 
-2. Open port 5173 on your development computer.
-3. Run `npm run cap-dev-android` or `npm run cap-dev-ios`
+1. Open port 5173 on your development computer.
+1. Run `npm run dev` and open the link in the terminal
 
-### Nix Setup
+### iOS App Setup
+1. Install XCode and accept the terms
+1. Log into Ladeklubben Developer account to allow automatic signing (necessary for running on physical iPhone)
+1. Install ruby using `brew install ruby`
+1. Install cocoapods `sudo gem install cocoapods`
+1. Run `cd ios/App && pod install`
+1. Run `npm run cap-dev-ios` to build and setup the live reloading server
+1. In a new terminal, run `npx cap run ios` to install the app
 
-Very easy to get working, without having to fiddle with Android Studio dependencies.
-
-1. Install [Nix package manager](https://nixos.org/download/). Not NixOS (unless you want to switch OS)
-1. _Optional -_ Install [direnv](https://direnv.net/docs/installation.html#from-system-packages) for automatic shell activation
-1. Clone repository and open it
-1. If using direnv, enter `direnv allow`. This is a one-time thing.
+### Android Setup
 
 # Adding Icons
 
