@@ -6,9 +6,12 @@ import type {
 	ChargerType,
 	ConnectorStatus,
 	EnergyPrices,
+	Reservation,
 } from "$lib/types/publicCharger.types";
 import { type Position } from "@capacitor/geolocation";
 import { writable, type Writable } from "svelte/store";
+import { put } from "$lib/services/api";
+import { showError } from "$lib/services/dialog.svelte";
 
 export const selectedChargerID: Writable<string> = writable("");
 
@@ -23,6 +26,7 @@ export class PublicCharger implements IPublicCharger {
 	online?: [number, boolean];
 	qr: string;
 	energyprices?: EnergyPrices;
+	claimTimeout?: number;
 
 	// Private properties
 	private lktarif: number = 1.1; // 10% service fee
@@ -82,9 +86,9 @@ export class PublicCharger implements IPublicCharger {
 		const a =
 			Math.sin(dLat / 2) * Math.sin(dLat / 2) +
 			Math.cos((userPosition.coords.latitude * Math.PI) / 180) *
-				Math.cos((this.location.latitude * Math.PI) / 180) *
-				Math.sin(dLon / 2) *
-				Math.sin(dLon / 2);
+			Math.cos((this.location.latitude * Math.PI) / 180) *
+			Math.sin(dLon / 2) *
+			Math.sin(dLon / 2);
 		const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 		return R * c;
 	}
@@ -142,4 +146,47 @@ export class PublicCharger implements IPublicCharger {
 
 		return `${formattedStartHour}:${formattedStartMinute} - ${formattedStopHour}:${formattedStopMinute}`;
 	}
+
+	async reserveCharger() {
+		// Claim this charger by sending a PUT request to /cp/{stationid}/claim
+		try {
+			const response = await put(`/cp/${this.stationid}/claim`, "");
+
+			if (response.claimTimeout) {
+				reservation.stationid = this.stationid;
+				reservation.claimTimeout = response.claimTimeout;
+
+				console.info("Claimed for " + response.claimTimeout + " seconds");
+
+				if (reservation.timer) {
+					clearInterval(reservation.timer);
+				}
+
+				// Start a countdown timer
+				reservation.timer = setInterval(() => {
+					reservation.claimTimeout--;
+					if (reservation.claimTimeout <= 0) {
+						if (reservation.timer) {
+							clearInterval(reservation.timer);
+						}
+						reservation.stationid = "";
+						reservation.timer = null;
+					}
+				}, 1000);
+			} else {
+				showError("Failed to claim charger.");
+				throw new Error("Failed to claim charger");
+			}
+
+		} catch (error) {
+			console.error("Failed to claim charger:", error);
+			// Optionally, handle error (e.g., show user feedback)
+		}
+	}
 }
+
+export const reservation = $state<Reservation>({
+	stationid: "",
+	claimTimeout: 0,
+	timer: null,
+});

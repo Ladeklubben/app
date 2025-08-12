@@ -4,7 +4,7 @@
 	import { onMount } from "svelte";
 	import type { PublicCharger } from "$lib/types/publicCharger.types";
 	import { pos, getPosition } from "$lib/services/map";
-	import { selectedChargerID } from "$lib/classes/PublicCharger";
+	import { selectedChargerID } from "$lib/classes/PublicCharger.svelte";
 	import type { Position } from "@capacitor/geolocation";
 	import "leaflet.markercluster/dist/leaflet.markercluster.js";
 	import "leaflet.markercluster/dist/MarkerCluster.css";

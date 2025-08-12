@@ -53,3 +53,9 @@ export interface EnergyPrices {
 	Costprice: number[];
 	start: number; // Timestamp when prices start
 }
+
+export interface Reservation {
+	stationid: string;
+	claimTimeout: number;
+	timer: ReturnType<typeof setInterval> | null;
+}
