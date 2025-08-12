@@ -98,7 +98,7 @@
 	>
 		<ChevronLeft font-size={20} />
 	</button>
-	<h1 class="m-0 text-xl absolute left-1/2 -translate-x-1/2">{title}</h1>
+	<h1 class="m-0 text-xl absolute left-1/2 -translate-x-1/2 truncate max-w-2/3">{title}</h1>
 </header>
 <div class="wrapper mt-[53px] pb-10">
 	{@render children?.()}
