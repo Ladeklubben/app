@@ -11,7 +11,7 @@ import type {
 import { type Position } from "@capacitor/geolocation";
 import { writable, type Writable } from "svelte/store";
 import { put } from "$lib/services/api";
-import { showError } from "$lib/services/dialog.svelte";
+import { showError, showWarning } from "$lib/services/dialog.svelte";
 
 export const selectedChargerID: Writable<string> = writable("");
 
@@ -165,6 +165,7 @@ export class PublicCharger implements IPublicCharger {
 				// Start a countdown timer
 				reservation.timer = setInterval(() => {
 					reservation.claimTimeout--;
+					this.startCharge(false);
 					if (reservation.claimTimeout <= 0) {
 						if (reservation.timer) {
 							clearInterval(reservation.timer);
@@ -181,6 +182,18 @@ export class PublicCharger implements IPublicCharger {
 		} catch (error) {
 			console.error("Failed to claim charger:", error);
 			// Optionally, handle error (e.g., show user feedback)
+		}
+	}
+
+	async startCharge(showErrorOnFail: boolean = false) {
+		let response: any;
+		try {
+			response = await put(`/cp/${this.stationid}/startcharge`, "");
+			console.info("Start charge response:", response);
+		} catch (error) {
+			if (showErrorOnFail) {
+				showWarning("Could not start charging", "Please make sure the car is connected to the charger.");
+			}
 		}
 	}
 }

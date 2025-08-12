@@ -21,8 +21,14 @@
 		isSelected = charger.stationid === $selectedChargerID;
 	});
 
-	function handleReserve() {
-		charger.reserveCharger();
+	let reserved = $derived(reservation.claimTimeout > 0 && reservation.stationid === charger.stationid);
+
+	function handleClick() {
+		if (reserved) {
+			charger.startCharge(true);
+		} else {
+			charger.reserveCharger();
+		}
 	}
 </script>
 
@@ -66,7 +72,7 @@
 					{charger.calculateOpeningHours()}
 				</div>
 
-				{#if reservation.claimTimeout && reservation.stationid === charger.stationid}
+				{#if reserved}
 					<button
 						onclick={() => console.log("TODO: Cancel reservation")}
 						disabled={!available}
@@ -85,13 +91,17 @@
 
 				<div class="flex justify-between gap-3">
 					<button
-						onclick={() => handleReserve()}
+						onclick={() => handleClick()}
 						disabled={!available}
 						class="flex-1 backdrop-blur-sm transition-all p-1.5 rounded-2xl text-lg font-medium shadow-sm
 						{available ? 'bg-lk-blue-200 text-lk-blue-900' : 'bg-lk-red-800 text-gray-300'}"
 					>
 						{#if available}
-							Reserve
+							{#if reserved}
+								Start Charge
+							{:else}
+								Reserve
+							{/if}
 						{:else}
 							Charging...
 						{/if}
