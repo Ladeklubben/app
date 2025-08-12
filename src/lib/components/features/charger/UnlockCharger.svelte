@@ -22,7 +22,8 @@
 			await chargers.loadAllChargersCardData();
 		} catch (error) {
 			console.error("Failed to initialize charger data:", error);
-			showError("Failed to load charger data.");
+			// TODO: Error is being shown when not needed, like starting the app
+			// showError("Failed to load charger data.");
 		} finally {
 			loaded = true;
 		}
