@@ -29,7 +29,7 @@
 </script>
 
 <div
-	class="flex justify-around items-center pt-3 fixed bottom-0 w-full z-1000 border-t border-lk-blue-800 bg-lk-blue-950 text-lk-blue-50 pb-8"
+	class="flex justify-around items-center pt-3 fixed bottom-0 w-full z-1000 border-t border-lk-blue-800 bg-lk-blue-950 text-lk-blue-50 {$device === Platform.Android ? 'pb-1' : 'pb-8'}"
 >
 	<button
 		type="button"

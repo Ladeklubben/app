@@ -18,11 +18,8 @@ public class MainActivity extends BridgeActivity {
             getWindow().setStatusBarColor(Color.parseColor("#182b34"));
         }
 
-        // Make the app display edge-to-edge on Android
-        getWindow().setFlags(
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-        );
+        // Make only the top (status bar) edge-to-edge fullscreen, keep navigation bar as is
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
 
     @Override

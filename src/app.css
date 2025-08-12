@@ -45,6 +45,35 @@
 		background-color: var(--color-lk-blue-950);
 		margin: 0px;
 		color: var(--color-lk-blue-50);
+		/* Ensure proper edge-to-edge behavior */
+		min-height: 100vh;
+		min-height: 100dvh; /* Dynamic viewport height for mobile */
+		overflow-x: hidden;
+	}
+
+	/* Ensure the app container takes full height */
+	#svelte {
+		min-height: 100vh;
+		min-height: 100dvh;
+	}
+
+	/* Better mobile keyboard handling */
+	@media (max-height: 500px) {
+		/* When keyboard is likely visible, adjust spacing */
+		.wrapper {
+			padding: 10px;
+			gap: 15px;
+		}
+	}
+
+	/* Ensure inputs are properly visible when keyboard appears */
+	input:focus,
+	textarea:focus {
+		/* Prevent zoom on iOS */
+		font-size: 16px;
+		/* Ensure proper positioning */
+		position: relative;
+		z-index: 1;
 	}
 
 	p {
