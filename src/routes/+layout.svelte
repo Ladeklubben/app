@@ -26,7 +26,8 @@
 		{#if loginCheckDone}
 			<main
 				class="flex-1"
-				class:pb-[87px]={$showTabBar}
+				class:pb-[57px]={$showTabBar && $device === Platform.Android}
+				class:pb-[87px]={$showTabBar && $device !== Platform.Android}
 				class:pt-10={page.url.pathname !== "/map"}
 				class:pt-[env(safe-area-inset-top)]={$device === Platform.IOS && page.url.pathname !== "/map"}
 			>
