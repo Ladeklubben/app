@@ -98,15 +98,21 @@
 		markerClusterGroup.clearLayers();
 
 		chargers.forEach((charger: PublicCharger) => {
-			// Select icon based on charger status
+			// Select icon based on charger status and selection
 			let icon;
-			switch (charger.connector) {
-				case "Available":
-					icon = chargerIconGreen;
-					break;
-				default:
-					icon = chargerIconRed;
-					break;
+			if (charger.stationid === $selectedChargerID) {
+				// Selected charger gets white icon
+				icon = chargerIconWhite;
+			} else {
+				// Non-selected chargers get color based on availability
+				switch (charger.connector) {
+					case "Available":
+						icon = chargerIconGreen;
+						break;
+					default:
+						icon = chargerIconRed;
+						break;
+				}
 			}
 
 			const marker = L.marker([charger.location.latitude, charger.location.longitude], {
