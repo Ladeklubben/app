@@ -5,6 +5,7 @@
 	import Bolt from "~icons/mdi/lightning-bolt";
 	import MapMarker from "~icons/mdi/map-marker";
 	import Clock from "~icons/mdi/clock-time-four-outline";
+	import Name from "~icons/mdi/rename-outline";
 	import { slide } from "svelte/transition";
 
 	let { charger, distance = 0 } = $props<{
@@ -48,8 +49,14 @@
 		</div>
 
 		{#if isSelected}
-			<div class="flex flex-col p-4 gap-2 border-t border-lk-blue-800 bg-lk-blue-950" transition:slide>
-				<div class="flex gap-2 pb-2 text-lg text-lk-blue-100/80 items-center">
+			<div class="flex flex-col p-4 gap-2 border-t border-lk-blue-800 bg-lk-blue-950 text-md" transition:slide>
+				<div class="flex gap-2 pb-2 text-lk-blue-100/80">
+					<Name />
+					<span class="truncate">
+						{charger.location.brief || "Unnamed"}
+					</span>
+				</div>
+				<div class="flex gap-2 pb-2 text-lk-blue-100/80 items-center">
 					<Clock />
 					{charger.calculateOpeningHours()}
 				</div>
