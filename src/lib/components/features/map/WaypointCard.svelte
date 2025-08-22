@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Directions from "~icons/mdi/directions";
-	import { PublicCharger, selectedChargerID, reservation } from "$lib/classes/PublicCharger.svelte";
+	import { PublicCharger, selectedChargerID } from "$lib/classes/PublicCharger.svelte";
 	import Glass from "$lib/components/ui/Glass.svelte";
 	import Bolt from "~icons/mdi/lightning-bolt";
 	import MapMarker from "~icons/mdi/map-marker";
@@ -21,7 +21,7 @@
 		isSelected = charger.stationid === $selectedChargerID;
 	});
 
-	let reserved = $derived(reservation.claimTimeout > 0 && reservation.stationid === charger.stationid);
+	let reserved = $derived(charger.reservation.claimTimeout > 0 && charger.reservation.reserved);
 
 	function handleClick() {
 		if (reserved) {
@@ -79,11 +79,11 @@
 						class="flex flex-col items-center w-full justify-between flex-1 backdrop-blur-sm transition-all p-2 rounded-2xl text-lg font-medium shadow-sm border border-lk-green-400 bg-lk-green-950 mb-1"
 					>
 						<span class="text-lg">
-							{Math.floor(reservation.claimTimeout / 60)
+							{Math.floor(charger.reservation.claimTimeout / 60)
 								.toString()
 								.padStart(2, "0")}
 							:
-							{(reservation.claimTimeout % 60).toString().padStart(2, "0")}
+							{(charger.reservation.claimTimeout % 60).toString().padStart(2, "0")}
 						</span>
 						<span class="text-xs text-center text-lk-blue-100/70">Reserved</span>
 					</button>

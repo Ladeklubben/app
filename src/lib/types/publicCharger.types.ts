@@ -55,7 +55,7 @@ export interface EnergyPrices {
 }
 
 export interface Reservation {
-	stationid: string;
+	reserved: boolean;
 	claimTimeout: number;
 	timer: ReturnType<typeof setInterval> | null;
 }

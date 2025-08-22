@@ -27,6 +27,11 @@ export class PublicCharger implements IPublicCharger {
 	qr: string;
 	energyprices?: EnergyPrices;
 	claimTimeout?: number;
+	reservation = $state<Reservation>({
+		reserved: false,
+		claimTimeout: 0,
+		timer: null,
+	});
 
 	// Private properties
 	private lktarif: number = 1.1; // 10% service fee
@@ -153,25 +158,26 @@ export class PublicCharger implements IPublicCharger {
 			const response = await put(`/cp/${this.stationid}/claim`, "");
 
 			if (response.claimTimeout) {
-				reservation.stationid = this.stationid;
-				reservation.claimTimeout = response.claimTimeout;
+				this.reservation.claimTimeout = response.claimTimeout;
 
 				console.info("Claimed for " + response.claimTimeout + " seconds");
 
-				if (reservation.timer) {
-					clearInterval(reservation.timer);
+				if (this.reservation.timer) {
+					clearInterval(this.reservation.timer);
 				}
 
+				this.reservation.reserved = true;
+
 				// Start a countdown timer
-				reservation.timer = setInterval(() => {
-					reservation.claimTimeout--;
+				this.reservation.timer = setInterval(() => {
+					this.reservation.claimTimeout--;
 					this.startCharge(false);
-					if (reservation.claimTimeout <= 0) {
-						if (reservation.timer) {
-							clearInterval(reservation.timer);
+					if (this.reservation.claimTimeout <= 0) {
+						if (this.reservation.timer) {
+							clearInterval(this.reservation.timer);
 						}
-						reservation.stationid = "";
-						reservation.timer = null;
+						this.reservation.reserved = false;
+						this.reservation.timer = null;
 					}
 				}, 1000);
 			} else {
@@ -197,9 +203,3 @@ export class PublicCharger implements IPublicCharger {
 		}
 	}
 }
-
-export const reservation = $state<Reservation>({
-	stationid: "",
-	claimTimeout: 0,
-	timer: null,
-});
