@@ -2,17 +2,17 @@
 	import * as L from "leaflet";
 	import BaseMap from "./BaseMap.svelte";
 	import { onMount } from "svelte";
-	import type { PublicCharger } from "$lib/types/publicCharger.types";
+	import type { IPublicCharger } from "$lib/types/publicCharger.types";
 	import { pos, getPosition } from "$lib/services/map";
-	import { selectedCharger } from "$lib/classes/PublicCharger.svelte";
+	import { selectedCharger, PublicCharger } from "$lib/classes/PublicCharger.svelte";
 	import type { Position } from "@capacitor/geolocation";
 	import "leaflet.markercluster/dist/leaflet.markercluster.js";
 	import "leaflet.markercluster/dist/MarkerCluster.css";
 	import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 
 	// Props
-	let { chargers = [] as PublicCharger[] } = $props<{
-		chargers?: PublicCharger[];
+	let { chargers = [] as IPublicCharger[] } = $props<{
+		chargers?: IPublicCharger[];
 	}>();
 
 	// Variables
@@ -85,7 +85,7 @@
 
 		map.addLayer(markerClusterGroup);
 		map.on("click", () => {
-			selectedCharger.id = "";
+			selectedCharger.clearCharger();
 		});
 		updateChargerMarkers();
 	}
@@ -96,10 +96,10 @@
 
 		markerClusterGroup.clearLayers();
 
-		chargers.forEach((charger: PublicCharger) => {
+		chargers.forEach((charger: IPublicCharger) => {
 			// Select icon based on charger status and selection
 			let icon;
-			if (charger.stationid === selectedCharger.id) {
+			if (charger.stationid === selectedCharger.charger?.stationid) {
 				// Selected charger gets white icon
 				icon = chargerIconWhite;
 			} else {
@@ -119,7 +119,7 @@
 				alt: charger.stationid,
 			});
 			marker.on("click", () => {
-				selectedCharger.id = charger.stationid;
+				selectedCharger.setCharger(new PublicCharger(charger));
 			});
 			if (markerClusterGroup) {
 				markerClusterGroup.addLayer(marker);
@@ -143,9 +143,11 @@
 
 	// Update map view for selected charger
 	function updateSelectedChargerView(): void {
-		if (!selectedCharger.id || !map) return;
+		if (!selectedCharger.charger || !map) return;
 
-		const selected = chargers.find((charger: PublicCharger) => charger.stationid === selectedCharger.id);
+		const selected = chargers.find(
+			(charger: IPublicCharger) => charger.stationid === selectedCharger.charger?.stationid,
+		);
 		if (selected) {
 			const latLng: L.LatLngTuple = [selected.location.latitude, selected.location.longitude];
 			const currentZoom = map.getZoom();

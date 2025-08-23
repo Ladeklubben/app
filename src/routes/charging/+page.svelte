@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { goto } from "$app/navigation";
+	import { selectedCharger } from "$lib/classes/PublicCharger.svelte";
 	import BottomButton from "$lib/components/ui/BottomButton.svelte";
 	import Subpage from "$lib/components/ui/Subpage.svelte";
 	import { onDestroy, onMount } from "svelte";
@@ -81,9 +83,16 @@
 		}, poll_interval);
 	}
 
+	function stopCharging(event: Event) {
+		event.preventDefault();
+		selectedCharger.charger?.stopCharge();
+		goto("/map");
+	}
+
 	onMount(() => {
-		requestOrderinfo();
-		startPolling();
+		// requestOrderinfo();
+		// startPolling();
+		console.log("Charging", selectedCharger.charger?.stationid);
 	});
 
 	onDestroy(() => {
@@ -126,7 +135,9 @@
 			</div>
 		</div>
 	</div>
-	<BottomButton buttonText="Stop Charging" formID="stop-charging" activeDot={undefined} totalDots={undefined} />
+	<form id="stop-charging" onsubmit={stopCharging}>
+		<BottomButton buttonText="Stop Charging" formID="stop-charging" activeDot={undefined} totalDots={undefined} />
+	</form>
 </Subpage>
 
 <style>

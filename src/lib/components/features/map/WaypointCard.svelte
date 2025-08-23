@@ -18,7 +18,7 @@
 	let available: boolean = $derived(charger.connector === "Available");
 
 	$effect(() => {
-		isSelected = charger.stationid === selectedCharger.id;
+		isSelected = charger.stationid === selectedCharger.charger?.stationid;
 	});
 
 	let reserved = $derived(charger.reservation.claimTimeout > 0 && charger.reservation.reserved);

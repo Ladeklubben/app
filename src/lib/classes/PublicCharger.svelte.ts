@@ -1,5 +1,5 @@
 import type {
-	PublicCharger as IPublicCharger,
+	IPublicCharger,
 	PriceInfo,
 	LocationInfo,
 	OpenHoursPeriod,
@@ -13,7 +13,19 @@ import { put } from "$lib/services/api";
 import { showError, showWarning } from "$lib/services/dialog.svelte";
 import { goto } from "$app/navigation";
 
-export const selectedCharger: { id: string } = $state({ id: "" });
+class SelectedCharger {
+	charger: PublicCharger | null = $state(null);
+
+	setCharger(charger: PublicCharger) {
+		this.charger = charger;
+	}
+
+	clearCharger() {
+		this.charger = null;
+	}
+}
+
+export const selectedCharger = new SelectedCharger();
 
 export class PublicCharger implements IPublicCharger {
 	stationid: string;
@@ -204,6 +216,9 @@ export class PublicCharger implements IPublicCharger {
 
 	async startCharge(showErrorOnFail: boolean = false) {
 		this.clearReservation();
+		selectedCharger.setCharger(this);
+		console.log("From this: " + this.stationid);
+		console.log("From selectedCharger: " + selectedCharger.charger?.stationid);
 		goto("/charging");
 		// let response: any;
 		// try {
@@ -216,7 +231,8 @@ export class PublicCharger implements IPublicCharger {
 		// }
 	}
 
-	async stopCharge() {
+	stopCharge() {
 		console.log("Stopping charge");
+		selectedCharger.clearCharger();
 	}
 }

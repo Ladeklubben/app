@@ -1,9 +1,9 @@
 export interface ChargerAPIResponse {
 	updatetime: number;
-	upd: PublicCharger[];
+	upd: IPublicCharger[];
 }
 
-export interface PublicCharger {
+export interface IPublicCharger {
 	stationid: string;
 	prices: PriceInfo;
 	location: LocationInfo;

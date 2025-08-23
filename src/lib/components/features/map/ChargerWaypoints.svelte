@@ -1,19 +1,23 @@
 <script lang="ts">
-	import type { PublicCharger } from "$lib/types/publicCharger.types";
+	import type { IPublicCharger } from "$lib/types/publicCharger.types";
 	import WaypointCard from "./WaypointCard.svelte";
 	import { pos } from "$lib/services/map";
-	import { selectedCharger } from "$lib/classes/PublicCharger.svelte";
+	import { PublicCharger, selectedCharger } from "$lib/classes/PublicCharger.svelte";
 
-	let { chargers = [] as PublicCharger[] } = $props<{
-		chargers?: PublicCharger[];
+	let { chargers = [] as IPublicCharger[] } = $props<{
+		chargers?: IPublicCharger[];
 	}>();
 
 	let scrollContainer: HTMLElement;
 	let waypointElements: Record<string, HTMLElement> = $state({});
 
 	function scrollToSelectedCharger() {
-		if (selectedCharger.id && waypointElements[selectedCharger.id] && scrollContainer) {
-			waypointElements[selectedCharger.id].scrollIntoView({
+		if (
+			selectedCharger.charger?.stationid &&
+			waypointElements[selectedCharger.charger.stationid] &&
+			scrollContainer
+		) {
+			waypointElements[selectedCharger.charger.stationid].scrollIntoView({
 				behavior: "smooth",
 				block: "nearest",
 				inline: "center",
@@ -46,7 +50,7 @@
 			{index === chargers.length - 1 ? 'mr-10' : ''}"
 			bind:this={waypointElements[charger.stationid]}
 			data-charger-id={charger.stationid}
-			onclick={() => (selectedCharger.id = charger.stationid)}
+			onclick={() => selectedCharger.setCharger(new PublicCharger(charger))}
 		>
 			<WaypointCard {charger} distance={charger.distance($pos)} />
 		</button>

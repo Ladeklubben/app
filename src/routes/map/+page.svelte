@@ -3,14 +3,14 @@
 	import ChargerWaypoints from "$lib/components/features/map/ChargerWaypoints.svelte";
 	import Glass from "$lib/components/ui/Glass.svelte";
 	import { get } from "$lib/services/api";
-	import { PublicCharger, selectedCharger } from "$lib/classes/PublicCharger.svelte";
+	import { PublicCharger } from "$lib/classes/PublicCharger.svelte";
 	import type { ChargerAPIResponse } from "$lib/types/publicCharger.types";
 	import Layer from "~icons/mdi/layers-outline";
 	import CrossHairs from "~icons/mdi/crosshairs-gps";
 	import QRCode from "~icons/mdi/qrcode-scan";
 	import { pos, calculateDistance, getPosition } from "$lib/services/map";
 	import { device, Platform } from "$lib/services/layout";
-	import { onDestroy, onMount } from "svelte";
+	import { onMount } from "svelte";
 	import { showError } from "$lib/services/dialog.svelte";
 	import { tileServer } from "$lib/services/map";
 
@@ -75,11 +75,6 @@
 
 	onMount(() => {
 		fetchChargers();
-	});
-
-	onDestroy(() => {
-		// Clear selected charger
-		selectedCharger.id = "";
 	});
 </script>
 
