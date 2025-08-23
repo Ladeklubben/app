@@ -6,6 +6,8 @@ export const pos: Writable<Position | null> = writable(null);
 export const MAP_TOKENS = writable({
 	JAWG: import.meta.env.VITE_JAWG_ACCESS_TOKEN,
 });
+export const tileServer = writable<TileServer>("dark");
+
 
 export async function getPosition() {
 	const deviceVal: Platform = get(device);

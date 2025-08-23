@@ -12,9 +12,9 @@
 	import { device, Platform } from "$lib/services/layout";
 	import { onDestroy, onMount } from "svelte";
 	import { showError } from "$lib/services/dialog.svelte";
+	import { tileServer } from "$lib/services/map";
 
 	let chargers: PublicCharger[] = $state([]);
-	let tileServer: TileServer = $state("dark");
 	let isSorted: boolean = $state(false);
 	let chargerWaypointsComponent: any = $state(null);
 
@@ -69,8 +69,8 @@
 
 	function cycleTileServer() {
 		const servers: TileServer[] = ["dark", "light", "satellite"];
-		const currentIndex = servers.indexOf(tileServer);
-		tileServer = servers[(currentIndex + 1) % servers.length];
+		const currentIndex = servers.indexOf($tileServer);
+		$tileServer = servers[(currentIndex + 1) % servers.length];
 	}
 
 	onMount(() => {
@@ -106,10 +106,10 @@
 			</button>
 		</Glass>
 	</div>
-	<ChargerMap {chargers} {tileServer} />
+	<ChargerMap {chargers} />
 	{#if isSorted}
 		<div class="absolute bottom-0 left-0 right-0 z-500">
-			<ChargerWaypoints bind:this={chargerWaypointsComponent}  {chargers} />
+			<ChargerWaypoints bind:this={chargerWaypointsComponent} {chargers} />
 		</div>
 	{/if}
 </div>

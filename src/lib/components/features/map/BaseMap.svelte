@@ -1,19 +1,17 @@
 <script lang="ts">
 	import { onMount, onDestroy } from "svelte";
-	import { MAP_TOKENS } from "$lib/services/map";
+	import { MAP_TOKENS, tileServer } from "$lib/services/map";
 	import * as L from "leaflet";
 	import "leaflet/dist/leaflet.css";
 
 	// Props for customization
 	let {
-		tileServer = "dark",
 		defaultCenter = [56, 10.5] as L.LatLngTuple,
 		defaultZoom = 6,
 		maxZoom = 20,
 		onMapClick = undefined as ((e: L.LeafletMouseEvent) => void) | undefined,
 		onMapInit = undefined as ((map: L.Map) => void) | undefined,
 	} = $props<{
-		tileServer: TileServer;
 		defaultCenter?: L.LatLngTuple;
 		defaultZoom?: number;
 		maxZoom?: number;
@@ -30,7 +28,7 @@
 	const TILE_SERVERS = {
 		light: `https://tile.jawg.io/jawg-streets/{z}/{x}/{y}{r}.png?access-token=${$MAP_TOKENS.JAWG}`,
 		dark: `https://tile.jawg.io/jawg-dark/{z}/{x}/{y}{r}.png?access-token=${$MAP_TOKENS.JAWG}`,
-		satellite: "https://tiles.stadiamaps.com/tiles/alidade_satellite/{z}/{x}/{y}{r}.jpg"
+		satellite: "https://tiles.stadiamaps.com/tiles/alidade_satellite/{z}/{x}/{y}{r}.jpg",
 	};
 
 	// Initialize map
@@ -71,13 +69,13 @@
 		}
 
 		// Add the new tile layer based on current tileserver value
-		currentTileLayer = L.tileLayer(TILE_SERVERS[tileServer as TileServer], {
+		currentTileLayer = L.tileLayer(TILE_SERVERS[$tileServer as TileServer], {
 			maxZoom,
 		}).addTo(map);
 	}
 
 	$effect(() => {
-		if (tileServer !== undefined) {
+		if ($tileServer !== undefined) {
 			updateTileLayer();
 		}
 	});
