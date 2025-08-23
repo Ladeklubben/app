@@ -9,12 +9,11 @@ import type {
 	Reservation,
 } from "$lib/types/publicCharger.types";
 import { type Position } from "@capacitor/geolocation";
-import { writable, type Writable } from "svelte/store";
 import { put } from "$lib/services/api";
 import { showError, showWarning } from "$lib/services/dialog.svelte";
 import { goto } from "$app/navigation";
 
-export const selectedChargerID: Writable<string> = writable("");
+export const selectedCharger: { id: string } = $state({ id: "" });
 
 export class PublicCharger implements IPublicCharger {
 	stationid: string;

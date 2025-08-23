@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Directions from "~icons/mdi/directions";
-	import { PublicCharger, selectedChargerID } from "$lib/classes/PublicCharger.svelte";
+	import { PublicCharger, selectedCharger } from "$lib/classes/PublicCharger.svelte";
 	import Glass from "$lib/components/ui/Glass.svelte";
 	import Bolt from "~icons/mdi/lightning-bolt";
 	import MapMarker from "~icons/mdi/map-marker";
@@ -18,7 +18,7 @@
 	let available: boolean = $derived(charger.connector === "Available");
 
 	$effect(() => {
-		isSelected = charger.stationid === $selectedChargerID;
+		isSelected = charger.stationid === selectedCharger.id;
 	});
 
 	let reserved = $derived(charger.reservation.claimTimeout > 0 && charger.reservation.reserved);

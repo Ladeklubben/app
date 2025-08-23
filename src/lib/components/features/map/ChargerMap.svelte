@@ -4,7 +4,7 @@
 	import { onMount } from "svelte";
 	import type { PublicCharger } from "$lib/types/publicCharger.types";
 	import { pos, getPosition } from "$lib/services/map";
-	import { selectedChargerID } from "$lib/classes/PublicCharger.svelte";
+	import { selectedCharger } from "$lib/classes/PublicCharger.svelte";
 	import type { Position } from "@capacitor/geolocation";
 	import "leaflet.markercluster/dist/leaflet.markercluster.js";
 	import "leaflet.markercluster/dist/MarkerCluster.css";
@@ -85,7 +85,7 @@
 
 		map.addLayer(markerClusterGroup);
 		map.on("click", () => {
-			$selectedChargerID = "";
+			selectedCharger.id = "";
 		});
 		updateChargerMarkers();
 	}
@@ -99,7 +99,7 @@
 		chargers.forEach((charger: PublicCharger) => {
 			// Select icon based on charger status and selection
 			let icon;
-			if (charger.stationid === $selectedChargerID) {
+			if (charger.stationid === selectedCharger.id) {
 				// Selected charger gets white icon
 				icon = chargerIconWhite;
 			} else {
@@ -119,7 +119,7 @@
 				alt: charger.stationid,
 			});
 			marker.on("click", () => {
-				$selectedChargerID = charger.stationid;
+				selectedCharger.id = charger.stationid;
 			});
 			if (markerClusterGroup) {
 				markerClusterGroup.addLayer(marker);
@@ -143,9 +143,9 @@
 
 	// Update map view for selected charger
 	function updateSelectedChargerView(): void {
-		if (!$selectedChargerID || !map) return;
+		if (!selectedCharger.id || !map) return;
 
-		const selected = chargers.find((charger: PublicCharger) => charger.stationid === $selectedChargerID);
+		const selected = chargers.find((charger: PublicCharger) => charger.stationid === selectedCharger.id);
 		if (selected) {
 			const latLng: L.LatLngTuple = [selected.location.latitude, selected.location.longitude];
 			const currentZoom = map.getZoom();

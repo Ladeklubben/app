@@ -3,7 +3,7 @@
 	import ChargerWaypoints from "$lib/components/features/map/ChargerWaypoints.svelte";
 	import Glass from "$lib/components/ui/Glass.svelte";
 	import { get } from "$lib/services/api";
-	import { PublicCharger, selectedChargerID } from "$lib/classes/PublicCharger.svelte";
+	import { PublicCharger, selectedCharger } from "$lib/classes/PublicCharger.svelte";
 	import type { ChargerAPIResponse } from "$lib/types/publicCharger.types";
 	import Layer from "~icons/mdi/layers-outline";
 	import CrossHairs from "~icons/mdi/crosshairs-gps";
@@ -79,7 +79,7 @@
 
 	onDestroy(() => {
 		// Clear selected charger
-		$selectedChargerID = "";
+		selectedCharger.id = "";
 	});
 </script>
 
