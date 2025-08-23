@@ -12,6 +12,7 @@ import { type Position } from "@capacitor/geolocation";
 import { writable, type Writable } from "svelte/store";
 import { put } from "$lib/services/api";
 import { showError, showWarning } from "$lib/services/dialog.svelte";
+import { goto } from "$app/navigation";
 
 export const selectedChargerID: Writable<string> = writable("");
 
@@ -173,11 +174,7 @@ export class PublicCharger implements IPublicCharger {
 					this.reservation.claimTimeout--;
 					this.startCharge(false);
 					if (this.reservation.claimTimeout <= 0) {
-						if (this.reservation.timer) {
-							clearInterval(this.reservation.timer);
-						}
-						this.reservation.reserved = false;
-						this.reservation.timer = null;
+						this.clearReservation();
 					}
 				}, 1000);
 			} else {
@@ -191,15 +188,36 @@ export class PublicCharger implements IPublicCharger {
 		}
 	}
 
-	async startCharge(showErrorOnFail: boolean = false) {
-		let response: any;
-		try {
-			response = await put(`/cp/${this.stationid}/startcharge`, "");
-			console.info("Start charge response:", response);
-		} catch (error) {
-			if (showErrorOnFail) {
-				showWarning("Could not start charging", "Please make sure the car is connected to the charger.");
-			}
+	/**
+	 * Clears the current reservation for this charger.
+	 * - Stops and removes the countdown timer if it exists.
+	 * - Sets the reservation status to not reserved.
+	 * - Resets the claim timeout to 0.
+	 */
+	clearReservation() {
+		if (this.reservation.timer) {
+			clearInterval(this.reservation.timer);
+			this.reservation.timer = null;
+			this.reservation.reserved = false;
+			this.reservation.claimTimeout = 0;
 		}
+	}
+
+	async startCharge(showErrorOnFail: boolean = false) {
+		this.clearReservation();
+		goto("/charging");
+		// let response: any;
+		// try {
+		// 	response = await put(`/cp/${this.stationid}/startcharge`, "");
+		// 	console.info("Start charge response:", response);
+		// } catch (error) {
+		// 	if (showErrorOnFail) {
+		// 		showWarning("Could not start charging", "Please make sure the car is connected to the charger.");
+		// 	}
+		// }
+	}
+
+	async stopCharge() {
+		console.log("Stopping charge");
 	}
 }
