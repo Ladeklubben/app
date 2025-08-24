@@ -7,7 +7,9 @@ import type {
 	ConnectorStatus,
 	EnergyPrices,
 	Reservation,
+	MemberPriceSetup,
 } from "$lib/types/publicCharger.types";
+import { getMemberPriceSetup } from "$lib/services/memberPricing.svelte";
 import { type Position } from "@capacitor/geolocation";
 import { put } from "$lib/services/api";
 import { showError, showWarning } from "$lib/services/dialog.svelte";
@@ -38,7 +40,7 @@ export class PublicCharger implements IPublicCharger {
 	online?: [number, boolean];
 	qr: string;
 	energyprices?: EnergyPrices;
-	claimTimeout?: number;
+	memberPrice?: MemberPriceSetup;
 	reservation = $state<Reservation>({
 		reserved: false,
 		claimTimeout: 0,
@@ -59,6 +61,9 @@ export class PublicCharger implements IPublicCharger {
 		this.online = data.online;
 		this.qr = data.qr;
 		this.energyprices = data.energyprices;
+
+		// Automatically set member pricing for this station
+		this.memberPrice = getMemberPriceSetup(this.stationid);
 	}
 
 	get isAvailable(): boolean {
@@ -70,21 +75,35 @@ export class PublicCharger implements IPublicCharger {
 	}
 
 	get currentPrice(): string {
-		let price: number = this.prices.nominal;
-
-		// Check if prices are below minimum
-		if (this.prices.nominal < this.prices.minimum) {
-			price = this.prices.minimum;
+		// Check for member pricing first
+		if (this.memberPrice) {
+			if (this.memberPrice.flat || this.memberPrice.free) {
+				return "0.00";
+			}
 		}
+
+		let price: number = this.prices.nominal;
+		let discount = 0;
+
+		// Apply member discount if available
+		if (this.memberPrice && this.memberPrice.tariff_pct > 0) {
+			price = this.prices.nominal * (1 - this.memberPrice.tariff_pct / 100);
+			discount = this.prices.nominal - price;
+		}
+
+		// Apply minimum price check (after member discount, before tariff/VAT)
+		price = price < this.prices.minimum ? this.prices.minimum : price;
 
 		// Handle spot price following
 		if (this.prices.follow_spot === 1) {
 			if (this.energyprices && this.energyprices.Costprice) {
 				price += this.energyprices.Costprice[0] / 100;
+				price -= discount; // Subtract discount from energy price calculation
 				price *= this.lktarif;
 				price *= this.VAT;
 			} else {
 				price = this.prices.fallback;
+				price -= discount; // Subtract discount from fallback price calculation
 				price *= this.lktarif;
 				price *= this.VAT;
 			}
@@ -124,6 +143,39 @@ export class PublicCharger implements IPublicCharger {
 	 */
 	static fromApiResponse(data: IPublicCharger[]): PublicCharger[] {
 		return data.map((station) => new PublicCharger(station));
+	}
+
+	/**
+	 * Sets member pricing for this charger
+	 */
+	setMemberPrice(memberPrice: MemberPriceSetup) {
+		this.memberPrice = memberPrice;
+	}
+
+	/**
+	 * Creates a default member price setup (no discounts)
+	 */
+	static getDefaultMemberPrice(): MemberPriceSetup {
+		return {
+			tariff_pct: 0,
+			discount_tariff: 0,
+			flat: false,
+			free: false,
+		};
+	}
+
+	/**
+	 * Refreshes member pricing for this charger (useful when user info changes)
+	 */
+	refreshMemberPricing() {
+		this.memberPrice = getMemberPriceSetup(this.stationid);
+	}
+
+	/**
+	 * Refreshes member pricing for an array of chargers
+	 */
+	static refreshMemberPricingForAll(chargers: PublicCharger[]) {
+		chargers.forEach(charger => charger.refreshMemberPricing());
 	}
 
 	/**

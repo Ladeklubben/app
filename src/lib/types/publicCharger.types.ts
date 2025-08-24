@@ -59,3 +59,11 @@ export interface Reservation {
 	claimTimeout: number;
 	timer: ReturnType<typeof setInterval> | null;
 }
+
+export interface MemberPriceSetup {
+	stationid?: string;
+	tariff_pct: number; // Percentage discount (0-100)
+	discount_tariff: number; // The discount percentage applied
+	flat: boolean; // If true, price is 0.0
+	free: boolean; // If true, price is 0.0
+}
