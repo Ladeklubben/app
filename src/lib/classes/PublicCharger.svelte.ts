@@ -25,7 +25,7 @@ class SelectedCharger {
 	}
 }
 
-export const selectedCharger = new SelectedCharger();
+export const selectedCharger = $state(new SelectedCharger());
 
 export class PublicCharger implements IPublicCharger {
 	stationid: string;
@@ -217,8 +217,6 @@ export class PublicCharger implements IPublicCharger {
 	async startCharge(showErrorOnFail: boolean = false) {
 		this.clearReservation();
 		selectedCharger.setCharger(this);
-		console.log("From this: " + this.stationid);
-		console.log("From selectedCharger: " + selectedCharger.charger?.stationid);
 		goto("/charging");
 		// let response: any;
 		// try {

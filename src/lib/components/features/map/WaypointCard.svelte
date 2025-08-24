@@ -60,7 +60,7 @@
 		</div>
 
 		{#if isSelected}
-			<div class="flex flex-col p-4 gap-3 border-t border-lk-blue-800 bg-lk-blue-950 text-md" transition:slide>
+			<div class="flex flex-col p-4 gap-3 border-t border-lk-blue-800 text-md" transition:slide>
 				<div class="flex gap-2 text-lk-blue-100/80">
 					<Name />
 					<span class="truncate">
