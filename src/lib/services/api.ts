@@ -1,4 +1,4 @@
-import { getAuth } from "$lib/services/auth";
+import { getAuth, logout } from "$lib/services/auth";
 import { CapacitorHttp } from "@capacitor/core";
 
 const API_BASE_URL = "https://restapi.ladeklubben.dk";
@@ -39,7 +39,11 @@ async function request(method: string, endpoint: string, data?: any, auth: boole
 
 		// CapacitorHttp already parses JSON responses automatically
 		return response.data;
-	} catch (error) {
+	} catch (error: any) {
+		if (error.message.includes("expired token")) {
+			await logout();
+		}
+
 		// Handle network errors or other exceptions
 		throw error instanceof Error ? error : new Error("Network error occurred");
 	}
