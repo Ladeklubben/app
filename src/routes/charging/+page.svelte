@@ -87,8 +87,9 @@
 
 	function stopCharging(event: Event) {
 		event.preventDefault();
-		selectedCharger.charger?.stopCharge();
-		goto("/map");
+		selectedCharger.charger?.stopCharge().then(() => {
+			goto("/map");
+		});
 	}
 
 	onMount(() => {

@@ -281,8 +281,14 @@ export class PublicCharger implements IPublicCharger {
 		// }
 	}
 
-	stopCharge() {
-		console.log("Stopping charge");
-		selectedCharger.clearCharger();
+	async stopCharge() {
+		try {
+			await put(`/cp/${this.stationid}/stopcharge`, "");
+			selectedCharger.clearCharger();
+		} catch (error) {
+			console.error("Failed to stop charge:", error);
+			showError("Failed to stop charging.");
+			throw error;
+		}
 	}
 }
