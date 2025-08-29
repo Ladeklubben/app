@@ -7,82 +7,16 @@
 	import { onDestroy, onMount } from "svelte";
 	import { getRandomFunFact } from "$lib/services/funFacts";
 
-	let power = $state(0);
-	let orderstart = $state(0);
-	let orderstop = $state(0);
-	let consumption = $state(54.3);
-	let orderno = $state("-");
+	function formatDuration(seconds: number): string {
+		const hours = Math.floor(seconds / 3600);
+		const minutes = Math.floor((seconds % 3600) / 60);
+		const secs = seconds % 60;
 
-	let price = $state(0);
-	let unitprice = $state(0);
-	let valuta = $state("DKK");
-
-	let poll_interval = $state(5 * 1000);
-	// let charging = $state(false);
-	let pollTimer: NodeJS.Timeout | null = $state(null);
-
-	function updateValues(ok: boolean, orderinfo: any) {
-		if (!ok) return;
-
-		try {
-			orderstart = orderinfo.Started;
-		} catch (exception1) {
-			return;
-		}
-
-		try {
-			consumption = orderinfo.consumption;
-			power = orderinfo.power;
-		} catch (exception1) {}
-
-		orderno = orderinfo.orderid ?? "-";
-
-		if ("order" in orderinfo) {
-			unitprice = orderinfo.order.price / consumption;
-			price = orderinfo.order.price;
-			valuta = orderinfo.order.valuta;
+		if (hours > 0) {
+			return `${hours}:${minutes.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
 		} else {
-			unitprice = 0.0;
-			price = 0.0;
-			valuta = "DKK";
+			return `${minutes}:${secs.toString().padStart(2, "0")}`;
 		}
-
-		if ("Ended" in orderinfo) {
-			// charging = false;
-			orderstop = orderinfo.Ended;
-			guestcharge_stopped();
-			poll_interval = 5 * 1000;
-		} else {
-			guestcharge_started();
-			poll_interval = 20 * 1000;
-		}
-	}
-
-	function guestcharge_started() {
-		console.log("Charge started");
-	}
-
-	function guestcharge_stopped() {
-		console.log("Charge stopped");
-	}
-
-	function requestOrderinfo() {
-		// console.log('Requesting order info for station:', data.stationid);
-		updateValues(true, {
-			Started: 1724438400,
-			consumption: 15,
-			power: 10,
-			orderid: "1234567890",
-		});
-	}
-
-	function startPolling() {
-		if (pollTimer) {
-			clearInterval(pollTimer);
-		}
-		pollTimer = setInterval(() => {
-			requestOrderinfo();
-		}, poll_interval);
 	}
 
 	function stopCharging(event: Event) {
@@ -93,17 +27,14 @@
 	}
 
 	onMount(() => {
-		// requestOrderinfo();
-		// startPolling();
 		console.log("Charging", selectedCharger.charger?.stationid);
 		$bottomButtonFixed = true;
+		selectedCharger.charger?.startPolling();
 	});
 
 	onDestroy(() => {
-		if (pollTimer) {
-			clearInterval(pollTimer);
-		}
 		$bottomButtonFixed = false;
+		selectedCharger.charger?.stopPolling();
 	});
 </script>
 
@@ -115,12 +46,12 @@
 			>
 				<div class="text-lk-blue-950">Energy</div>
 				<div class="text-lk-blue-800 text-3xl font-bold">
-					{consumption}
+					{selectedCharger.charger?.charging.consumption?.toFixed(1)}
 					<span class="text-sm font-light">kWh</span>
 				</div>
 			</div>
 			<div class="text-lk-blue-300 text-sm p-4 text-center">
-				{getRandomFunFact(consumption)}
+				{getRandomFunFact(selectedCharger.charger?.charging.consumption || 0)}
 			</div>
 		</div>
 
@@ -128,7 +59,9 @@
 			class="flex flex-row rounded-2xl overflow-hidden border border-lk-blue-800 w-full p-6 justify-between items-center"
 		>
 			<div class="text-lk-blue-300">Duration</div>
-			<div class="text-lk-blue-50 text-3xl font-bold">0:15:32</div>
+			<div class="text-lk-blue-50 text-3xl font-bold">
+				{formatDuration(selectedCharger.charger?.charging.duration || 0)}
+			</div>
 		</div>
 
 		<div
@@ -136,7 +69,7 @@
 		>
 			<div class="text-lk-blue-300">Cost</div>
 			<div class="text-lk-blue-50 text-3xl font-bold">
-				37.50
+				{selectedCharger.charger?.charging.price?.toFixed(2)}
 				<span class="text-sm font-light">DKK</span>
 			</div>
 		</div>

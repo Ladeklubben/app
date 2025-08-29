@@ -67,3 +67,10 @@ export interface MemberPriceSetup {
 	flat: boolean; // If true, price is 0.0
 	free: boolean; // If true, price is 0.0
 }
+
+export interface ChargeSessionInfo {
+	pollTimer: ReturnType<typeof setInterval> | null;
+	consumption: number;
+	price: number;
+	duration: number; // Duration in seconds
+}

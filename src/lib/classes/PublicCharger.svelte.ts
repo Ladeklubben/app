@@ -8,10 +8,11 @@ import type {
 	EnergyPrices,
 	Reservation,
 	MemberPriceSetup,
+	ChargeSessionInfo,
 } from "$lib/types/publicCharger.types";
 import { getMemberPriceSetup } from "$lib/services/memberPricing.svelte";
 import { type Position } from "@capacitor/geolocation";
-import { put } from "$lib/services/api";
+import { get, put } from "$lib/services/api";
 import { showError, showWarning } from "$lib/services/dialog.svelte";
 import { goto } from "$app/navigation";
 
@@ -45,6 +46,12 @@ export class PublicCharger implements IPublicCharger {
 		reserved: false,
 		claimTimeout: 0,
 		timer: null,
+	});
+	charging = $state<ChargeSessionInfo>({
+		pollTimer: null,
+		consumption: 0,
+		price: 0,
+		duration: 0,
 	});
 
 	// Private properties
@@ -269,6 +276,7 @@ export class PublicCharger implements IPublicCharger {
 	async startCharge(showErrorOnFail: boolean = false) {
 		this.clearReservation();
 		selectedCharger.setCharger(this);
+		this.getChargeSessionInfo();
 		goto("/charging");
 		// let response: any;
 		// try {
@@ -281,9 +289,40 @@ export class PublicCharger implements IPublicCharger {
 		// }
 	}
 
+	async getChargeSessionInfo() {
+		try {
+			const response = await get(`/cs/${this.stationid}/activeguest`);
+			this.charging.consumption = response.consumption;
+			this.charging.price = parseFloat(response.Cost) || 0;
+
+			// Calculate duration in seconds
+			const currentTime = Math.floor(Date.now() / 1000);
+			this.charging.duration = currentTime - response.Started;
+
+			console.log("Charge session info:", response);
+		} catch (error) {
+			console.error("Failed to get charge session info:", error);
+		}
+	}
+
+	startPolling() {
+		this.stopPolling();
+		this.charging.pollTimer = setInterval(() => {
+			this.getChargeSessionInfo();
+		}, 1000);
+	}
+
+	stopPolling() {
+		if (this.charging.pollTimer) {
+			clearInterval(this.charging.pollTimer);
+			this.charging.pollTimer = null;
+		}
+	}
+
 	async stopCharge() {
 		try {
 			await put(`/cp/${this.stationid}/stopcharge`, "");
+			this.stopPolling();
 			selectedCharger.clearCharger();
 		} catch (error) {
 			console.error("Failed to stop charge:", error);
