@@ -16,6 +16,32 @@ import { get, put } from "$lib/services/api";
 import { showError, showWarning } from "$lib/services/dialog.svelte";
 import { goto } from "$app/navigation";
 
+class ChargerRegistry {
+	private chargers = new Map<string, PublicCharger>();
+
+	getCharger(stationid: string, apiData: IPublicCharger): PublicCharger {
+		let charger = this.chargers.get(stationid);
+		if (charger) {
+			// Update existing charger with fresh API data
+			charger.updateFromApiData(apiData);
+			return charger;
+		} else {
+			// Create new charger and register it
+			charger = new PublicCharger(apiData);
+			this.chargers.set(stationid, charger);
+			return charger;
+		}
+	}
+
+	removeCharger(stationid: string) {
+		this.chargers.delete(stationid);
+	}
+
+	getAllChargers(): PublicCharger[] {
+		return Array.from(this.chargers.values());
+	}
+}
+
 class SelectedCharger {
 	charger: PublicCharger | null = $state(null);
 
@@ -28,6 +54,7 @@ class SelectedCharger {
 	}
 }
 
+export const chargerRegistry = new ChargerRegistry();
 export const selectedCharger = $state(new SelectedCharger());
 
 export class PublicCharger implements IPublicCharger {
@@ -185,6 +212,27 @@ export class PublicCharger implements IPublicCharger {
 	 */
 	static refreshMemberPricingForAll(chargers: PublicCharger[]) {
 		chargers.forEach(charger => charger.refreshMemberPricing());
+	}
+
+	/**
+	 * Updates this charger instance with fresh API data while preserving local state
+	 */
+	updateFromApiData(data: IPublicCharger) {
+		// Update server-side properties
+		this.prices = data.prices;
+		this.location = data.location;
+		this.openhours = data.openhours;
+		this.type = data.type;
+		this.connector = data.connector;
+		this.online = data.online;
+		this.qr = data.qr;
+		this.energyprices = data.energyprices;
+
+		// Refresh member pricing for this station
+		this.memberPrice = getMemberPriceSetup(this.stationid);
+
+		// Preserve client-side state: charging, reservation, timers
+		// These are intentionally NOT updated from API data
 	}
 
 	/**

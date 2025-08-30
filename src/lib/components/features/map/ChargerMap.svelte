@@ -4,7 +4,7 @@
 	import { onMount } from "svelte";
 	import type { IPublicCharger } from "$lib/types/publicCharger.types";
 	import { pos, getPosition } from "$lib/services/map";
-	import { selectedCharger, PublicCharger } from "$lib/classes/PublicCharger.svelte";
+	import { selectedCharger, PublicCharger, chargerRegistry } from "$lib/classes/PublicCharger.svelte";
 	import type { Position } from "@capacitor/geolocation";
 	import "leaflet.markercluster/dist/leaflet.markercluster.js";
 	import "leaflet.markercluster/dist/MarkerCluster.css";
@@ -119,7 +119,7 @@
 				alt: charger.stationid,
 			});
 			marker.on("click", () => {
-				selectedCharger.setCharger(new PublicCharger(charger));
+				selectedCharger.setCharger(chargerRegistry.getCharger(charger.stationid, charger));
 			});
 			if (markerClusterGroup) {
 				markerClusterGroup.addLayer(marker);

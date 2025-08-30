@@ -2,7 +2,7 @@
 	import type { IPublicCharger } from "$lib/types/publicCharger.types";
 	import WaypointCard from "./WaypointCard.svelte";
 	import { pos } from "$lib/services/map";
-	import { PublicCharger, selectedCharger } from "$lib/classes/PublicCharger.svelte";
+	import { PublicCharger, selectedCharger, chargerRegistry } from "$lib/classes/PublicCharger.svelte";
 
 	let { chargers = [] as IPublicCharger[] } = $props<{
 		chargers?: IPublicCharger[];
@@ -50,7 +50,7 @@
 			{index === chargers.length - 1 ? 'mr-10' : ''}"
 			bind:this={waypointElements[charger.stationid]}
 			data-charger-id={charger.stationid}
-			onclick={() => selectedCharger.setCharger(new PublicCharger(charger))}
+			onclick={() => selectedCharger.setCharger(chargerRegistry.getCharger(charger.stationid, charger))}
 		>
 			<WaypointCard {charger} distance={charger.distance($pos)} />
 		</button>

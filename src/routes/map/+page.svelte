@@ -3,7 +3,7 @@
 	import ChargerWaypoints from "$lib/components/features/map/ChargerWaypoints.svelte";
 	import Glass from "$lib/components/ui/Glass.svelte";
 	import { get } from "$lib/services/api";
-	import { PublicCharger } from "$lib/classes/PublicCharger.svelte";
+	import { PublicCharger, chargerRegistry } from "$lib/classes/PublicCharger.svelte";
 	import type { ChargerAPIResponse } from "$lib/types/publicCharger.types";
 	import Layer from "~icons/mdi/layers-outline";
 	import CrossHairs from "~icons/mdi/crosshairs-gps";
@@ -22,7 +22,9 @@
 	async function fetchChargers() {
 		try {
 			const response: ChargerAPIResponse = await get("/chargermap");
-			chargers = PublicCharger.fromApiResponse(response.upd);
+			chargers = response.upd.map(chargerData => 
+				chargerRegistry.getCharger(chargerData.stationid, chargerData)
+			);
 		} catch (error) {
 			console.error("Error fetching chargers:", error);
 			showError("Failed to load chargers");

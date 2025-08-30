@@ -15,14 +15,9 @@
 		distance?: number;
 	}>();
 
-	let isSelected: boolean = $state(false);
 	let available: boolean = $derived(charger.connector === "Available");
 	let charging: boolean = $derived(charger.charging.isActive);
-
-	$effect(() => {
-		isSelected = charger.stationid === selectedCharger.charger?.stationid;
-	});
-
+	let isSelected: boolean = $derived(charger.stationid === selectedCharger.charger?.stationid);
 	let reserved = $derived(charger.reservation.claimTimeout > 0 && charger.reservation.reserved);
 
 	function handleClick() {
