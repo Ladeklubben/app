@@ -324,20 +324,19 @@ export class PublicCharger implements IPublicCharger {
 	}
 
 	async startCharge(showErrorOnFail: boolean = false) {
-		this.clearReservation();
-		selectedCharger.setCharger(this);
-		this.getChargeSessionInfo();
-		this.charging.isActive = true;
-		goto("/charging");
-		// let response: any;
-		// try {
-		// 	response = await put(`/cp/${this.stationid}/startcharge`, "");
-		// 	console.info("Start charge response:", response);
-		// } catch (error) {
-		// 	if (showErrorOnFail) {
-		// 		showWarning("Could not start charging", "Please make sure the car is connected to the charger.");
-		// 	}
-		// }
+		try {
+			const response = await put(`/cp/${this.stationid}/startcharge`, "");
+			console.info("Start charge response:", response);
+			this.clearReservation();
+			selectedCharger.setCharger(this);
+			this.getChargeSessionInfo();
+			this.charging.isActive = true;
+			goto("/charging");
+		} catch (error) {
+			if (showErrorOnFail) {
+				showWarning("Could not start charging", "Please make sure the car is connected to the charger.");
+			}
+		}
 	}
 
 	async getChargeSessionInfo() {
