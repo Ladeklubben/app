@@ -69,6 +69,7 @@ export interface MemberPriceSetup {
 }
 
 export interface ChargeSessionInfo {
+	isActive: boolean;
 	pollTimer: ReturnType<typeof setInterval> | null;
 	consumption: number;
 	speed: number;

@@ -48,6 +48,7 @@ export class PublicCharger implements IPublicCharger {
 		timer: null,
 	});
 	charging = $state<ChargeSessionInfo>({
+		isActive: false,
 		pollTimer: null,
 		speed: 0,
 		consumption: 0,
@@ -278,6 +279,7 @@ export class PublicCharger implements IPublicCharger {
 		this.clearReservation();
 		selectedCharger.setCharger(this);
 		this.getChargeSessionInfo();
+		this.charging.isActive = true;
 		goto("/charging");
 		// let response: any;
 		// try {
@@ -325,6 +327,7 @@ export class PublicCharger implements IPublicCharger {
 		try {
 			await put(`/cp/${this.stationid}/stopcharge`, "");
 			this.stopPolling();
+			this.charging.isActive = false;
 			selectedCharger.clearCharger();
 		} catch (error) {
 			console.error("Failed to stop charge:", error);

@@ -8,6 +8,7 @@
 	import Name from "~icons/mdi/rename-outline";
 	import Cancel from "~icons/mdi/cancel";
 	import { slide } from "svelte/transition";
+	import { goto } from "$app/navigation";
 
 	let { charger, distance = 0 } = $props<{
 		charger: PublicCharger;
@@ -16,6 +17,7 @@
 
 	let isSelected: boolean = $state(false);
 	let available: boolean = $derived(charger.connector === "Available");
+	let charging: boolean = $derived(charger.charging.isActive);
 
 	$effect(() => {
 		isSelected = charger.stationid === selectedCharger.charger?.stationid;
@@ -24,7 +26,9 @@
 	let reserved = $derived(charger.reservation.claimTimeout > 0 && charger.reservation.reserved);
 
 	function handleClick() {
-		if (reserved) {
+		if (charging) {
+			goto(`/charging`);
+		} else if (reserved) {
 			charger.startCharge(true);
 		} else {
 			charger.reserveCharger();
@@ -94,16 +98,22 @@
 						onclick={() => handleClick()}
 						disabled={!available}
 						class="flex-1 backdrop-blur-sm transition-all p-1.5 rounded-2xl text-lg font-medium shadow-sm
-						{available ? 'bg-lk-blue-200 text-lk-blue-900' : 'bg-lk-red-800 text-gray-300'}"
+						{charging
+							? 'bg-lk-green-500 text-lk-blue-800'
+							: available
+								? 'bg-lk-blue-200 text-lk-blue-900'
+								: 'bg-lk-red-800 text-gray-300'}"
 					>
-						{#if available}
+						{#if charging}
+							View Status
+						{:else if available}
 							{#if reserved}
-								Start Charge
+								Charge Now
 							{:else}
 								Reserve
 							{/if}
 						{:else}
-							Charging...
+							Occupied
 						{/if}
 					</button>
 					<button
