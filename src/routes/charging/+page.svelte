@@ -5,7 +5,6 @@
 	import Subpage from "$lib/components/ui/Subpage.svelte";
 	import { bottomButtonFixed } from "$lib/services/layout";
 	import { onDestroy, onMount } from "svelte";
-	import { getRandomFunFact } from "$lib/services/funFacts";
 
 	function formatDuration(seconds: number): string {
 		const hours = Math.floor(seconds / 3600);
@@ -51,7 +50,7 @@
 				</div>
 			</div>
 			<div class="text-lk-blue-300 text-sm p-4 text-center">
-				{getRandomFunFact(selectedCharger.charger?.charging.consumption || 0)}
+				Chargin speed: {selectedCharger.charger?.charging.speed} kW
 			</div>
 		</div>
 

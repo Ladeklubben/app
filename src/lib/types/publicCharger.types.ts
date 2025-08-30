@@ -71,6 +71,7 @@ export interface MemberPriceSetup {
 export interface ChargeSessionInfo {
 	pollTimer: ReturnType<typeof setInterval> | null;
 	consumption: number;
+	speed: number;
 	price: number;
 	duration: number; // Duration in seconds
 }

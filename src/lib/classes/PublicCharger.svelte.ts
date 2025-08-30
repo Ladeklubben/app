@@ -49,6 +49,7 @@ export class PublicCharger implements IPublicCharger {
 	});
 	charging = $state<ChargeSessionInfo>({
 		pollTimer: null,
+		speed: 0,
 		consumption: 0,
 		price: 0,
 		duration: 0,
@@ -294,6 +295,7 @@ export class PublicCharger implements IPublicCharger {
 			const response = await get(`/cs/${this.stationid}/activeguest`);
 			this.charging.consumption = response.consumption;
 			this.charging.price = parseFloat(response.Cost) || 0;
+			this.charging.speed = response.power;
 
 			// Calculate duration in seconds
 			const currentTime = Math.floor(Date.now() / 1000);
