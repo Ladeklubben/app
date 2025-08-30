@@ -14,6 +14,7 @@
 			<span class="add-icon">+</span>
 		</button>
 	</div>
-	<SmartCharge />
-	<UnlockCharger />
+	<h1 class="text-lk-blue-50 text-2xl font-bold h-80 flex items-center justify-center">Work In Progress</h1>
+	<!-- <SmartCharge />
+	<UnlockCharger /> -->
 </div>
