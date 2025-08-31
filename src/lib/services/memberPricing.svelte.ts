@@ -54,6 +54,7 @@ function updateMemberPriceMap(guestGroupsData: GuestGroupsData) {
 
 		if (hasDiscount && typeof guestGroupsData.DISCOUNT[stationId] === 'number') {
 			discountTariff = guestGroupsData.DISCOUNT[stationId] as number;
+			discountTariff = Math.max(0, Math.min(discountTariff, 100));
 			// Only set tariff_pct if not flat or free (mimics QML logic)
 			if (!isFlat && !isFree) {
 				tariffPct = discountTariff;
