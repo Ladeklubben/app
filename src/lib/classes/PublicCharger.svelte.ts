@@ -292,9 +292,12 @@ export class PublicCharger implements IPublicCharger {
 				// Start a countdown timer
 				this.reservation.timer = setInterval(() => {
 					this.reservation.claimTimeout--;
-					this.startCharge(false);
 					if (this.reservation.claimTimeout <= 0) {
 						this.clearReservation();
+					}
+					// Try to start charging every 5 seconds
+					if (this.reservation.claimTimeout % 5 === 0) {
+						this.startCharge(false);
 					}
 				}, 1000);
 			} else {
