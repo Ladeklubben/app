@@ -1,9 +1,9 @@
 export interface ChargerAPIResponse {
 	updatetime: number;
-	upd: PublicCharger[];
+	upd: IPublicCharger[];
 }
 
-export interface PublicCharger {
+export interface IPublicCharger {
 	stationid: string;
 	prices: PriceInfo;
 	location: LocationInfo;
@@ -52,4 +52,27 @@ export type ConnectorStatus = "Available" | "SuspendedEV" | "Finishing" | "Prepa
 export interface EnergyPrices {
 	Costprice: number[];
 	start: number; // Timestamp when prices start
+}
+
+export interface Reservation {
+	reserved: boolean;
+	claimTimeout: number;
+	timer: ReturnType<typeof setInterval> | null;
+}
+
+export interface MemberPriceSetup {
+	stationid?: string;
+	tariff_pct: number; // Percentage discount (0-100)
+	discount_tariff: number; // The discount percentage applied
+	flat: boolean; // If true, price is 0.0
+	free: boolean; // If true, price is 0.0
+}
+
+export interface ChargeSessionInfo {
+	isActive: boolean;
+	pollTimer: ReturnType<typeof setInterval> | null;
+	consumption: number;
+	speed: number;
+	price: number;
+	duration: number; // Duration in seconds
 }

@@ -3,25 +3,29 @@
 	import ChargerWaypoints from "$lib/components/features/map/ChargerWaypoints.svelte";
 	import Glass from "$lib/components/ui/Glass.svelte";
 	import { get } from "$lib/services/api";
-	import { PublicCharger, selectedChargerID } from "$lib/classes/PublicCharger";
+	import { PublicCharger, chargerRegistry } from "$lib/classes/PublicCharger.svelte";
 	import type { ChargerAPIResponse } from "$lib/types/publicCharger.types";
+	import type { TileServer } from "$lib/types/map.types";
 	import Layer from "~icons/mdi/layers-outline";
 	import CrossHairs from "~icons/mdi/crosshairs-gps";
 	import QRCode from "~icons/mdi/qrcode-scan";
 	import { pos, calculateDistance, getPosition } from "$lib/services/map";
 	import { device, Platform } from "$lib/services/layout";
-	import { onDestroy, onMount } from "svelte";
+	import { onMount } from "svelte";
 	import { showError } from "$lib/services/dialog.svelte";
+	import { tileServer } from "$lib/services/map";
+	import { userInfo } from "$lib/services/auth";
 
 	let chargers: PublicCharger[] = $state([]);
-	let tileServer: TileServer = $state("dark");
 	let isSorted: boolean = $state(false);
 	let chargerWaypointsComponent: any = $state(null);
 
 	async function fetchChargers() {
 		try {
 			const response: ChargerAPIResponse = await get("/chargermap");
-			chargers = PublicCharger.fromApiResponse(response.upd);
+			chargers = response.upd.map((chargerData) =>
+				chargerRegistry.getCharger(chargerData.stationid, chargerData),
+			);
 		} catch (error) {
 			console.error("Error fetching chargers:", error);
 			showError("Failed to load chargers");
@@ -32,6 +36,14 @@
 	$effect(() => {
 		if ($pos && chargers.length > 0) {
 			sortChargersByDistance();
+		}
+	});
+
+	// Refresh member pricing when user info changes
+	$effect(() => {
+		if ($userInfo && chargers.length > 0) {
+			PublicCharger.refreshMemberPricingForAll(chargers);
+			chargers = chargers;
 		}
 	});
 
@@ -69,17 +81,12 @@
 
 	function cycleTileServer() {
 		const servers: TileServer[] = ["dark", "light", "satellite"];
-		const currentIndex = servers.indexOf(tileServer);
-		tileServer = servers[(currentIndex + 1) % servers.length];
+		const currentIndex = servers.indexOf($tileServer);
+		$tileServer = servers[(currentIndex + 1) % servers.length];
 	}
 
 	onMount(() => {
 		fetchChargers();
-	});
-
-	onDestroy(() => {
-		// Clear selected charger
-		$selectedChargerID = "";
 	});
 </script>
 
@@ -106,10 +113,10 @@
 			</button>
 		</Glass>
 	</div>
-	<ChargerMap {chargers} {tileServer} />
+	<ChargerMap {chargers} />
 	{#if isSorted}
 		<div class="absolute bottom-0 left-0 right-0 z-500">
-			<ChargerWaypoints bind:this={chargerWaypointsComponent}  {chargers} />
+			<ChargerWaypoints bind:this={chargerWaypointsComponent} {chargers} />
 		</div>
 	{/if}
 </div>

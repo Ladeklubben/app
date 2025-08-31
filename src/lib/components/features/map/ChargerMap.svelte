@@ -2,18 +2,17 @@
 	import * as L from "leaflet";
 	import BaseMap from "./BaseMap.svelte";
 	import { onMount } from "svelte";
-	import type { PublicCharger } from "$lib/types/publicCharger.types";
+	import type { IPublicCharger } from "$lib/types/publicCharger.types";
 	import { pos, getPosition } from "$lib/services/map";
-	import { selectedChargerID } from "$lib/classes/PublicCharger";
+	import { selectedCharger, PublicCharger, chargerRegistry } from "$lib/classes/PublicCharger.svelte";
 	import type { Position } from "@capacitor/geolocation";
 	import "leaflet.markercluster/dist/leaflet.markercluster.js";
 	import "leaflet.markercluster/dist/MarkerCluster.css";
 	import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 
 	// Props
-	let { tileServer = "dark", chargers = [] as PublicCharger[] } = $props<{
-		tileServer: TileServer;
-		chargers?: PublicCharger[];
+	let { chargers = [] as IPublicCharger[] } = $props<{
+		chargers?: IPublicCharger[];
 	}>();
 
 	// Variables
@@ -86,7 +85,7 @@
 
 		map.addLayer(markerClusterGroup);
 		map.on("click", () => {
-			$selectedChargerID = "";
+			selectedCharger.clearCharger();
 		});
 		updateChargerMarkers();
 	}
@@ -97,10 +96,10 @@
 
 		markerClusterGroup.clearLayers();
 
-		chargers.forEach((charger: PublicCharger) => {
+		chargers.forEach((charger: IPublicCharger) => {
 			// Select icon based on charger status and selection
 			let icon;
-			if (charger.stationid === $selectedChargerID) {
+			if (charger.stationid === selectedCharger.charger?.stationid) {
 				// Selected charger gets white icon
 				icon = chargerIconWhite;
 			} else {
@@ -120,7 +119,7 @@
 				alt: charger.stationid,
 			});
 			marker.on("click", () => {
-				$selectedChargerID = charger.stationid;
+				selectedCharger.setCharger(chargerRegistry.getCharger(charger.stationid, charger));
 			});
 			if (markerClusterGroup) {
 				markerClusterGroup.addLayer(marker);
@@ -144,9 +143,11 @@
 
 	// Update map view for selected charger
 	function updateSelectedChargerView(): void {
-		if (!$selectedChargerID || !map) return;
+		if (!selectedCharger.charger || !map) return;
 
-		const selected = chargers.find((charger: PublicCharger) => charger.stationid === $selectedChargerID);
+		const selected = chargers.find(
+			(charger: IPublicCharger) => charger.stationid === selectedCharger.charger?.stationid,
+		);
 		if (selected) {
 			const latLng: L.LatLngTuple = [selected.location.latitude, selected.location.longitude];
 			const currentZoom = map.getZoom();
@@ -173,4 +174,4 @@
 	});
 </script>
 
-<BaseMap {tileServer} defaultZoom={6} onMapInit={initializeMap} />
+<BaseMap defaultZoom={6} onMapInit={initializeMap} />

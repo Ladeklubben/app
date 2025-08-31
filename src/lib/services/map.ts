@@ -1,11 +1,14 @@
 import { get, writable, type Writable } from "svelte/store";
 import { device, Platform } from "$lib/services/layout";
 import { type Position, type PermissionStatus, Geolocation } from "@capacitor/geolocation";
+import type { AddressFromCoords, TileServer } from '$lib/types/map.types';
 
 export const pos: Writable<Position | null> = writable(null);
 export const MAP_TOKENS = writable({
 	JAWG: import.meta.env.VITE_JAWG_ACCESS_TOKEN,
 });
+export const tileServer = writable<TileServer>("dark");
+
 
 export async function getPosition() {
 	const deviceVal: Platform = get(device);
@@ -34,8 +37,8 @@ export async function getPosition() {
 			setTimeout(() => {
 				const pseudoPosition: Position = {
 					coords: {
-						latitude: 54.951718,
-						longitude: 9.896465,
+						latitude: 54.924774,
+						longitude: 9.739437,
 						accuracy: 0,
 						altitude: 0,
 						altitudeAccuracy: 0,
@@ -73,23 +76,22 @@ export async function getAddressFromCoordinates(lat: number, lon: number): Promi
 		const data = await response.json();
 
 		// Validate and extract only the properties you need
-        if (!data.address) {
-            return null;
-        }
-        
-        // Transform to match your AddressFromCoords type structure
-        const address: AddressFromCoords = {
-            house_number: data.address.house_number || "",
+		const latNum = Number(data.lat), lonNum = Number(data.lon);
+		if (!data.address || !Number.isFinite(latNum) || !Number.isFinite(lonNum)) return null;
+
+		// Transform to match your AddressFromCoords type structure
+		const address: AddressFromCoords = {
+			house_number: data.address.house_number || "",
 			road: data.address.road || "",
 			city: data.address.town || data.address.city || data.address.village || data.address.municipality || "",
 			postcode: data.address.postcode || "",
 			country: data.address.country || "",
 			lat: parseFloat(data.lat),
 			lon: parseFloat(data.lon)
-        };
-        
-		console.info("Address fetched:", data.address);
-        return address;
+		};
+
+		console.debug("Address fetched:", data.address);
+		return address;
 	} catch (error) {
 		console.error("Error fetching address:", error);
 		return null;
