@@ -1,6 +1,7 @@
 import { get, writable, type Writable } from "svelte/store";
 import { device, Platform } from "$lib/services/layout";
 import { type Position, type PermissionStatus, Geolocation } from "@capacitor/geolocation";
+import type { AddressFromCoords, TileServer } from '$lib/types/map.types';
 
 export const pos: Writable<Position | null> = writable(null);
 export const MAP_TOKENS = writable({
@@ -75,9 +76,8 @@ export async function getAddressFromCoordinates(lat: number, lon: number): Promi
 		const data = await response.json();
 
 		// Validate and extract only the properties you need
-		if (!data.address) {
-			return null;
-		}
+		const latNum = Number(data.lat), lonNum = Number(data.lon);
+		if (!data.address || !Number.isFinite(latNum) || !Number.isFinite(lonNum)) return null;
 
 		// Transform to match your AddressFromCoords type structure
 		const address: AddressFromCoords = {
@@ -90,7 +90,7 @@ export async function getAddressFromCoordinates(lat: number, lon: number): Promi
 			lon: parseFloat(data.lon)
 		};
 
-		console.info("Address fetched:", data.address);
+		console.debug("Address fetched:", data.address);
 		return address;
 	} catch (error) {
 		console.error("Error fetching address:", error);

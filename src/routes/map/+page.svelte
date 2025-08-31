@@ -5,6 +5,7 @@
 	import { get } from "$lib/services/api";
 	import { PublicCharger, chargerRegistry } from "$lib/classes/PublicCharger.svelte";
 	import type { ChargerAPIResponse } from "$lib/types/publicCharger.types";
+	import type { TileServer } from "$lib/types/map.types";
 	import Layer from "~icons/mdi/layers-outline";
 	import CrossHairs from "~icons/mdi/crosshairs-gps";
 	import QRCode from "~icons/mdi/qrcode-scan";
@@ -22,8 +23,8 @@
 	async function fetchChargers() {
 		try {
 			const response: ChargerAPIResponse = await get("/chargermap");
-			chargers = response.upd.map(chargerData => 
-				chargerRegistry.getCharger(chargerData.stationid, chargerData)
+			chargers = response.upd.map((chargerData) =>
+				chargerRegistry.getCharger(chargerData.stationid, chargerData),
 			);
 		} catch (error) {
 			console.error("Error fetching chargers:", error);

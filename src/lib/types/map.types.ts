@@ -1,6 +1,6 @@
-type TileServer = "light" | "dark" | "satellite";
+export type TileServer = "light" | "dark" | "satellite";
 
-type AddressFromCoords = {
+export type AddressFromCoords = {
     house_number: string;
     road: string;
     city: string;
