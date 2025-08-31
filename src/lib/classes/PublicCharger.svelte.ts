@@ -328,7 +328,15 @@ export class PublicCharger implements IPublicCharger {
 		this.reservation.claimTimeout = 0;
 	}
 
+	private _startChargeInFlight: boolean = false;
+
 	async startCharge(showErrorOnFail: boolean = false) {
+		// Reentrancy guard: prevent concurrent starts or if already charging
+		if (this._startChargeInFlight || this.charging.isActive) {
+			console.warn("Start charge already in flight or already charging");
+			return;
+		}
+		this._startChargeInFlight = true;
 		try {
 			const response = await put(`/cp/${this.stationid}/startcharge`, "");
 			console.info("Start charge response:", response);
@@ -341,6 +349,8 @@ export class PublicCharger implements IPublicCharger {
 			if (showErrorOnFail) {
 				showWarning("Could not start charging", "Please make sure the car is connected to the charger.");
 			}
+		} finally {
+			this._startChargeInFlight = false;
 		}
 	}
 
