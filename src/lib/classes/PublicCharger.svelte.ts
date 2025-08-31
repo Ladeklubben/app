@@ -68,7 +68,7 @@ export class PublicCharger implements IPublicCharger {
 	online?: [number, boolean];
 	qr: string;
 	energyprices?: EnergyPrices;
-	memberPrice?: MemberPriceSetup;
+	memberPrice = $state<MemberPriceSetup | undefined>(undefined);
 	reservation = $state<Reservation>({
 		reserved: false,
 		claimTimeout: 0,
