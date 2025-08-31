@@ -43,6 +43,7 @@
 	$effect(() => {
 		if ($userInfo && chargers.length > 0) {
 			PublicCharger.refreshMemberPricingForAll(chargers);
+			chargers = chargers;
 		}
 	});
 
