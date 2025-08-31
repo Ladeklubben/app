@@ -324,6 +324,8 @@ export class PublicCharger implements IPublicCharger {
 			this.reservation.reserved = false;
 			this.reservation.claimTimeout = 0;
 		}
+		this.reservation.reserved = false;
+		this.reservation.claimTimeout = 0;
 	}
 
 	async startCharge(showErrorOnFail: boolean = false) {
