@@ -91,7 +91,7 @@
 				<div class="flex justify-between gap-3">
 					<button
 						onclick={() => handleClick()}
-						disabled={!available}
+						disabled={!available && !charging}
 						class="flex-1 backdrop-blur-sm transition-all p-1.5 rounded-2xl text-lg font-medium shadow-sm
 						{charging
 							? 'bg-lk-green-500 text-lk-blue-800'
