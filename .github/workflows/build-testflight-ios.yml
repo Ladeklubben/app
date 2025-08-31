@@ -11,7 +11,7 @@ on:
 jobs:
     build_ios:
         if: github.event_name == 'workflow_dispatch' || github.event.pull_request.merged == true
-        runs-on: macos-latest
+        runs-on: macos-14
 
         # Specify Xcode 16 version explicitly
         env:
