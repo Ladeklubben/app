@@ -69,7 +69,8 @@
 		}
 
 		// Add the new tile layer based on current tileserver value
-		currentTileLayer = L.tileLayer(TILE_SERVERS[$tileServer as TileServer], {
+		const key = ($tileServer ?? "light") as keyof typeof TILE_SERVERS;
+		currentTileLayer = L.tileLayer(TILE_SERVERS[key], {
 			maxZoom,
 		}).addTo(map);
 	}
