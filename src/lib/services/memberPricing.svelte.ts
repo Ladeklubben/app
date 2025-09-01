@@ -1,9 +1,9 @@
 import { writable } from "svelte/store";
-import type { GuestGroupsData, UserInfo } from "$lib/types/auth.types";
+import type { GuestGroups, UserInfo } from "$lib/types/user.types";
 import type { MemberPriceSetup } from "$lib/types/publicCharger.types";
 import { get } from "$lib/services/api";
 
-export const guestGroups = writable<GuestGroupsData | null>(null);
+export const guestGroups = writable<GuestGroups | null>(null);
 export const memberPriceMap = $state({
 	map: new Map<string, MemberPriceSetup>(),
 });
@@ -32,7 +32,7 @@ export async function fetchUserInformation(): Promise<UserInfo | null> {
  * Updates the member price map based on guest groups data
  * Mimics the QML update_groups function logic
  */
-function updateMemberPriceMap(guestGroupsData: GuestGroupsData) {
+function updateMemberPriceMap(guestGroupsData: GuestGroups) {
 	const newPriceMap = new Map<string, MemberPriceSetup>();
 
 	// Create a set of all stations that have special pricing
