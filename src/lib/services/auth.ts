@@ -51,17 +51,19 @@ export async function getAuth(): Promise<AuthData | null> {
 // Login and save auth data
 export async function login(email: string, password: string, preHashed: boolean): Promise<boolean> {
 	try {
+		// Normalize email input
+		const normalizedEmail = email.trim().toLowerCase();
 		// Hash password if not pre-hashed
 		let hashedPassword = password;
 		if (!preHashed) {
 			hashedPassword = MD5(hashedPassword).toString();
 		}
 
-		const data = await post("/user/login", { email, password: hashedPassword }, false);
+		const data = await post("/user/login", { email: normalizedEmail, password: hashedPassword }, false);
 
 		// Create auth data object
 		const authData: AuthData = {
-			email,
+			email: normalizedEmail,
 			hashed_password: hashedPassword,
 			token: data.access_token,
 		};

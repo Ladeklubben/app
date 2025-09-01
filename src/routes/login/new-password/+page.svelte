@@ -43,11 +43,13 @@
 		if (valid) {
 			try {
 				if ($forgotPasswordEmail) {
+					const email = (($forgotPasswordEmail as string | null) || "").trim().toLowerCase();
+					$forgotPasswordEmail = email;
 					await put("/user/set_new_password", {
-						email: $forgotPasswordEmail,
+						email: email,
 						password: MD5(fields.newPassword).toString(),
 					});
-					await login($forgotPasswordEmail, fields.newPassword, false);
+					await login(email, fields.newPassword, false);
 					goto("/");
 				} else {
 					throw new Error("Email not provided");
@@ -73,12 +75,7 @@
 	<Form {handleSubmit} gap={0}>
 		<p class="mb-4">Password needs to be at least 6 characters, 1 big letter, 1 small letter and 1 number.</p>
 
-		<TextInput
-			id="new-password"
-			label="New Password"
-			bind:value={fields.newPassword}
-			error={errors.newPassword}
-		/>
+		<TextInput id="new-password" label="New Password" bind:value={fields.newPassword} error={errors.newPassword} />
 
 		<TextInput
 			id="new-password-repeat"

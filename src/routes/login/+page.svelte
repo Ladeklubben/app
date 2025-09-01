@@ -19,6 +19,9 @@
 		valid = true;
 		loading = true;
 
+		// Normalize email
+		fields.email = (fields.email || "").trim().toLowerCase();
+
 		// Validate email
 		if (!fields.email) {
 			errors.email = "Email is required";
@@ -53,6 +56,9 @@
 	async function handleForgotPassword() {
 		valid = true;
 		loading = true;
+
+		// Normalize email
+		fields.email = (fields.email || "").trim().toLowerCase();
 
 		// Validate email
 		if (!fields.email || fields.email === "") {

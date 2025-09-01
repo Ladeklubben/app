@@ -24,8 +24,11 @@
 		}
 
 		try {
+			// Normalize email before use
+			const email = (($forgotPasswordEmail as string | null) || "").trim().toLowerCase();
+			$forgotPasswordEmail = email;
 			await put("/user/validate_password_code", {
-				email: $forgotPasswordEmail,
+				email: email,
 				code: code,
 			});
 			goto("/login/new-password");
@@ -42,7 +45,7 @@
 	<p>Enter the code you received in your email to reset your password.</p>
 
 	<Form {handleSubmit} gap={0}>
-		<NumberInput id="code" label="Code from email" bind:value={code} error={error} />
+		<NumberInput id="code" label="Code from email" bind:value={code} {error} />
 
 		<Button type="submit" {loading}>Reset Password</Button>
 	</Form>
