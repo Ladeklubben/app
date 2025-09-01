@@ -1,7 +1,7 @@
 import { writable } from "svelte/store";
 import type { GuestGroups, UserInfo } from "$lib/types/user.types";
 import type { MemberPriceSetup } from "$lib/types/publicCharger.types";
-import { get } from "$lib/services/api";
+import { User } from "$lib/services/user";
 
 export const guestGroups = writable<GuestGroups | null>(null);
 export const memberPriceMap = $state({
@@ -9,21 +9,22 @@ export const memberPriceMap = $state({
 });
 
 /**
- * Fetches user information including guest groups from the API
+ * Updates member pricing data using the User class singleton
  */
-export async function fetchUserInformation(): Promise<UserInfo | null> {
+export async function updateMemberPricing(): Promise<UserInfo | null> {
 	try {
-		const userInfo = await get("/user/information");
+		const user = User.getInstance();
+		const userData = await user.getAllData();
 
-		// Update guest groups store
-		if (userInfo.guestgroups) {
-			guestGroups.set(userInfo.guestgroups);
-			updateMemberPriceMap(userInfo.guestgroups);
+		if (userData?.guestgroups) {
+			guestGroups.set(userData.guestgroups);
+			updateMemberPriceMap(userData.guestgroups);
+			console.log("Member pricing updated", userData.guestgroups);
 		}
 
-		return userInfo;
+		return userData?.userinfo || null;
 	} catch (error) {
-		console.error("Failed to fetch user information:", error);
+		console.error("Failed to update member pricing:", error);
 		return null;
 	}
 }

@@ -2,7 +2,7 @@ import { writable } from "svelte/store";
 import { MD5 } from "crypto-js";
 import { goto } from "$app/navigation";
 import { post } from "$lib/services/api";
-import { fetchUserInformation, clearMemberPricing } from "$lib/services/memberPricing.svelte";
+import { updateMemberPricing, clearMemberPricing } from "$lib/services/memberPricing.svelte";
 import { token } from "$lib/services/token";
 
 // Create writable stores
@@ -25,8 +25,8 @@ export async function login(email: string, password: string, preHashed: boolean)
 		// Save auth data
 		token.setToken(data.access_token, data.expires);
 
-		// Fetch user information and member pricing
-		await fetchUserInformation();
+		// Update member pricing using User class
+		await updateMemberPricing();
 
 		return true;
 	} catch (error) {
