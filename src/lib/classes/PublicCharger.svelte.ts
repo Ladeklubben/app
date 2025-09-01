@@ -100,6 +100,9 @@ export class PublicCharger implements IPublicCharger {
 
 		// Automatically set member pricing for this station
 		this.memberPrice = getMemberPriceSetup(this.stationid);
+
+		// Check if user is charging at this station
+		this.checkAndSetChargingStatus();
 	}
 
 	get isAvailable(): boolean {
@@ -215,6 +218,35 @@ export class PublicCharger implements IPublicCharger {
 	}
 
 	/**
+	 * Checks if user has an active charging session and returns the station ID
+	 */
+	static async checkUserChargingStatus(): Promise<string | null> {
+		try {
+			const response = await get("/user/is_guest_charging");
+			return response.active_charging_session || null;
+		} catch (error) {
+			console.error("Error checking charging status:", error);
+			return null;
+		}
+	}
+
+	/**
+	 * Internal method to check if user is charging at this station and set state accordingly
+	 */
+	private async checkAndSetChargingStatus() {
+		try {
+			const activeStationId = await PublicCharger.checkUserChargingStatus();
+			if (activeStationId === this.stationid) {
+				this.charging.isActive = true;
+				selectedCharger.setCharger(this);
+				this.getChargeSessionInfo();
+			}
+		} catch (error) {
+			console.error("Error checking charging status for station:", this.stationid, error);
+		}
+	}
+
+	/**
 	 * Updates this charger instance with fresh API data while preserving local state
 	 */
 	updateFromApiData(data: IPublicCharger) {
@@ -230,6 +262,9 @@ export class PublicCharger implements IPublicCharger {
 
 		// Refresh member pricing for this station
 		this.memberPrice = getMemberPriceSetup(this.stationid);
+
+		// Check and update charging status if needed
+		this.checkAndSetChargingStatus();
 
 		// Preserve client-side state: charging, reservation, timers
 		// These are intentionally NOT updated from API data
