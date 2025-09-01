@@ -4,12 +4,10 @@
 	import BaseMap from "./BaseMap.svelte";
 	import { pos, getPosition, getAddressFromCoordinates } from "$lib/services/map";
 	import type { Position } from "@capacitor/geolocation";
+	import type { TileServer, AddressFromCoords } from "$lib/types/map.types";
 
 	// Props
-	let { 
-		tileServer = "dark",
-		onLocationFound 
-	 } = $props<{
+	let { tileServer = "dark", onLocationFound } = $props<{
 		tileServer: TileServer;
 		onLocationFound: (address: AddressFromCoords) => void;
 	}>();
@@ -74,7 +72,6 @@
 				return;
 			}
 			onLocationFound(address);
-			
 		} catch (error) {
 			console.error("Error getting address:", error);
 		}
@@ -113,4 +110,4 @@
 	});
 </script>
 
-<BaseMap {tileServer} defaultZoom={6} onMapClick={handleMapClick} onMapInit={handleMapInit} />
+<BaseMap defaultZoom={6} onMapClick={handleMapClick} onMapInit={handleMapInit} />
