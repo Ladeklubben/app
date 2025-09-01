@@ -50,7 +50,7 @@
 				</div>
 			</div>
 			<div class="text-lk-blue-300 text-sm p-4 text-center">
-				Charging speed: {selectedCharger.charger?.charging.speed} kW
+				Charging speed: {(selectedCharger.charger?.charging.speed ?? 0 / 1000).toFixed(1)} kW
 			</div>
 		</div>
 
