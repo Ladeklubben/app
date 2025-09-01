@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { logout } from "$lib/services/auth";
-	import { currentUser } from "$lib/services/auth";
 	import MenuItem from "$lib/components/ui/MenuItem.svelte";
 	import MenuGroup from "$lib/components/ui/MenuGroup.svelte";
 	import { onMount } from "svelte";
@@ -14,6 +13,14 @@
 	import Lock from "~icons/mdi/lock";
 	import { goto } from "$app/navigation";
 	import { showError } from "$lib/services/dialog.svelte";
+	import { User } from "$lib/services/user";
+	import type { UserInfo } from "$lib/types/user.types";
+
+	let user = $state<UserInfo | null>(null);
+
+	onMount(async () => {
+		user = await User.getInstance().getInfo();
+	});
 </script>
 
 <div class="wrapper">
@@ -21,7 +28,7 @@
 		<div class="avatar w-20 h-20 bg-lk-blue-50 rounded-full">
 			<!-- Add User SVG icon here -->
 		</div>
-		<p class="text-lk-blue-100">{$currentUser?.email}</p>
+		<p class="text-lk-blue-100">{user?.email}</p>
 		<button
 			class="bg-lk-blue-100 border-0 py-2 px-4 rounded-2xl text-lk-blue-800 text-sm cursor-pointer"
 			onclick={logout}

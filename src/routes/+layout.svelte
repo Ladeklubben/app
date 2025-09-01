@@ -3,19 +3,22 @@
 	import { i18n } from "$lib/i18n";
 	import { ParaglideJS } from "@inlang/paraglide-sveltekit";
 	import TabBar from "$lib/components/ui/TabBar.svelte";
-	import { checkLoginStatus } from "$lib/services/auth";
 	import { onMount } from "svelte";
 	import { showTabBar } from "$lib/services/layout";
 	import { setDevice, device, Platform } from "$lib/services/layout";
 	import { page } from "$app/state";
 	import Dialog from "$lib/components/ui/Dialog.svelte";
 	import "../app.css";
+	import { token } from "$lib/services/token";
+	import { goto } from "$app/navigation";
+	import { User } from "$lib/services/user";
 
 	let { children } = $props();
 	let loginCheckDone = $state(false);
 
 	onMount(async () => {
-		await checkLoginStatus();
+		if (!(await token.isAuthenticated())) goto("/login");
+		await User.getInstance().getAllData();
 		loginCheckDone = true;
 		setDevice();
 	});

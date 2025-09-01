@@ -14,7 +14,6 @@
 	import { onMount } from "svelte";
 	import { showError } from "$lib/services/dialog.svelte";
 	import { tileServer } from "$lib/services/map";
-	import { userInfo } from "$lib/services/auth";
 
 	let chargers: PublicCharger[] = $state([]);
 	let isSorted: boolean = $state(false);
@@ -39,13 +38,7 @@
 		}
 	});
 
-	// Refresh member pricing when user info changes
-	$effect(() => {
-		if ($userInfo && chargers.length > 0) {
-			PublicCharger.refreshMemberPricingForAll(chargers);
-			chargers = chargers;
-		}
-	});
+	// TODO: Refresh member pricing when user info changes
 
 	// Function to sort chargers by distance to user
 	function sortChargersByDistance() {
